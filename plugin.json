@@ -12,8 +12,8 @@
     "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
   },
   "readme": {
-    "en_US": "README_en_US.md",
-    "zh_CN": "README.md"
+    "en_US": "README.md",
+    "zh_CN": "README_zh_CN.md"
   },
   "i18n": [
     "en_US",
