@@ -4,7 +4,7 @@
 [中文版](./README_zh_CN.md)
 
 1. Using vite for packaging
-2. Use soft linking instead of putting the project into the plugins directory program development
+2. Use symbolic linking instead of putting the project into the plugins directory program development
 3. Built-in support for the svelte framework
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
@@ -16,20 +16,29 @@
 2. Clone your repo to a local development folder at any place
     - Notice: we **don't recommand** you to place the folder under your `{workspace}/data/plugins/` folder.
 
-3. Create development soft links
+3. Create development symbolic links
 
     - It is recommended to create a symbolic link between your development directory and the plugins directory.
-    - If you have python environment in you device, run the command `python scripts/make_dev_link.py <plugin_dir>`, `<plugin_dir>` is the absolute path to the plugins directory, e.g.
+    - If you have python environment in you device, run the command `python scripts/make_dev_link.py`, input the `<plugin_dir>` i.e. the absolute path to the plugins directory, e.g.
 
         ```powershell
-        >>> sudo python . \scripts\make_dev_link.py "H:\SiYuanDevSpace\data\plugins"
+        >>> python make_dev_link.py
+        Please input the directory of siyuan/data/plugins: H:\SiYuanDevSpace\data\plugins
         Symlink created: H:\SiYuanDevSpace\data\plugins\plugin-sample
         ```
-        - You may need to run it as administration, normal windows users can first open the command line as administrator and then run it. Or if you have scoop installed in you windows system, you install `scoop install sudo` and run with sudo.
-    - If you haven't installed python in your environment, you can also manually make a soft link
-        - Create directory `dev` in you workspace
-        - Window user use [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink); and unix user use ln command
-        - Notice: make sure that the name of soft link is same as the name in your plugin.json
+    - If you haven't intalled python, while you are an unix user, you can use `ln` command
+        ```sh
+        ln -s ./dev "<plugin_dir>/<plugin_name>"
+        ```
+        - Notice: make sure that the name of symbolic link is same as the name in your plugin.json
+    - If you haven't intalled python, while you are a windows user, you can download the `make_dev_link.exe` in release and run it in your workspace (as administrator)
+    - If you haven't intalled python, while you are a windows user, and you don't trust any other exe file, you can make the symlink by your self
+        1. Create a dev folder in your worksapce
+        2. Using use [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) command to create symlink
+            ```cmd
+            mklink /d "<plugin_dir>\<plugin_name>" "<project_dir>\dev"
+            ```
+    - You may need to run it as administration.
     - As the generated softlink is the same as the plugin name, **do not put the project directory under plugins** (this is contrary to the webpack version)
 
 4. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder

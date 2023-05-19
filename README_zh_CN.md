@@ -25,15 +25,14 @@
         ln -s ./dev "<plugin_dir>/<plugin_name>"
         ```
         - 注意：要确保符号链接的名称 `plugin_name` 和 plugin.json 中的 name 字段保持一致
-    - 如果您没有安装 python 环境，而且是 windows 用户
-        - 您可以直接下载我们提供的 `make_dev_link.exe` 放在根目录下, 以管理员方式运行
+    - 如果您没有安装 python 环境，而且是 windows 用户, 您可以直接下载我们提供的 `make_dev_link.exe` 放在根目录下, 以管理员方式运行
     - 如果您没有安装 python 环境，而且是 windows 用户, 而且对外来的 exe 不信任，你也可以手动创建符号链接
-        - 首先手动在工作目录下创建 dev 目录
-        - windows 用户请在**管理员** cmd 环境下 使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令, 注意要使用绝对路径
+        1. 首先手动在工作目录下创建 dev 目录
+        2. windows 用户请在**管理员** cmd 环境下 使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令, 注意要使用绝对路径
             ```cmd
             mklink /d "<plugin_dir>\<plugin_name>" "<project_dir>\dev"
             ```
-    - 可能需要使用**管理员身份来运行**上面的命令。unix 用户可以直接 sudo 运行, windows 用户可以首先使用管理员身份打开控制台，然后再运行命令
+    - 可能需要使用**管理员身份**来运行上面的命令
     - 注意: 由于生成的符号链接和 plugin name 相同，所以不要把工程目录放在 plugins 下（这一点和 plugin-sample 模板相反）
 
 4. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i`
