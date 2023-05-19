@@ -1,0 +1,27 @@
+{
+  "name": "sy-plugin-template-vite",
+  "author": "frostime",
+  "url": "https://github.com/frostime/sy-plugin-template-vite",
+  "version": "1.0.0",
+  "displayName": {
+    "en_US": "Plugin Template Vite Ver",
+    "zh_CN": "插件开发模板-Vite版"
+  },
+  "description": {
+    "en_US": "This is a plugin development template based on vite, provided by community",
+    "zh_CN": "这是一个基于 Vite 的插件开发模板, 由社区热心用户提供"
+  },
+  "readme": {
+    "en_US": "README_en_US.md",
+    "zh_CN": "README.md"
+  },
+  "i18n": [
+    "en_US",
+    "zh_CN"
+  ],
+  "funding": {
+    "custom": [
+      "https://afdian.net/a/frostime"
+    ]
+  }
+}
