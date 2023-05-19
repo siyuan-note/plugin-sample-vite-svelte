@@ -25,7 +25,7 @@
         ln -s ./dev "<plugin_dir>/<plugin_name>"
         ```
         - 注意：要确保符号链接的名称 `plugin_name` 和 plugin.json 中的 name 字段保持一致
-    - 如果您没有安装 python 环境，而且是 windows 用户, 您可以直接下载我们提供的 `make_dev_link.exe` 放在根目录下, 以管理员方式运行
+    - 如果您没有安装 python 环境，而且是 windows 用户, 您可以直接下载我们提供的 [make_dev_link.exe](https://github.com/siyuan-note/plugin-sample-vite-svelte/releases/tag/v0.0.1) 放在根目录下, 以管理员方式运行
     - 如果您没有安装 python 环境，而且是 windows 用户, 而且对外来的 exe 不信任，你也可以手动创建符号链接
         1. 首先手动在工作目录下创建 dev 目录
         2. windows 用户请在**管理员** cmd 环境下 使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令, 注意要使用绝对路径

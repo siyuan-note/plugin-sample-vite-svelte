@@ -31,7 +31,7 @@
         ln -s ./dev "<plugin_dir>/<plugin_name>"
         ```
         - Notice: make sure that the name of symbolic link is same as the name in your plugin.json
-    - If you haven't intalled python, while you are a windows user, you can download the `make_dev_link.exe` in release and run it in your workspace (as administrator)
+    - If you haven't intalled python, while you are a windows user, you can download the [make_dev_link.exe](https://github.com/siyuan-note/plugin-sample-vite-svelte/releases/tag/v0.0.1) in release and run it in your workspace (as administrator)
     - If you haven't intalled python, while you are a windows user, and you don't trust any other exe file, you can make the symlink by your self
         1. Create a dev folder in your worksapce
         2. Using use [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) command to create symlink
