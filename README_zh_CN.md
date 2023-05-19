@@ -3,7 +3,7 @@
 # 使用 vite + svelte 的思源笔记插件示例
 
 1. 使用 vite 打包
-2. 使用软链接、而不是把项目放到插件目录下的模式进行开发
+2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
 3. 内置对 svelte 框架的支持
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 
@@ -12,19 +12,28 @@
 1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名必须和插件名称一致，默认分支必须为 `main`
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
-3. 创建开发需要的软链接
-    - 推荐使用软链接来链接你的工作目录和插件目录
-    - 如果你的设备安装了 python 环境，运行 `python scripts/make_dev_link.py <plugin_dir>` 命令，`<plugin_dir>`是插件目录的绝对路径，示例:
+3. 创建开发需要的符号链接
+    - 推荐使用符号链接来链接你的工作目录和插件目录
+    - 如果你的设备安装了 python 环境，运行 `python scripts/make_dev_link.py` 命令，然后输入插件目录的绝对路径，示例:
          ```powershell
-        >>> sudo python . \scripts\make_dev_link.py "H:\SiYuanDevSpace\data\plugins"
-        Symlink created: H:\SiYuanDevSpace\data\plugins\plugin-sample
+        >>> python make_dev_link.py
+        Please input the directory of siyuan/data/plugins: H:\临时文件夹\SiYuanDevSpace\data\plugins
+        Symlink created: H:\临时文件夹\SiYuanDevSpace\data\plugins\plugin-sample-vite-svelte
         ```
-        - 可能需要使用管理员身份来运行这个命令。对 windows 用户来讲可以首先使用管理员身份打开控制台，然后再运行脚本。如果你的 windows 设备上安装了 scoop 等软件，可以安装 `scoop install sudo` 然后使用 sudo 命令来运行上面的程序
-    - 如果您的开发环境下没有安装 python，也可以自己手动创建软链接
-        - 首先手动在工作目录下创建 dev 目录
-        - windows 用户请使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令; unix 用户使用 ln 命令
-        - 注意：要确保软链接的名称和 plugin.json 中的 name 字段保持一致
-    由于生成的软链接和 plugin name 相同，所以不要把工程目录放在 plugins 下（这一点和 plugin-sample 模板相反）
+    - 如果您没有安装 python 环境但是是 unix 用户，可以直接使用 ln 命令创建符号链接
+        ```sh
+        ln -s ./dev "<plugin_dir>/<plugin_name>"
+        ```
+        - 注意：要确保符号链接的名称 `plugin_name` 和 plugin.json 中的 name 字段保持一致
+    - 如果您没有安装 python 环境，而且是 windows 用户, 您可以直接下载我们提供的 `make_dev_link.exe` 放在根目录下, 以管理员方式运行
+    - 如果您没有安装 python 环境，而且是 windows 用户, 而且对外来的 exe 不信任，你也可以手动创建符号链接
+        1. 首先手动在工作目录下创建 dev 目录
+        2. windows 用户请在**管理员** cmd 环境下 使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令, 注意要使用绝对路径
+            ```cmd
+            mklink /d "<plugin_dir>\<plugin_name>" "<project_dir>\dev"
+            ```
+    - 可能需要使用**管理员身份**来运行上面的命令
+    - 注意: 由于生成的符号链接和 plugin name 相同，所以不要把工程目录放在 plugins 下（这一点和 plugin-sample 模板相反）
 
 4. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i`
 5. 执行 `pnpm run dev` 进行实时编译
