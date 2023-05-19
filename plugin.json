@@ -1,15 +1,15 @@
 {
-  "name": "sy-plugin-template-vite",
+  "name": "plugin-sample-vite-svelte",
   "author": "frostime",
-  "url": "https://github.com/frostime/sy-plugin-template-vite",
+  "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "1.0.0",
   "displayName": {
-    "en_US": "Plugin Template Vite Ver",
-    "zh_CN": "插件开发模板-Vite版"
+    "en_US": "Plugin sample with vite and svelte",
+    "zh_CN": "插件样例 vite + svelte 版"
   },
   "description": {
-    "en_US": "This is a plugin development template based on vite, provided by community",
-    "zh_CN": "这是一个基于 Vite 的插件开发模板, 由社区热心用户提供"
+    "en_US": "SiYuan plugin sample with vite and svelte",
+    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
   },
   "readme": {
     "en_US": "README_en_US.md",
