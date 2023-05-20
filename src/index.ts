@@ -20,7 +20,7 @@ export default class SamplePlugin extends Plugin {
             {
                 icon: "iconEmoji",
                 "title": "Hello SiYuan",
-                "callback": () => this.openHelloDialog()
+                "callback": () => this.openHelloInDialog()
             }
         )
     }
@@ -41,7 +41,7 @@ export default class SamplePlugin extends Plugin {
         });
     }
 
-    private openHelloDialog() {
+    private openHelloInDialog() {
         this.counter.hello++;
         let dialog = new Dialog({
             title: "Hello World",
@@ -55,6 +55,7 @@ export default class SamplePlugin extends Plugin {
             target: dialog.element.querySelector("#helloPanel"),
             props: {
                 name: `[${this.counter.hello}]${this.i18n.name}`,
+                i18n: this.i18n.hello
             }
         });
     }
