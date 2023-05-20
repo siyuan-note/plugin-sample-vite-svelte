@@ -8,7 +8,6 @@
     import { showMessage } from "siyuan";
     export let name: string;
     export let i18n: any;
-    export let opendCount: number;
 
     let time;
     let ver;
@@ -16,14 +15,6 @@
     let intv1 = setInterval(async () => {
         time = new Date();
     }, 1000);
-
-    let intv2 = setInterval(async () => {
-        ver = await version();
-        showMessage(
-            `[${opendCount}] Hello ${name} v${ver}`,
-            5000
-        );
-    }, 10000);
 
     onMount(async () => {
         time = new Date();
@@ -36,7 +27,6 @@
     onDestroy(() => {
         showMessage("Hello panel closed");
         clearInterval(intv1);
-        clearInterval(intv2);
     });
 
     $: time_str = new Date(time).toLocaleTimeString();
@@ -46,7 +36,7 @@
 <div id="hello">
     <div class="fn__flex">
         <div class="fn__flex-1">
-            <h2>[{opendCount}] Hello {name} v{ver}</h2>
+            <h2>Hello {name} v{ver}</h2>
         </div>
         <div class="fn__flex-1 b3-label__text __text-right">
             {time_str}

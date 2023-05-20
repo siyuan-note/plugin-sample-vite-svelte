@@ -33,21 +33,22 @@ export default class SamplePlugin extends Plugin {
             }
         });
 
+        let div = document.createElement("div");
+        new HelloExample({
+            target: div,
+            props: {
+                name: this.i18n.name,
+                i18n: this.i18n.hello
+            }
+        });
         this.customTab = this.addTab({
             type: TAB_TYPE,
             init() {
-                this.tab = new HelloExample({
-                    target: this.element,
-                    props: {
-                        name: this.i18n.name,
-                        opendCount: this.counter.hello,
-                        i18n: this.i18n.hello
-                    }
-                });
+                this.element.appendChild(div);
+                console.log(this.element);
             },
             destroy() {
                 console.log("destroy tab:", TAB_TYPE);
-                this.tab.$destroy(); //Call svelte component destroy
             }
         });
 
@@ -192,7 +193,6 @@ export default class SamplePlugin extends Plugin {
             target: dialog.element.querySelector("#helloPanel"),
             props: {
                 name: this.i18n.name,
-                opendCount: this.counter.hello,
                 i18n: this.i18n.hello
             }
         });
