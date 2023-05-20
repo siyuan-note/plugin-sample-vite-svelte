@@ -4,7 +4,7 @@
  */
 
 /**
- * 思源内部常用的数据格式
+ * Frequently used data structures in SiYuan
  */
 declare module "sy-dtype" {
 
