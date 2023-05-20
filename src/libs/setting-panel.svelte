@@ -1,7 +1,13 @@
 <script>
-    import { } from "os";
-import SettingItem from "./setting-item.svelte";
+    import SettingItem from "./setting-item.svelte";
     import { showMessage } from "siyuan";
+    import { onMount, onDestroy } from 'svelte';
+    onMount(() => {
+        showMessage("Setting panel opened");
+    });
+    onDestroy(() => {
+        showMessage("Setting panel closed");
+    });
 </script>
 
 <!--
@@ -10,6 +16,17 @@ with the same UI style in SiYuan
 -->
 
 <div class="config__tab-container">
+    <div data-type="Header" class="fn__flex b3-label">
+        <div class="fn_flex-1">
+            <h4>This setting panel is provided by a svelte component</h4>
+            <div class="b3-label__text">
+                <span class="fn__flex-1">
+                    See:
+                    <pre style="display: inline">/lib/setting-pannel.svelte</pre>
+                </span>
+            </div>
+        </div>
+    </div>
     <SettingItem
         type="checkbox"
         title="Checkbox"
@@ -17,7 +34,9 @@ with the same UI style in SiYuan
         settingKey="Checkbox"
         settingValue={true}
         on:changed={(event) => {
-            showMessage(`Checkbox changed: ${event.detail.key} = ${event.detail.value}`);
+            showMessage(
+                `Checkbox changed: ${event.detail.key} = ${event.detail.value}`
+            );
         }}
     />
     <SettingItem
@@ -28,7 +47,9 @@ with the same UI style in SiYuan
         settingValue=""
         placeholder="Input something"
         on:changed={(event) => {
-            showMessage(`Input changed: ${event.detail.key} = ${event.detail.value}`);
+            showMessage(
+                `Input changed: ${event.detail.key} = ${event.detail.value}`
+            );
         }}
     />
     <SettingItem
@@ -53,7 +74,9 @@ with the same UI style in SiYuan
             right: "Right",
         }}
         on:changed={(event) => {
-            showMessage(`Select changed: ${event.detail.key} = ${event.detail.value}`);
+            showMessage(
+                `Select changed: ${event.detail.key} = ${event.detail.value}`
+            );
         }}
     />
     <SettingItem
@@ -68,7 +91,9 @@ with the same UI style in SiYuan
             step: 1,
         }}
         on:changed={(event) => {
-            showMessage(`Slide changed: ${event.detail.key} = ${event.detail.value}`);
+            showMessage(
+                `Slide changed: ${event.detail.key} = ${event.detail.value}`
+            );
         }}
     />
 </div>

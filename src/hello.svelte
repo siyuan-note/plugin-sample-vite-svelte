@@ -5,6 +5,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { version } from "./api";
+    import { showMessage } from "siyuan";
     export let name: string;
 
     let time;
@@ -20,6 +21,14 @@
     setInterval(async () => {
         time = new Date();
     }, 1000);
+
+    setInterval(async () => {
+        ver = await version();
+        showMessage(
+            `Hello ${name} v${ver}`,
+            5000
+        );
+    }, 10000);
 
 </script>
 

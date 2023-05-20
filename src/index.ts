@@ -9,6 +9,10 @@ import "./index.scss";
 
 export default class SamplePlugin extends Plugin {
 
+    counter: { [key: string]: number } = {
+        hello: 0,
+    };
+
     async onload() {
         console.log("onload");
         showMessage("Hello World");
@@ -25,22 +29,32 @@ export default class SamplePlugin extends Plugin {
         let dialog = new Dialog({
             title: "SettingPannel",
             content: `<div id="SettingPanel"></div>`,
-            width: "600px"
+            width: "600px",
+            destroyCallback: (options) => {
+                console.log("destroyCallback", options);
+                //You must destroy the component when the dialog is closed
+                pannel.$destroy();
+            }
         });
-        new SettingPannel({
+        let pannel = new SettingPannel({
             target: dialog.element.querySelector("#SettingPanel"),
         });
     }
 
     private openHelloDialog() {
+        this.counter.hello++;
         let dialog = new Dialog({
             title: "Hello World",
             content: `<div id="helloPanel"></div>`,
+            destroyCallback(options) {
+                //You must destroy the component when the dialog is closed
+                hello.$destroy();
+            },
         });
-        new Hello({
+        let hello = new Hello({
             target: dialog.element.querySelector("#helloPanel"),
             props: {
-                name: this.i18n.name,
+                name: `[${this.counter.hello}]${this.i18n.name}`,
             }
         });
     }
