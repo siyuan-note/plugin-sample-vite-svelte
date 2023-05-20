@@ -64,7 +64,7 @@ export default class SamplePlugin extends Plugin {
             },
             type: DOCK_TYPE,
             init() {
-                new DockExample({
+                this.component = new DockExample({
                     target: this.element,
                     props: {
                         text: this.data.text,
@@ -73,6 +73,7 @@ export default class SamplePlugin extends Plugin {
             },
             destroy() {
                 console.log("destroy dock:", DOCK_TYPE);
+                this.component.$destroy();
             }
         });
 
