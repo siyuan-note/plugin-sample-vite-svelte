@@ -50,6 +50,6 @@ if (fs.existsSync(targetPath)) {
 }
 
 //创建软链接
-fs.symlinkSync(process.cwd(), targetPath, 'junction');
+fs.symlinkSync(`${process.cwd()}/dev`, targetPath, 'junction');
 console.log(`Done! Created symlink ${targetPath}`);
 
