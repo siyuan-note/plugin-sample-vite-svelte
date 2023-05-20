@@ -16,32 +16,18 @@
 2. Clone your repo to a local development folder at any place
     - Notice: we **don't recommand** you to place the folder under your `{workspace}/data/plugins/` folder.
 
-3. Create development symbolic links
+3. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
+4. Create development symbolic links
+    - Open `./scripts/make_dev_link.js` file, set `targetDir` to your SiYuan plugin directory `<siyuan workspace>/data/plugins`
+    - Run `pnpm run make-link`, succeed if following message is shown:
+      ```bash
+      ❯❯❯ pnpm run make-link
+      > plugin-sample-vite-svelte@0.0.1 make-link H:\SrcCode\plugin-sample-vite-svelte
+      > node ./scripts/make_dev_link.js
 
-    - It is recommended to create a symbolic link between your development directory and the plugins directory.
-    - If you have python environment in you device, run the command `python scripts/make_dev_link.py`, input the `<plugin_dir>` i.e. the absolute path to the plugins directory, e.g.
+      Done! Created symlink H:/SiYuanDevSpace/data/plugins/plugin-sample-vite-svelte
+      ```
 
-        ```powershell
-        >>> python make_dev_link.py
-        Please input the directory of siyuan/data/plugins: H:\SiYuanDevSpace\data\plugins
-        Symlink created: H:\SiYuanDevSpace\data\plugins\plugin-sample
-        ```
-    - If you haven't intalled python, while you are an unix user, you can use `ln` command
-        ```sh
-        ln -s ./dev "<plugin_dir>/<plugin_name>"
-        ```
-        - Notice: make sure that the name of symbolic link is same as the name in your plugin.json
-    - If you haven't intalled python, while you are a windows user, you can download the [make_dev_link.exe](https://github.com/siyuan-note/plugin-sample-vite-svelte/releases/tag/v0.0.1) in release and run it in your workspace (as administrator)
-    - If you haven't intalled python, while you are a windows user, and you don't trust any other exe file, you can make the symlink by your self
-        1. Create a dev folder in your worksapce
-        2. Using use [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) command to create symlink
-            ```cmd
-            mklink /d "<plugin_dir>\<plugin_name>" "<project_dir>\dev"
-            ```
-    - You may need to run it as administration.
-    - As the generated softlink is the same as the plugin name, **do not put the project directory under plugins** (this is contrary to the webpack version)
-
-4. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
 5. Execute pnpm run dev for real-time compilation
 6. Open SiYuan marketplace and enable plugin in downloaded tab
 

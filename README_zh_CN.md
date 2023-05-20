@@ -12,30 +12,17 @@
 1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名必须和插件名称一致，默认分支必须为 `main`
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
-3. 创建开发需要的符号链接
-    - 推荐使用符号链接来链接你的工作目录和插件目录
-    - 如果你的设备安装了 python 环境，运行 `python scripts/make_dev_link.py` 命令，然后输入插件目录的绝对路径，示例:
-         ```powershell
-        >>> python make_dev_link.py
-        Please input the directory of siyuan/data/plugins: H:\临时文件夹\SiYuanDevSpace\data\plugins
-        Symlink created: H:\临时文件夹\SiYuanDevSpace\data\plugins\plugin-sample-vite-svelte
-        ```
-    - 如果您没有安装 python 环境但是是 unix 用户，可以直接使用 ln 命令创建符号链接
-        ```sh
-        ln -s ./dev "<plugin_dir>/<plugin_name>"
-        ```
-        - 注意：要确保符号链接的名称 `plugin_name` 和 plugin.json 中的 name 字段保持一致
-    - 如果您没有安装 python 环境，而且是 windows 用户, 您可以直接下载我们提供的 [make_dev_link.exe](https://github.com/siyuan-note/plugin-sample-vite-svelte/releases/tag/v0.0.1) 放在根目录下, 以管理员方式运行
-    - 如果您没有安装 python 环境，而且是 windows 用户, 而且对外来的 exe 不信任，你也可以手动创建符号链接
-        1. 首先手动在工作目录下创建 dev 目录
-        2. windows 用户请在**管理员** cmd 环境下 使用 [mklink](https://learn.microsoft.com/windows-server/administration/windows-commands/mklink) 命令, 注意要使用绝对路径
-            ```cmd
-            mklink /d "<plugin_dir>\<plugin_name>" "<project_dir>\dev"
-            ```
-    - 可能需要使用**管理员身份**来运行上面的命令
-    - 注意: 由于生成的符号链接和 plugin name 相同，所以不要把工程目录放在 plugins 下（这一点和 plugin-sample 模板相反）
+3. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i` 安装所需要的依赖
+4. 创建开发需要的符号链接
+    - 打开 `./scripts/make_dev_link.js` 文件，更改 `targetDir` 为思源的插件目录 `<siyuan workspace>/data/plugins`
+    - 运行 `pnpm run make-link` 命令, 如果看到类似以下的消息，说明创建成功:
+      ```bash
+      ❯❯❯ pnpm run make-link
+      > plugin-sample-vite-svelte@0.0.1 make-link H:\SrcCode\plugin-sample-vite-svelte
+      > node ./scripts/make_dev_link.js
 
-4. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i`
+      Done! Created symlink H:/SiYuanDevSpace/data/plugins/plugin-sample-vite-svelte
+      ```
 5. 执行 `pnpm run dev` 进行实时编译
 6. 在思源中打开集市并在下载选项卡中启用插件
 
