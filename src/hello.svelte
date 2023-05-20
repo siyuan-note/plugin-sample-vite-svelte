@@ -8,6 +8,7 @@
     import { showMessage } from "siyuan";
     export let name: string;
     export let i18n: any;
+    export let opendCount: number;
 
     let time;
     let ver;
@@ -19,7 +20,7 @@
     let intv2 = setInterval(async () => {
         ver = await version();
         showMessage(
-            `Hello ${name} v${ver}`,
+            `[${opendCount}] Hello ${name} v${ver}`,
             5000
         );
     }, 10000);
@@ -45,26 +46,15 @@
 <div id="hello">
     <div class="fn__flex">
         <div class="fn__flex-1">
-            <h2>Hello {name} v{ver}</h2>
+            <h2>[{opendCount}] Hello {name} v{ver}</h2>
         </div>
-        <div class="fn__flex-1 b3-label__text __text-alignright">
+        <div class="fn__flex-1 b3-label__text __text-right">
             {time_str}
         </div>
     </div>
 
-    <br />
-
-    <div class="fn__flex-column">
-        <div class="fn__flex-1">
-            <ul class="b3-list b3-list--background">
-                <li class="b3-list-item">
-                    <span class="b3-list-item__text">
-                        {@html i18n.makesure}
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="fn__space-column"></div>
+    <div>
+        <p>{@html i18n.makesure}</p>
     </div>
 
 </div>
@@ -72,13 +62,11 @@
 <style lang="scss">
     #hello {
         margin: 20px;
+        div {
+            margin-bottom: 10px;
+        }
     }
-    .__text-alignright {
+    .__text-right {
         text-align: right;
-    }
-    .fn__space-column {
-        height: 8px;
-        display: inline-block;
-        flex-shrink: 0;
     }
 </style>

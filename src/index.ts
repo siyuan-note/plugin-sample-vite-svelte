@@ -54,7 +54,8 @@ export default class SamplePlugin extends Plugin {
         let hello = new Hello({
             target: dialog.element.querySelector("#helloPanel"),
             props: {
-                name: `[${this.counter.hello}]${this.i18n.name}`,
+                name: this.i18n.name,
+                opendCount: this.counter.hello,
                 i18n: this.i18n.hello
             }
         });
