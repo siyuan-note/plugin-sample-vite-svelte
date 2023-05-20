@@ -2,7 +2,7 @@
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": {
     "en_US": "Plugin sample with vite and svelte",
     "zh_CN": "插件样例 vite + svelte 版"
