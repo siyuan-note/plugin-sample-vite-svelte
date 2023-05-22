@@ -11,10 +11,10 @@ const targetDir = '';
 //********************************************************************************************
 
 
-async function getSiYuanDir() {
+async function getSiYuanDir(token) {
     let url = 'http://127.0.0.1:6806/api/system/getConf';
     let header = {
-        // "Authorization": `Token ${token}`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
     }
     try {
@@ -24,13 +24,13 @@ async function getSiYuanDir() {
         });
         console.log(conf);
     } catch (e) {
-        console.log('Failed! Please make sure SiYuan is running');
+        console.log(e);
         process.exit(1);
     }
 }
 
 if (targetDir === '') {
-    await getSiYuanDir();
+    await getSiYuanDir('es7zy9zewgibc6dt');
     process.exit(0);
 }
 
