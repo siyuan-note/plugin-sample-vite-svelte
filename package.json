@@ -1,6 +1,6 @@
 {
   "name": "plugin-sample-vite-svelte",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "description": "",
   "repository": "",
@@ -8,7 +8,7 @@
   "author": "",
   "license": "GPL-3.0",
   "scripts": {
-    "make-link": "node ./scripts/make_dev_link.js",
+    "make-link": "node  --no-warnings ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
     "build": "vite build"
   },

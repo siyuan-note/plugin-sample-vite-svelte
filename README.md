@@ -17,11 +17,27 @@
     - Notice: we **don't recommand** you to place the folder under your `{workspace}/data/plugins/` folder.
 
 3. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
-4. Create development symbolic links
+4. **Auto create development symbolic links**
+    - Make sure that SiYuan is running
+    - Run `pnpm run make-link`, the script will detec all the siyuan workspace, please select
+        ```bash
+        >>> pnpm run make-link
+        > plugin-sample-vite-svelte@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite-svelte
+        > node  --no-warnings ./scripts/make_dev_link.js
+
+        "targetDir" is empty, try to get SiYuan directory automatically....
+        Got 2 SiYuan workspaces
+        [0] H:\Media\SiYuan
+        [1] H:\临时文件夹\SiYuanDevSpace
+        Please select a workspace[0-1]: 0
+        Got target directory: H:\Media\SiYuan/data/plugins
+        Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite-svelte
+        ```
+4. **Manually create development symbolic links**
     - Open `./scripts/make_dev_link.js` file, set `targetDir` to your SiYuan plugin directory `<siyuan workspace>/data/plugins`
     - Run `pnpm run make-link`, succeed if following message is shown:
       ```bash
-      ❯❯❯ pnpm run make-link
+      >>> pnpm run make-link
       > plugin-sample-vite-svelte@0.0.1 make-link H:\SrcCode\plugin-sample-vite-svelte
       > node ./scripts/make_dev_link.js
 
