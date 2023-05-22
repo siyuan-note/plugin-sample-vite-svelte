@@ -308,7 +308,8 @@ export async function getFile(path: string): Promise<any> {
         path: path
     }
     let url = '/api/file/getFile';
-    return request(url, data);
+    let file = await fetchSyncPost(url, data);
+    return file;
 }
 
 export async function putFile(path: string, isDir: boolean, file: any) {
