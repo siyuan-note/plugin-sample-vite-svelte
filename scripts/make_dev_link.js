@@ -1,11 +1,12 @@
 import fs from 'fs';
+import readline  from 'node:readline';
 
 
 //************************************ Write you dir here ************************************
 
 //Please write the "workspace/data/plugins" directory here
 //请在这里填写你的 "workspace/data/plugins" 目录
-const targetDir = '';
+let targetDir = '';
 //Like this
 // const targetDir = `H:\\SiYuanDevSpace\\data\\plugins`;
 //********************************************************************************************
@@ -28,19 +29,50 @@ async function getSiYuanDir() {
             conf = await response.json();
         } else {
             log(`HTTP-Error: ${response.status}`);
-            process.exit(1);
+            return null;
         }
     } catch (e) {
         log("Error:", e);
-        process.exit(1);
+        return null;
     }
     return conf.data;
 }
 
+async function chooseTarget(workspaces) {
+    let count = workspaces.length;
+    log(`Got ${count} SiYuan ${count > 1 ? 'workspaces' : 'workspace'}`)
+    for (let i = 0; i < workspaces.length; i++) {
+        log(`[${i}] ${workspaces[i].path}`);
+    }
+
+    if (count == 1) {
+        return `${workspaces[0].path}/data/plugins`;
+    } else {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+        let index = await new Promise((resolve, reject) => {
+            rl.question(`Please select a workspace[0-${count-1}]: `, (answer) => {
+                resolve(answer);
+            });
+        });
+        rl.close();
+        return `${workspaces[index].path}/data/plugins`;
+    }
+}
+
 if (targetDir === '') {
+    log('"targetDir" is empty, try to get SiYuan directory automatically....')
     let res = await getSiYuanDir();
-    log(res);
-    process.exit(0);
+    
+    if (res === null) {
+        log('Failed! Please set the plugin directory in scripts/make_dev_link.js');
+        process.exit(1);
+    }
+
+    targetDir = await chooseTarget(res);
+    log(`Got target directory: ${targetDir}`);
 }
 
 //Check
@@ -75,11 +107,10 @@ if (!fs.existsSync(devDir)) {
 const targetPath = `${targetDir}/${name}`;
 //如果已经存在，就退出
 if (fs.existsSync(targetPath)) {
-    log('Failed! Target directory already exists');
-    process.exit(1);
+    log(`Failed! Target directory  ${targetPath} already exists`);
+} else {
+    //创建软链接
+    fs.symlinkSync(`${process.cwd()}/dev`, targetPath, 'junction');
+    log(`Done! Created symlink ${targetPath}`);
 }
-
-//创建软链接
-fs.symlinkSync(`${process.cwd()}/dev`, targetPath, 'junction');
-log(`Done! Created symlink ${targetPath}`);
 
