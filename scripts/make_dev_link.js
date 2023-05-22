@@ -33,6 +33,7 @@ async function getSiYuanDir() {
         }
     } catch (e) {
         log("Error:", e);
+        log("Please make sure SiYuan is running!!!");
         return null;
     }
     return conf.data;
@@ -67,7 +68,7 @@ if (targetDir === '') {
     let res = await getSiYuanDir();
     
     if (res === null) {
-        log('Failed! Please set the plugin directory in scripts/make_dev_link.js');
+        log('Failed! You can set the plugin directory in scripts/make_dev_link.js and try again');
         process.exit(1);
     }
 
