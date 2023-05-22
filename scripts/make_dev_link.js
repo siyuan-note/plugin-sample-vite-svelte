@@ -11,7 +11,28 @@ const targetDir = '';
 //********************************************************************************************
 
 
+async function getSiYuanDir() {
+    let url = 'http://127.0.0.1:6806/api/system/getConf';
+    let header = {
+        // "Authorization": `Token ${token}`,
+        "Content-Type": "application/json",
+    }
+    try {
+        let conf = await fetch(url, {
+            method: 'POST',
+            headers: header
+        });
+        console.log(conf);
+    } catch (e) {
+        console.log('Failed! Please make sure SiYuan is running');
+        process.exit(1);
+    }
+}
 
+if (targetDir === '') {
+    await getSiYuanDir();
+    process.exit(0);
+}
 
 //Check
 if (!fs.existsSync(targetDir)) {
