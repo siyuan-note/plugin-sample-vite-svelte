@@ -19,7 +19,7 @@
 3. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
 4. **Auto create development symbolic links**
     - Make sure that SiYuan is running
-    - Run `pnpm run make-link`, the script will detec all the siyuan workspace, please select
+    - Run `pnpm run make-link`, the script will detect all the siyuan workspace, please select the targe workspace and the script will automatically create the symbolic link under the `{workspace}/data/plugins/` folder
         ```bash
         >>> pnpm run make-link
         > plugin-sample-vite-svelte@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite-svelte
