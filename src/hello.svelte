@@ -1,11 +1,9 @@
-<!--
- * Copyright (c) 2023 frostime. All rights reserved.
- * https://github.com/frostime/sy-plugin-template-vite
--->
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { version } from "./api";
     import { showMessage } from "siyuan";
+    import Typo from "./libs/b3-typography.svelte";
+
     export let name: string;
     export let i18n: any;
 
@@ -43,9 +41,10 @@
         </div>
     </div>
 
-    <div>
+    <Typo>
+        <h2>Wellcome to plugin sample with vite & svelte</h2>
         <p>{@html i18n.makesure}</p>
-    </div>
+    </Typo>
 
 </div>
 

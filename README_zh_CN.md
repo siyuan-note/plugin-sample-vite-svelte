@@ -167,4 +167,25 @@ PR 社区集市仓库。
             prerelease: true # 把这个改为 false
     ```
 
+## 如何去掉 svelte 依赖
 
+本插件使用 vite 打包，并提供了 svelte 框架依赖。不过实际情况下可能有些开发者并不想要 svelte，只希望使用 vite 打包。
+
+实际上你可以完全不做任何修改，就可以在不使用 svelte 的前提下使用这个模板。与 svelte 编译的编译相关的部分是以插件的形式载入到 vite 的工作流中，所以即使你的项目里面没有 svelte，也不会有太大的影响。
+
+如果你执意希望删除掉所有 svelte 依赖以免它们污染你的工作空间，可以执行一下步骤:
+
+1. 删掉 package.json 中的
+    ```json
+    {
+      "@sveltejs/vite-plugin-svelte": "^2.0.3",
+      "@tsconfig/svelte": "^4.0.1",
+      "svelte": "^3.57.0"
+    }
+    ```
+2. 删掉 `svelte.config.js` 文件
+3. 删掉 `vite.config.js` 文件中的
+    - 第六行: `import { svelte } from "@sveltejs/vite-plugin-svelte"`
+    - 第二十行: `svelte(),`
+4. 删掉 `tsconfig.json` 中 37 行 `"svelte"`
+5. 重新执行 `pnpm i`
