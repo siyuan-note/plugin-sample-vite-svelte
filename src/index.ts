@@ -149,8 +149,8 @@ export default class SamplePlugin extends Plugin {
             label: "Open Float Layer(open help)",
             click: () => {
                 this.addFloatLayer({
-                    ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
-                    defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
+                    ids: ["20230523173319-xj1l3qu", "20230523173321-55o0w2n"],
+                    defIds: ["20230523173323-imgm9tp", "20230523173324-cxu98t3"],
                     x: window.innerWidth - 768 - 120,
                     y: 32
                 });
