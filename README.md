@@ -178,3 +178,26 @@ The github action is included in this sample, you can use it to publish your new
             prerelease: true # change this to false
     ```
 
+
+## How to remove svelte dependencies
+
+This plugin is packaged in vite and provides a dependency on the svelte framework. However, in practice some developers may not want to use svelte and only want to use the vite package.
+
+In fact you can use this template without using svelte without any modifications at all. The compilation-related parts of the svelte compilation are loaded into the vite workflow as plugins, so even if you don't have svelte in your project, it won't matter much.
+
+If you insist on removing all svelte dependencies so that they do not pollute your workspace, you can perform the following steps. 1.
+
+1. delete the
+    ```json
+    {
+      "@sveltejs/vite-plugin-svelte": "^2.0.3",
+      "@tsconfig/svelte": "^4.0.1",
+      "svelte": "^3.57.0"
+    }
+    ```
+2. delete the `svelte.config.js` file
+3. delete the following line from the `vite.config.js` file
+    - Line 6: `import { svelte } from "@sveltejs/vite-plugin-svelte"`
+    - Line 20: `svelte(),`
+4. delete line 37 of `tsconfig.json` from `"svelte"` 5.
+5. re-run `pnpm i`
