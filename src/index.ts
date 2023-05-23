@@ -1,7 +1,3 @@
-/**
- * Copyright (c) 2023 frostime. All rights reserved.
- * https://github.com/frostime/sy-plugin-template-vite
- */
 import { Plugin, showMessage, confirm, Dialog, Menu, isMobile, openTab } from "siyuan";
 import "./index.scss";
 
@@ -15,14 +11,11 @@ const DOCK_TYPE = "dock_tab";
 
 export default class SamplePlugin extends Plugin {
 
-    counter: { [key: string]: number } = {
-        hello: 0,
-    };
     private customTab: () => any;
 
     async onload() {
         showMessage("Hello SiYuan Plugin");
-        console.log(this.i18n.helloPlugin);
+        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
         const topBarElement = this.addTopBar({
             icon: "iconEmoji",
@@ -79,8 +72,33 @@ export default class SamplePlugin extends Plugin {
 
     }
 
+    onLayoutReady() {
+        this.loadData(STORAGE_NAME);
+    }
+
+    onunload() {
+        console.log(this.i18n.byePlugin);
+        showMessage("Goodbye SiYuan Plugin");
+        console.log("onunload");
+    }
+
     private wsEvent({ detail }: any) {
         console.log(detail);
+    }
+
+    private blockIconEvent({detail}: any) {
+        console.log(detail);
+        detail.menu.addSeparator(0);
+        const ids: string[] = [];
+        detail.blockElements.forEach((item: HTMLElement) => {
+            ids.push(item.getAttribute("data-node-id"));
+        });
+        detail.menu.addItem({
+            index: 1,
+            iconHTML: "",
+            type: "readonly",
+            label: "IDs<br>" + ids.join("<br>"),
+        });
     }
 
     private async addMenu(rect: DOMRect) {
@@ -127,25 +145,79 @@ export default class SamplePlugin extends Plugin {
             }
         });
         menu.addItem({
+            icon: "iconLayout",
+            label: "Open Float Layer(open help)",
+            click: () => {
+                this.addFloatLayer({
+                    ids: ["20210428212840-8rqwn5o", "20201225220955-l154bn4"],
+                    defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
+                    x: window.innerWidth - 768 - 120,
+                    y: 32
+                });
+            }
+        });
+        menu.addItem({
             icon: "iconTrashcan",
             label: "Remove Data",
             click: () => {
-                this.removeData(STORAGE_NAME);
+                this.removeData(STORAGE_NAME).then(() => {
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+                });
             }
         });
         menu.addItem({
-            icon: "iconSelect",
-            label: "On ws-main",
-            click: () => {
-                this.eventBus.on("ws-main", this.wsEvent);
-            }
-        });
-        menu.addItem({
-            icon: "iconClose",
-            label: "Off ws-main",
-            click: () => {
-                this.eventBus.off("ws-main", this.wsEvent);
-            }
+            icon: "iconScrollHoriz",
+            label: "Event Bus",
+            type: "submenu",
+            submenu: [{
+                icon: "iconSelect",
+                label: "On ws-main",
+                click: () => {
+                    this.eventBus.on("ws-main", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off ws-main",
+                click: () => {
+                    this.eventBus.off("ws-main", this.wsEvent);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-blockicon",
+                click: () => {
+                    this.eventBus.on("click-blockicon", this.blockIconEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-blockicon",
+                click: () => {
+                    this.eventBus.off("click-blockicon", this.blockIconEvent);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-pdf",
+                click: () => {
+                    this.eventBus.on("click-pdf", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-pdf",
+                click: () => {
+                    this.eventBus.off("click-pdf", this.wsEvent);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-editorcontent",
+                click: () => {
+                    this.eventBus.on("click-editorcontent", this.wsEvent);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-editorcontent",
+                click: () => {
+                    this.eventBus.off("click-editorcontent", this.wsEvent);
+                }
+            }]
         });
         menu.addSeparator();
         menu.addItem({
@@ -181,7 +253,6 @@ export default class SamplePlugin extends Plugin {
     }
 
     private openHelloInDialog() {
-        this.counter.hello++;
         let dialog = new Dialog({
             title: "Hello World",
             content: `<div id="helloPanel"></div>`,
@@ -197,10 +268,5 @@ export default class SamplePlugin extends Plugin {
                 i18n: this.i18n.hello
             }
         });
-    }
-
-    async onunload() {
-        showMessage("Goodbye SiYuan Plugin");
-        console.log("onunload");
     }
 }
