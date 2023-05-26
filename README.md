@@ -69,7 +69,8 @@ conveniently.
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "minAppVersion": "2.9.0",
   "displayName": {
     "en_US": "Plugin sample with vite and svelte",
     "zh_CN": "插件样例 vite + svelte 版"
@@ -82,13 +83,9 @@ conveniently.
     "en_US": "README_en_US.md",
     "zh_CN": "README.md"
   },
-  "i18n": [
-    "en_US",
-    "zh_CN"
-  ],
   "funding": {
     "custom": [
-      "https://afdian.net/a/frostime"
+      ""
     ]
   }
 }
@@ -99,6 +96,7 @@ conveniently.
 * `author`: Plugin author name
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
+* `minAppVersion`: Minimum version number of SiYuan required to use this plugin
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
@@ -108,7 +106,6 @@ conveniently.
 * `readme`: readme file name, mainly used to display in the marketplace details page, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
-* `i18n`: Plugin supported language list
 * `funding`: Plugin sponsorship information
     * `openCollective`: Open Collective name
     * `patreon`: Patreon name
