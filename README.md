@@ -3,6 +3,9 @@
 
 [中文版](./README_zh_CN.md)
 
+> Come up with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.0.6](https://github.com/siyuan-note/plugin-sample/tree/v0.0.6).
+
+
 1. Using vite for packaging
 2. Use symbolic linking instead of putting the project into the plugins directory program development
 3. Built-in support for the svelte framework
