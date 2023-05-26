@@ -1,8 +1,7 @@
-import { Plugin, showMessage, confirm, Dialog, Menu, isMobile, openTab } from "siyuan";
+import { Plugin, showMessage, confirm, Dialog, Menu, isMobile, openTab, adaptHotkey } from "siyuan";
 import "./index.scss";
 
 import HelloExample from "./hello.svelte";
-import DockExample from "./dock.svelte";
 import SettingPannel from "./libs/setting-panel.svelte";
 
 const STORAGE_NAME = "menu-config";
@@ -48,7 +47,7 @@ export default class SamplePlugin extends Plugin {
         this.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
+                size: {width: 200, height: 0},
                 icon: "iconEmoji",
                 title: "Custom Dock",
             },
@@ -57,16 +56,22 @@ export default class SamplePlugin extends Plugin {
             },
             type: DOCK_TYPE,
             init() {
-                this.component = new DockExample({
-                    target: this.element,
-                    props: {
-                        text: this.data.text,
-                    }
-                });
+                this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
+    <div class="block__icons">
+        <div class="block__logo">
+            <svg><use xlink:href="#iconEmoji"></use></svg>
+            Custom Dock
+        </div>
+        <span class="fn__flex-1 fn__space"></span>
+        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
+    </div>
+    <div class="fn__flex-1 plugin-sample__custom-dock">
+        ${this.data.text}
+    </div>
+</div>`;
             },
             destroy() {
                 console.log("destroy dock:", DOCK_TYPE);
-                this.component.$destroy();
             }
         });
 
