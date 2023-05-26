@@ -3,7 +3,7 @@
 
 [中文版](./README_zh_CN.md)
 
-> Come up with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.0.6](https://github.com/siyuan-note/plugin-sample/tree/v0.0.6).
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.0.6](https://github.com/siyuan-note/plugin-sample/tree/v0.0.6).
 
 
 1. Using vite for packaging
