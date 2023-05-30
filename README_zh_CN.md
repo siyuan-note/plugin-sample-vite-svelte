@@ -17,7 +17,7 @@
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
 3. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i` 安装所需要的依赖
-4. **自动创建符号链接**
+3. **自动创建符号链接** (需要 nodejs 版本在 18 以上)
     - 打开思源笔记, 确保思源内核正在运行
     - 运行 `pnpm run make-link`, 脚本会自动检测所有思源的工作空间, 请在命令行中手动输入序号以选择工作空间
         ```bash
@@ -33,7 +33,7 @@
         Got target directory: H:\Media\SiYuan/data/plugins
         Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite-svelte
         ```
-4. **手动创建符号链接**
+4. **手动创建符号链接** (需要 nodejs 版本在 18 以上)
     - 打开 `./scripts/make_dev_link.js` 文件，更改 `targetDir` 为思源的插件目录 `<siyuan workspace>/data/plugins`
     - 运行 `pnpm run make-link` 命令, 如果看到类似以下的消息，说明创建成功:
       ```bash
@@ -45,6 +45,9 @@
       ```
 5. 执行 `pnpm run dev` 进行实时编译
 6. 在思源中打开集市并在下载选项卡中启用插件
+
+
+> 注意由于使用的 make-link 脚本依赖于 `fetch`，所以如果想要使用 make-link **请保证至少安装 v18 版本的 nodejs**
 
 
 ## 国际化
