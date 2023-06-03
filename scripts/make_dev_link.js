@@ -11,7 +11,8 @@ let targetDir = '';
 // const targetDir = `H:\\SiYuanDevSpace\\data\\plugins`;
 //********************************************************************************************
 
-const log = console.log;
+const log = (info) => console.log(`\x1B[36m%s\x1B[0m`, info);
+const error = (info) => console.log(`\x1B[31m%s\x1B[0m`, info);
 
 async function getSiYuanDir() {
     let url = 'http://127.0.0.1:6806/api/system/getWorkspaces';
@@ -28,12 +29,12 @@ async function getSiYuanDir() {
         if (response.ok) {
             conf = await response.json();
         } else {
-            log(`HTTP-Error: ${response.status}`);
+            error(`HTTP-Error: ${response.status}`);
             return null;
         }
     } catch (e) {
-        log("Error:", e);
-        log("Please make sure SiYuan is running!!!");
+        error("Error:", e);
+        error("Please make sure SiYuan is running!!!");
         return null;
     }
     return conf.data;
@@ -78,23 +79,27 @@ if (targetDir === '') {
 
 //Check
 if (!fs.existsSync(targetDir)) {
-    log(`Failed! plugin directory not exists: "${targetDir}"`);
-    log(`Please set the plugin directory in scripts/make_dev_link.js`);
+    error(`Failed! plugin directory not exists: "${targetDir}"`);
+    error(`Please set the plugin directory in scripts/make_dev_link.js`);
     process.exit(1);
 }
 
 
 //check if plugin.json exists
 if (!fs.existsSync('./plugin.json')) {
-    console.error('Failed! plugin.json not found');
-    process.exit(1);
+    //change dir to parent
+    process.chdir('../');
+    if (!fs.existsSync('./plugin.json')) {
+        error('Failed! plugin.json not found');
+        process.exit(1);
+    }
 }
 
 //load plugin.json
 const plugin = JSON.parse(fs.readFileSync('./plugin.json', 'utf8'));
 const name = plugin?.name;
 if (!name || name === '') {
-    log('Failed! Please set plugin name in plugin.json');
+    error('Failed! Please set plugin name in plugin.json');
     process.exit(1);
 }
 
@@ -108,7 +113,7 @@ if (!fs.existsSync(devDir)) {
 const targetPath = `${targetDir}/${name}`;
 //如果已经存在，就退出
 if (fs.existsSync(targetPath)) {
-    log(`Failed! Target directory  ${targetPath} already exists`);
+    error(`Failed! Target directory  ${targetPath} already exists`);
 } else {
     //创建软链接
     fs.symlinkSync(`${process.cwd()}/dev`, targetPath, 'junction');
