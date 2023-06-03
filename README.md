@@ -21,7 +21,7 @@
     - Notice: we **don't recommand** you to place the folder under your `{workspace}/data/plugins/` folder.
 
 3. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
-4. **Auto create development symbolic links** (requires nodejs over version 18)
+4. **Auto create development symbolic links**
     - Make sure that SiYuan is running
     - Run `pnpm run make-link`, the script will detect all the siyuan workspace, please select the targe workspace and the script will automatically create the symbolic link under the `{workspace}/data/plugins/` folder
         ```bash
@@ -37,7 +37,7 @@
         Got target directory: H:\Media\SiYuan/data/plugins
         Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite-svelte
         ```
-4. **Manually create development symbolic links** (requires nodejs over version 18)
+4. **Manually create development symbolic links**
     - Open `./scripts/make_dev_link.js` file, set `targetDir` to your SiYuan plugin directory `<siyuan workspace>/data/plugins`
     - Run `pnpm run make-link`, succeed if following message is shown:
       ```bash
