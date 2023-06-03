@@ -3,7 +3,8 @@
 
 [中文版](./README_zh_CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.0.6](https://github.com/siyuan-note/plugin-sample/tree/v0.0.6).
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.1.3](https://github.com/siyuan-note/plugin-sample/tree/v0.1.3).
+
 
 
 1. Using vite for packaging
@@ -62,7 +63,6 @@ complete the following tasks:
 * Text used in the plugin, such as button text and tooltips
     * src/i18n/*.json language configuration files
     * Use `this.i18.key` to get the text in the code
-* Finally, declare the language supported by the plugin in the `i18n` field in plugin.json
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
 conveniently.
@@ -74,8 +74,10 @@ conveniently.
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.0.1",
-  "minAppVersion": "2.9.0",
+  "version": "0.1.3",
+  "minAppVersion": "2.8.8",
+  "backends": ["windows", "linux", "darwin"],
+  "frontends": ["desktop"],
   "displayName": {
     "en_US": "Plugin sample with vite and svelte",
     "zh_CN": "插件样例 vite + svelte 版"
@@ -89,8 +91,11 @@ conveniently.
     "zh_CN": "README.md"
   },
   "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
     "custom": [
-      ""
+      "https://ld246.com/sponsor"
     ]
   }
 }
@@ -102,6 +107,21 @@ conveniently.
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
+* `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+  * `windows`: Windows desktop
+  * `linux`: Linux desktop
+  * `darwin`: macOS desktop
+  * `docker`: Docker
+  * `android`: Android APP
+  * `ios`: iOS APP
+  * `all`: All environments
+* `frontends`: Frontend environment required by the plugin, optional values are `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
+  * `desktop`: Desktop
+  * `desktop-window`: Desktop window converted from tab
+  * `mobile`: Mobile APP
+  * `browser-desktop`: Desktop browser
+  * `browser-mobile`: Mobile browser
+  * `all`: All environments
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
@@ -122,13 +142,13 @@ conveniently.
 No matter which method is used to compile and package, we finally need to generate a package.zip, which contains at
 least the following files:
 
-* icon.png
+* i18n/*
+* icon.png (160*160)
+* index.css
 * index.js
 * plugin.json
-* preview.png
+* preview.png (1024*768)
 * README*.md
-* index.css (optional)
-* i18n/* (optional)
 
 ## List on the marketplace
 

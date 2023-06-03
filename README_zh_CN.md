@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例和 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.0.6](https://github.com/siyuan-note/plugin-sample/tree/v0.0.6) 基本保持一致。
+> 本例和 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.1.3](https://github.com/siyuan-note/plugin-sample/tree/v0.1.3) 基本保持一致。
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -59,7 +59,6 @@
 * 插件中使用的文本，比如按钮文字和提示信息
     * src/i18n/*.json 语言配置文件
     * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。
 
@@ -70,8 +69,10 @@
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.0.1",
-  "minAppVersion": "2.9.0",
+  "version": "0.1.3",
+  "minAppVersion": "2.8.8",
+  "backends": ["windows", "linux", "darwin"],
+  "frontends": ["desktop"],
   "displayName": {
     "en_US": "Plugin sample with vite and svelte",
     "zh_CN": "插件样例 vite + svelte 版"
@@ -85,8 +86,11 @@
     "zh_CN": "README.md"
   },
   "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
     "custom": [
-      ""
+      "https://ld246.com/sponsor"
     ]
   }
 }
@@ -97,32 +101,47 @@
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
+* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+  * `windows`：Windows 桌面端
+  * `linux`：Linux 桌面端
+  * `darwin`：macOS 桌面端
+  * `docker`：Docker 端
+  * `android`：Android 端
+  * `ios`：iOS 端
+  * `all`：所有环境
+* `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
+  * `desktop`：桌面端
+  * `desktop-window`：桌面端页签转换的独立窗口
+  * `mobile`：移动端
+  * `browser-desktop`：桌面端浏览器
+  * `browser-mobile`：移动端浏览器
+  * `all`：所有环境
 * `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `description`：插件描述，主要用于插件集市列表中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
-    * `default`：默认语言，必须存在
-    * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `default`：默认语言，必须存在
+  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
 * `funding`：插件赞助信息
-    * `openCollective`：Open Collective 名称
-    * `patreon`：Patreon 名称
-    * `github`：GitHub 登录名
-    * `custom`：自定义赞助链接列表
+  * `openCollective`：Open Collective 名称
+  * `patreon`：Patreon 名称
+  * `github`：GitHub 登录名
+  * `custom`：自定义赞助链接列表
 
 ## 打包
 
 无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
 
-* icon.png
+* i18n/*
+* icon.png (160*160)
+* index.css
 * index.js
 * plugin.json
-* preview.png
+* preview.png (1024*768)
 * README*.md
-* index.css (optional)
-* i18n/* (optional)
 
 ## 上架集市
 
