@@ -27,6 +27,8 @@ export default class PluginSample extends Plugin {
     async onload() {
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
+        console.log("loading plugin-sample", this.i18n);
+
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
         // 图标的制作参见帮助文档
@@ -127,6 +129,7 @@ export default class PluginSample extends Plugin {
             }
         });
 
+        console.log(this.i18n.helloPlugin);
     }
 
     onLayoutReady() {
@@ -156,19 +159,16 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private eventBusLog({ detail }: any) {
+    private eventBusLog({detail}: any) {
         console.log(detail);
     }
 
-    private blockIconEvent({ detail }: any) {
-        console.log(detail);
-        detail.menu.addSeparator(0);
+    private blockIconEvent({detail}: any) {
         const ids: string[] = [];
         detail.blockElements.forEach((item: HTMLElement) => {
             ids.push(item.getAttribute("data-node-id"));
         });
         detail.menu.addItem({
-            index: 1,
             iconHTML: "",
             type: "readonly",
             label: "IDs<br>" + ids.join("<br>"),
@@ -176,10 +176,21 @@ export default class PluginSample extends Plugin {
     }
 
     private showDialog() {
-        new Dialog({
-            title: "Info",
-            content: '<div class="b3-dialog__content">This is a dialog</div>',
-            width: this.isMobile ? "92vw" : "520px",
+        let dialog = new Dialog({
+            title: "Hello World",
+            content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
+            width: this.isMobile ? "92vw" : "720px",
+            destroyCallback(options) {
+                //Destroy the component when the dialog is closed
+                // hello.$destroy();
+            },
+        });
+        let hello = new HelloExample({
+            target: dialog.element.querySelector("#helloPanel"),
+            props: {
+                name: this.i18n.name,
+                i18n: this.i18n.hello
+            }
         });
     }
 
@@ -191,7 +202,7 @@ export default class PluginSample extends Plugin {
             icon: "iconInfo",
             label: "Dialog",
             accelerator: this.commands[0].customHotkey,
-            click: this.showDialog
+            click: () => this.showDialog()
         });
         if (!this.isMobile) {
             menu.addItem({
@@ -370,23 +381,5 @@ export default class PluginSample extends Plugin {
                 isLeft: true,
             });
         }
-    }
-
-    private openHelloInDialog() {
-        let dialog = new Dialog({
-            title: "Hello World",
-            content: `<div id="helloPanel"></div>`,
-            destroyCallback(options) {
-                //You must destroy the component when the dialog is closed
-                hello.$destroy();
-            },
-        });
-        let hello = new HelloExample({
-            target: dialog.element.querySelector("#helloPanel"),
-            props: {
-                name: this.i18n.name,
-                i18n: this.i18n.hello
-            }
-        });
     }
 }
