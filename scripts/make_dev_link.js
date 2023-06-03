@@ -1,4 +1,5 @@
 import fs from 'fs';
+import http from 'node:http';
 import readline  from 'node:readline';
 
 
@@ -19,11 +20,34 @@ let POST_HEADER = {
     "Content-Type": "application/json",
 }
 
+async function myfetch(url, options) {
+    //使用 http 模块，从而兼容那些不支持 fetch 的 nodejs 版本
+    return new Promise((resolve, reject) => {
+        let req = http.request(url, options, (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                resolve({
+                    ok: true,
+                    status: res.statusCode,
+                    json: () => JSON.parse(data)
+                });
+            });
+        });
+        req.on('error', (e) => {
+            reject(e);
+        });
+        req.end();
+    });
+}
+
 async function getSiYuanDir() {
     let url = 'http://127.0.0.1:6806/api/system/getWorkspaces';
     let conf = {};
     try {
-        let response = await fetch(url, {
+        let response = await myfetch(url, {
             method: 'POST',
             headers: POST_HEADER
         });
