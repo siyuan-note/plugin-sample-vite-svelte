@@ -6,9 +6,9 @@ import readline  from 'node:readline';
 
 //Please write the "workspace/data/plugins" directory here
 //请在这里填写你的 "workspace/data/plugins" 目录
-let targetDir = '';
+// let targetDir = '';
 //Like this
-// const targetDir = `H:\\SiYuanDevSpace\\data\\plugins`;
+const targetDir = `H:\\临时文件夹\\SiYuanDevSpace\\data\\plugins`;
 //********************************************************************************************
 
 const log = (info) => console.log(`\x1B[36m%s\x1B[0m`, info);
@@ -17,7 +17,7 @@ const error = (info) => console.log(`\x1B[31m%s\x1B[0m`, info);
 async function getSiYuanDir() {
     let url = 'http://127.0.0.1:6806/api/system/getWorkspaces';
     let header = {
-        // "Authorization": `Token ${token}`,
+        // "Authorization": `Token 6j8dkekjqjwb5dqq`,
         "Content-Type": "application/json",
     }
     let conf = {};
@@ -104,19 +104,45 @@ if (!name || name === '') {
 }
 
 //dev directory
-const devDir = `./dev`;
+const devDir = `${process.cwd()}/dev`;
 //mkdir if not exists
 if (!fs.existsSync(devDir)) {
     fs.mkdirSync(devDir);
 }
 
+function cmpPath(path1, path2) {
+    path1 = path1.replace(/\\/g, '/');
+    path2 = path2.replace(/\\/g, '/');
+    // sepertor at tail
+    if (path1[path1.length - 1] !== '/') {
+        path1 += '/';
+    }
+    if (path2[path2.length - 1] !== '/') {
+        path2 += '/';
+    }
+    return path1 === path2;
+}
+
 const targetPath = `${targetDir}/${name}`;
 //如果已经存在，就退出
 if (fs.existsSync(targetPath)) {
-    error(`Failed! Target directory  ${targetPath} already exists`);
+    let isSymbol = fs.lstatSync(targetPath).isSymbolicLink();
+
+    if (isSymbol) {
+        let srcPath = fs.readlinkSync(targetPath);
+        
+        if (cmpPath(srcPath, devDir)) {
+            log(`Good! ${targetPath} is already linked to ${devDir}`);
+        } else {
+            error(`Error! Already exists symbolic link ${targetPath}\nBut it links to ${srcPath}`);
+        }
+    } else {
+        error(`Failed! ${targetPath} already exists and is not a symbolic link`);
+    }
+
 } else {
     //创建软链接
-    fs.symlinkSync(`${process.cwd()}/dev`, targetPath, 'junction');
+    fs.symlinkSync(devDir, targetPath, 'junction');
     log(`Done! Created symlink ${targetPath}`);
 }
 
