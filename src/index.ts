@@ -19,13 +19,13 @@ const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
-export default class SamplePlugin extends Plugin {
+export default class PluginSample extends Plugin {
 
-    private customTab: () => any;
+    private customTab: () => IModel;
     private isMobile: boolean;
 
     async onload() {
-        this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
@@ -60,7 +60,7 @@ export default class SamplePlugin extends Plugin {
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 });
             });
@@ -69,9 +69,9 @@ export default class SamplePlugin extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
 
-        let div = document.createElement("div");
+        let tabDiv = document.createElement("div");
         new HelloExample({
-            target: div,
+            target: tabDiv,
             props: {
                 name: this.i18n.name,
                 i18n: this.i18n.hello
@@ -80,7 +80,7 @@ export default class SamplePlugin extends Plugin {
         this.customTab = this.addTab({
             type: TAB_TYPE,
             init() {
-                this.element.appendChild(div);
+                this.element.appendChild(tabDiv);
                 console.log(this.element);
             },
             destroy() {
@@ -99,8 +99,8 @@ export default class SamplePlugin extends Plugin {
         this.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
-                icon: "iconEmoji",
+                size: {width: 200, height: 0},
+                icon: "iconSaving",
                 title: "Custom Dock",
             },
             data: {
