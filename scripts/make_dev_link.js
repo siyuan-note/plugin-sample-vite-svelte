@@ -6,9 +6,9 @@ import readline  from 'node:readline';
 
 //Please write the "workspace/data/plugins" directory here
 //请在这里填写你的 "workspace/data/plugins" 目录
-// let targetDir = '';
+let targetDir = '';
 //Like this
-const targetDir = `H:\\临时文件夹\\SiYuanDevSpace\\data\\plugins`;
+// let targetDir = `H:\\SiYuanDevSpace\\data\\plugins`;
 //********************************************************************************************
 
 const log = (info) => console.log(`\x1B[36m%s\x1B[0m`, info);
