@@ -14,17 +14,18 @@ const targetDir = `H:\\临时文件夹\\SiYuanDevSpace\\data\\plugins`;
 const log = (info) => console.log(`\x1B[36m%s\x1B[0m`, info);
 const error = (info) => console.log(`\x1B[31m%s\x1B[0m`, info);
 
+let POST_HEADER = {
+    // "Authorization": `Token ${token}`,
+    "Content-Type": "application/json",
+}
+
 async function getSiYuanDir() {
     let url = 'http://127.0.0.1:6806/api/system/getWorkspaces';
-    let header = {
-        // "Authorization": `Token 6j8dkekjqjwb5dqq`,
-        "Content-Type": "application/json",
-    }
     let conf = {};
     try {
         let response = await fetch(url, {
             method: 'POST',
-            headers: header
+            headers: POST_HEADER
         });
         if (response.ok) {
             conf = await response.json();
