@@ -5,6 +5,9 @@
     "byeMenu": "再见，菜单！",
     "helloPlugin": "你好，插件！",
     "byePlugin": "再见，插件！",
+    "showDialog": "弹出一个对话框",
+    "removedData": "数据已删除",
+    "confirmRemove": "确认删除 ${name} 中的数据？",
     "name": "思源",
     "hello": {
         "makesure": "使用这个模板之前，请阅读<a href=\"https://github.com/siyuan-note/plugin-sample\">官方教程</a>, 确保自己已经理解了插件的基本开发流程。"
