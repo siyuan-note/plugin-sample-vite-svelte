@@ -6,10 +6,6 @@
  * API 文档见 [API_zh_CN.md](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
  */
 
-import {
-    Block, Notebook, NotebookConf, NotebookId, DocumentId, BlockId,
-    doOperation, PreviousID, ParentID, BlockType, BlockSubType 
-} from "sy-dtype";
 import { fetchSyncPost, IWebSocketData } from "siyuan";
 
 
