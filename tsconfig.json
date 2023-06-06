@@ -35,7 +35,12 @@
             "node",
             "vite/client",
             "svelte"
-        ]
+        ],
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": ["*"],
+            "@/libs/*": ["libs/*"],
+        }
     },
     "include": [
         "tools/**/*.ts",

@@ -10,10 +10,10 @@ import {
     getBackend,
     IModel
 } from "siyuan";
-import "./index.scss";
+import "@/index.scss";
 
-import HelloExample from "./hello.svelte";
-import SettingPannel from "./libs/setting-panel.svelte";
+import HelloExample from "@/hello.svelte";
+import SettingPannel from "@/libs/setting-panel.svelte";
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";

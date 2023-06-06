@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { version } from "./api";
+    import { version } from "@/api";
     import { showMessage } from "siyuan";
-    import Typo from "./libs/b3-typography.svelte";
+    import Typo from "@/libs/b3-typography.svelte";
 
     export let name: string;
     export let i18n: any;
