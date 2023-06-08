@@ -12,9 +12,6 @@ import {
 } from "siyuan";
 import "@/index.scss";
 
-import HelloExample from "@/hello.svelte";
-import SettingPannel from "@/libs/setting-panel.svelte";
-
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
@@ -71,22 +68,10 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
 
-        let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                name: this.i18n.name,
-                i18n: this.i18n.hello
-            }
-        });
         this.customTab = this.addTab({
             type: TAB_TYPE,
             init() {
-                this.element.appendChild(tabDiv);
-                console.log(this.element);
-            },
-            destroy() {
-                console.log("destroy tab:", TAB_TYPE);
+                this.element.innerHTML = '<p>Hello</p>'
             }
         });
 
@@ -144,19 +129,7 @@ export default class PluginSample extends Plugin {
     }
 
     openSetting(): void {
-        let dialog = new Dialog({
-            title: "SettingPannel",
-            content: `<div id="SettingPanel"></div>`,
-            width: "600px",
-            destroyCallback: (options) => {
-                console.log("destroyCallback", options);
-                //You must destroy the component when the dialog is closed
-                pannel.$destroy();
-            }
-        });
-        let pannel = new SettingPannel({
-            target: dialog.element.querySelector("#SettingPanel"),
-        });
+        
     }
 
     private eventBusLog({detail}: any) {

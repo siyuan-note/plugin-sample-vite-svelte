@@ -1,5 +1,5 @@
 
-# SiYuan plugin sample with vite and svelte
+# SiYuan plugin sample with vite
 
 [中文版](./README_zh_CN.md)
 
@@ -9,8 +9,7 @@
 
 1. Using vite for packaging
 2. Use symbolic linking instead of putting the project into the plugins directory program development
-3. Built-in support for the svelte framework
-4. Provides a github action template to automatically generate package.zip and upload to new release
+3. Provides a github action template to automatically generate package.zip and upload to new release
 
 
 ## Get started
@@ -26,7 +25,7 @@
     - Run `pnpm run make-link`, the script will detect all the siyuan workspace, please select the targe workspace and the script will automatically create the symbolic link under the `{workspace}/data/plugins/` folder
         ```bash
         >>> pnpm run make-link
-        > plugin-sample-vite-svelte@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite-svelte
+        > plugin-sample-vite@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite
         > node  --no-warnings ./scripts/make_dev_link.js
 
         "targetDir" is empty, try to get SiYuan directory automatically....
