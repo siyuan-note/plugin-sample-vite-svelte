@@ -48,7 +48,7 @@ export default class PluginSample extends Plugin {
                 let rect = topBarElement.getBoundingClientRect();
                 // 如果被隐藏，则使用更多按钮
                 if (rect.width === 0) {
-                    rect = document.querySelector("#barMore").getBoundingClientRect();
+                    rect = document.querySelector("#barPlugins").getBoundingClientRect();
                 }
                 this.addMenu(rect);
             }
@@ -135,7 +135,7 @@ export default class PluginSample extends Plugin {
             confirmCallback: () => {
                 this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value});
             }
-        })
+        });
         this.setting.addItem({
             title: "Readonly text",
             createActionElement: () => {
@@ -144,18 +144,18 @@ export default class PluginSample extends Plugin {
                 textareaElement.value = this.data[STORAGE_NAME].readonlyText;
                 return textareaElement;
             },
-        })
+        });
         const btnaElement = document.createElement("button");
-        btnaElement.className = "b3-button b3-button--outline fn__flex-center";
+        btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
         btnaElement.textContent = "Open";
         btnaElement.addEventListener("click", () => {
-            window.open("https://github.com/siyuan-note/plugin-sample-vite-svelte")
+            window.open("https://github.com/siyuan-note/plugin-sample-vite-svelte");
         });
         this.setting.addItem({
             title: "Open plugin url",
             description: "Open plugin url in browser",
             actionElement: btnaElement,
-        })
+        });
 
         console.log(this.i18n.helloPlugin);
     }
@@ -250,7 +250,7 @@ export default class PluginSample extends Plugin {
                             fn: this.customTab
                         },
                     });
-                    console.log(tab)
+                    console.log(tab);
                 }
             });
             menu.addItem({
@@ -263,7 +263,7 @@ export default class PluginSample extends Plugin {
                             path: "assets/paragraph-20210512165953-ag1nib4.svg"
                         }
                     });
-                    console.log(tab)
+                    console.log(tab);
                 }
             });
             menu.addItem({
@@ -276,7 +276,7 @@ export default class PluginSample extends Plugin {
                             id: "20200812220555-lj3enxa",
                         }
                     });
-                    console.log(tab)
+                    console.log(tab);
                 }
             });
             menu.addItem({
@@ -289,7 +289,7 @@ export default class PluginSample extends Plugin {
                             k: "SiYuan"
                         }
                     });
-                    console.log(tab)
+                    console.log(tab);
                 }
             });
             menu.addItem({
@@ -302,7 +302,7 @@ export default class PluginSample extends Plugin {
                             type: "all"
                         }
                     });
-                    console.log(tab)
+                    console.log(tab);
                 }
             });
             menu.addItem({
