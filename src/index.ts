@@ -8,7 +8,8 @@ import {
     adaptHotkey,
     getFrontend,
     getBackend,
-    IModel
+    IModel,
+    Setting
 } from "siyuan";
 import "@/index.scss";
 
@@ -129,6 +130,33 @@ export default class PluginSample extends Plugin {
             }
         });
 
+        const textareaElement = document.createElement("textarea");
+        this.setting = new Setting({
+            confirmCallback: () => {
+                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value});
+            }
+        })
+        this.setting.addItem({
+            title: "Readonly text",
+            createActionElement: () => {
+                textareaElement.className = "b3-text-field fn__block";
+                textareaElement.placeholder = "Readonly text in the menu";
+                textareaElement.value = this.data[STORAGE_NAME].readonlyText;
+                return textareaElement;
+            },
+        })
+        const btnaElement = document.createElement("button");
+        btnaElement.className = "b3-button b3-button--outline fn__flex-center";
+        btnaElement.textContent = "Open";
+        btnaElement.addEventListener("click", () => {
+            window.open("https://github.com/siyuan-note/plugin-sample-vite-svelte")
+        });
+        this.setting.addItem({
+            title: "Open plugin url",
+            description: "Open plugin url in browser",
+            actionElement: btnaElement,
+        })
+
         console.log(this.i18n.helloPlugin);
     }
 
@@ -143,14 +171,17 @@ export default class PluginSample extends Plugin {
         console.log("onunload");
     }
 
-    openSetting(): void {
+    /**
+     * A custom setting pannel provided by svelte
+     */
+    openDIYSetting(): void {
         let dialog = new Dialog({
             title: "SettingPannel",
             content: `<div id="SettingPanel"></div>`,
             width: "600px",
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
-                //You must destroy the component when the dialog is closed
+                //You'd better destroy the component when the dialog is closed
                 pannel.$destroy();
             }
         });
@@ -181,7 +212,6 @@ export default class PluginSample extends Plugin {
             content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
             width: this.isMobile ? "92vw" : "720px",
             destroyCallback(options) {
-                //Destroy the component when the dialog is closed
                 // hello.$destroy();
             },
         });
@@ -364,9 +394,35 @@ export default class PluginSample extends Plugin {
                 click: () => {
                     this.eventBus.off("open-noneditableblock", this.eventBusLog);
                 }
+            }, {
+                icon: "iconSelect",
+                label: "On loaded-protyle",
+                click: () => {
+                    this.eventBus.on("loaded-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off loaded-protyle",
+                click: () => {
+                    this.eventBus.off("loaded-protyle", this.eventBusLog);
+                }
             }]
         });
         menu.addSeparator();
+        menu.addItem({
+            icon: "iconSettings",
+            label: "Official Setting Dialog",
+            click: () => {
+                this.openSetting();
+            }
+        });
+        menu.addItem({
+            icon: "iconSettings",
+            label: "A custom setting dialog (by svelte)",
+            click: () => {
+                this.openDIYSetting();
+            }
+        });
         menu.addItem({
             icon: "iconSparkles",
             label: this.data[STORAGE_NAME].readonlyText || "Readonly",
