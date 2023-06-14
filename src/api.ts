@@ -241,6 +241,16 @@ export async function getChildBlocks(id: BlockId): Promise<ChildBlock[]> {
     return request(url, data);
 }
 
+export async function transferBlockRef(fromID: BlockId, toID: BlockId, refIDs: BlockId[]) {
+    let data = {
+        fromID: fromID,
+        toID: toID,
+        refIDs: refIDs
+    }
+    let url = '/api/block/transferBlockRef';
+    return request(url, data);
+}
+
 // **************************************** Attributes ****************************************
 export async function setBlockAttrs(id: BlockId, attrs: { [key: string]: string }) {
     let data = {
