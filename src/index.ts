@@ -45,12 +45,19 @@ export default class PluginSample extends Plugin {
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
-                let rect = topBarElement.getBoundingClientRect();
-                // 如果被隐藏，则使用更多按钮
-                if (rect.width === 0) {
-                    rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                if (this.isMobile) {
+                    this.addMenu();
+                } else {
+                    let rect = topBarElement.getBoundingClientRect();
+                    // 如果被隐藏，则使用更多按钮
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barMore").getBoundingClientRect();
+                    }
+                    if (rect.width === 0) {
+                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
+                    }
+                    this.addMenu(rect);
                 }
-                this.addMenu(rect);
             }
         });
 
@@ -85,6 +92,9 @@ export default class PluginSample extends Plugin {
             init() {
                 this.element.appendChild(tabDiv);
                 console.log(this.element);
+            },
+            beforeDestroy() {
+                console.log("before destroy tab:", TAB_TYPE);
             },
             destroy() {
                 console.log("destroy tab:", TAB_TYPE);
@@ -224,7 +234,7 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private addMenu(rect: DOMRect) {
+    private addMenu(rect?: DOMRect) {
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
@@ -232,7 +242,9 @@ export default class PluginSample extends Plugin {
             icon: "iconInfo",
             label: "Dialog",
             accelerator: this.commands[0].customHotkey,
-            click: () => this.showDialog()
+            click: () => {
+                this.showDialog()
+            }
         });
         if (!this.isMobile) {
             menu.addItem({
