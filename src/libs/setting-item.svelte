@@ -13,7 +13,7 @@
         min: number;
         max: number;
         step: number;
-    } = {min: 0, max: 100, step: 1}; // Use it if type is slider
+    } = { min: 0, max: 100, step: 1 }; // Use it if type is slider
 
     const dispatch = createEventDispatcher();
 
@@ -76,15 +76,17 @@
         </select>
     {:else if type == "slider"}
         <!-- Slider -->
-        <input
-            class="b3-slider fn__size200"
-            id="fontSize"
-            min="{slider.min}"
-            max="{slider.max}"
-            step="{slider.step}"
-            type="range"
-            bind:value={settingValue}
-            on:change={changed}
-        />
+        <div class="b3-tooltips b3-tooltips__n" aria-label={settingValue}>
+            <input
+                class="b3-slider fn__size200"
+                id="fontSize"
+                min={slider.min}
+                max={slider.max}
+                step={slider.step}
+                type="range"
+                bind:value={settingValue}
+                on:change={changed}
+            />
+        </div>
     {/if}
 </label>

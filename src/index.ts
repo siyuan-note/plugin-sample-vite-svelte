@@ -9,7 +9,9 @@ import {
     getFrontend,
     getBackend,
     IModel,
-    Setting
+    Setting,
+    fetchPost,
+    Protyle
 } from "siyuan";
 import "@/index.scss";
 
@@ -83,8 +85,7 @@ export default class PluginSample extends Plugin {
         new HelloExample({
             target: tabDiv,
             props: {
-                name: this.i18n.name,
-                i18n: this.i18n.hello
+                app: this.app,
             }
         });
         this.customTab = this.addTab({
@@ -167,6 +168,15 @@ export default class PluginSample extends Plugin {
             actionElement: btnaElement,
         });
 
+        this.protyleSlash = [{
+            filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
+            html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertEmoji}</span><span class="b3-list-item__meta">😊</span></div>`,
+            id: "insertEmoji",
+            callback(protyle: Protyle) {
+                protyle.insert("😊");
+            }
+        }];
+
         console.log(this.i18n.helloPlugin);
     }
 
@@ -225,11 +235,10 @@ export default class PluginSample extends Plugin {
                 // hello.$destroy();
             },
         });
-        let hello = new HelloExample({
+        new HelloExample({
             target: dialog.element.querySelector("#helloPanel"),
             props: {
-                name: this.i18n.name,
-                i18n: this.i18n.hello
+                app: this.app,
             }
         });
     }
@@ -240,10 +249,10 @@ export default class PluginSample extends Plugin {
         });
         menu.addItem({
             icon: "iconInfo",
-            label: "Dialog",
+            label: "Dialog(open help first)",
             accelerator: this.commands[0].customHotkey,
             click: () => {
-                this.showDialog()
+                this.showDialog();
             }
         });
         if (!this.isMobile) {
