@@ -8,6 +8,7 @@
     "showDialog": "Show dialog",
     "removedData": "Data deleted",
     "confirmRemove": "Confirm to delete the data in ${name}?",
+    "insertEmoji": "Insert Emoji",
     "name": "SiYuan",
     "hello": {
         "makesure": "Before using this template, please read the <a href=\"https://github.com/siyuan-note/plugin-sample\">offical sample</a>, make sure that you've known about the pipeline for plugin developing."
