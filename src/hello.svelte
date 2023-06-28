@@ -1,61 +1,49 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { version } from "@/api";
-    import { showMessage } from "siyuan";
-    import Typo from "@/libs/b3-typography.svelte";
+    import { version, sql as query } from "@/api";
+    import { showMessage, fetchPost, Protyle } from "siyuan";
 
-    export let name: string;
-    export let i18n: any;
+    let time: string = "";
+    let ver: string;
 
-    let time;
-    let ver;
-
-    let intv1 = setInterval(async () => {
-        time = new Date();
-    }, 1000);
+    let divProtyle: HTMLDivElement;
+    let protyle: any;
+    let blockID: string = '';
 
     onMount(async () => {
-        time = new Date();
         ver = await version();
+        fetchPost("/api/system/currentTime", {}, (response) => {
+            time = new Date(response.data).toString();
+        });
+        await initProtyle();
     });
 
-    /**
-     * You must call this function when the component is destroyed.
-    */
     onDestroy(() => {
         showMessage("Hello panel closed");
-        clearInterval(intv1);
+        protyle.destroy();
     });
 
-    $: time_str = new Date(time).toLocaleTimeString();
-
+    async function initProtyle() {
+        let sql = "SELECT * FROM blocks ORDER BY RANDOM () LIMIT 1;";
+        let blocks: Block[] = await query(sql);
+        blockID = blocks[0].id;
+        protyle = new Protyle(this.app, divProtyle, {
+            blockId: blockID,
+            mode: "preview"
+        });
+    }
 </script>
 
-<div id="hello">
-    <div class="fn__flex">
-        <div class="fn__flex-1">
-            <h2>Hello {name} v{ver}</h2>
-        </div>
-        <div class="fn__flex-1 b3-label__text __text-right">
-            {time_str}
-        </div>
+<div class="b3-dialog__content">
+    <div>API demo:</div>
+    <div class="fn__hr" />
+    <div class="plugin-sample__time">
+        System current time: <span id="time">{time}</span>
     </div>
-
-    <Typo>
-        <h2>Wellcome to plugin sample with vite & svelte</h2>
-        <p>{@html i18n.makesure}</p>
-    </Typo>
-
+    <div class="fn__hr" />
+    <div class="fn__hr" />
+    <div>Protyle demo: id = {blockID}</div>
+    <div class="fn__hr" />
+    <div id="protyle" style="height: 360px;" bind:this={divProtyle}/>
 </div>
 
-<style lang="scss">
-    #hello {
-        margin: 20px;
-        div {
-            margin-bottom: 10px;
-        }
-    }
-    .__text-right {
-        text-align: right;
-    }
-</style>
