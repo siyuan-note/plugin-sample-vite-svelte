@@ -3,6 +3,8 @@
     import { version, sql as query } from "@/api";
     import { showMessage, fetchPost, Protyle } from "siyuan";
 
+    export let app;
+
     let time: string = "";
     let ver: string;
 
@@ -15,7 +17,7 @@
         fetchPost("/api/system/currentTime", {}, (response) => {
             time = new Date(response.data).toString();
         });
-        await initProtyle();
+        protyle = await initProtyle();
     });
 
     onDestroy(() => {
@@ -27,9 +29,8 @@
         let sql = "SELECT * FROM blocks ORDER BY RANDOM () LIMIT 1;";
         let blocks: Block[] = await query(sql);
         blockID = blocks[0].id;
-        protyle = new Protyle(this.app, divProtyle, {
-            blockId: blockID,
-            mode: "preview"
+        return new Protyle(app, divProtyle, {
+            blockId: blockID
         });
     }
 </script>

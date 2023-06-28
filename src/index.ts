@@ -83,7 +83,10 @@ export default class PluginSample extends Plugin {
 
         let tabDiv = document.createElement("div");
         new HelloExample({
-            target: tabDiv
+            target: tabDiv,
+            props: {
+                app: this.app,
+            }
         });
         this.customTab = this.addTab({
             type: TAB_TYPE,
@@ -234,6 +237,9 @@ export default class PluginSample extends Plugin {
         });
         new HelloExample({
             target: dialog.element.querySelector("#helloPanel"),
+            props: {
+                app: this.app,
+            }
         });
     }
 
