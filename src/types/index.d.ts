@@ -50,7 +50,10 @@ type Block = {
     length: number;
     type: BlockType;
     subtype: BlockSubType;
-    ial?: { [key: string]: string };
+    /** string of { [key: string]: string } 
+     * For instance: "{: custom-type=\"query-code\" id=\"20230613234017-zkw3pr0\" updated=\"20230613234509\"}" 
+     */
+    ial?: string;
     sort: number;
     created: string;
     updated: string;
