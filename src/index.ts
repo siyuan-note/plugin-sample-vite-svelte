@@ -26,9 +26,10 @@ export default class PluginSample extends Plugin {
 
     private customTab: () => IModel;
     private isMobile: boolean;
+    private blockIconEventBindThis = this.blockIconEvent.bind(this);
 
     async onload() {
-        this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+        this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
         console.log("loading plugin-sample", this.i18n);
 
@@ -72,7 +73,7 @@ export default class PluginSample extends Plugin {
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
             confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
-                    this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
+                    this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
                 });
             });
@@ -113,7 +114,7 @@ export default class PluginSample extends Plugin {
         this.addDock({
             config: {
                 position: "LeftBottom",
-                size: {width: 200, height: 0},
+                size: { width: 200, height: 0 },
                 icon: "iconSaving",
                 title: "Custom Dock",
             },
@@ -144,7 +145,7 @@ export default class PluginSample extends Plugin {
         const textareaElement = document.createElement("textarea");
         this.setting = new Setting({
             confirmCallback: () => {
-                this.saveData(STORAGE_NAME, {readonlyText: textareaElement.value});
+                this.saveData(STORAGE_NAME, { readonlyText: textareaElement.value });
             }
         });
         this.setting.addItem({
@@ -210,11 +211,11 @@ export default class PluginSample extends Plugin {
         });
     }
 
-    private eventBusLog({detail}: any) {
+    private eventBusLog({ detail }: any) {
         console.log(detail);
     }
 
-    private blockIconEvent({detail}: any) {
+    private blockIconEvent({ detail }: any) {
         const ids: string[] = [];
         detail.blockElements.forEach((item: HTMLElement) => {
             ids.push(item.getAttribute("data-node-id"));
@@ -359,13 +360,13 @@ export default class PluginSample extends Plugin {
                 icon: "iconSelect",
                 label: "On click-blockicon",
                 click: () => {
-                    this.eventBus.on("click-blockicon", this.blockIconEvent);
+                    this.eventBus.on("click-blockicon", this.blockIconEventBindThis);
                 }
             }, {
                 icon: "iconClose",
                 label: "Off click-blockicon",
                 click: () => {
-                    this.eventBus.off("click-blockicon", this.blockIconEvent);
+                    this.eventBus.off("click-blockicon", this.blockIconEventBindThis);
                 }
             }, {
                 icon: "iconSelect",
@@ -426,6 +427,102 @@ export default class PluginSample extends Plugin {
                 label: "Off loaded-protyle",
                 click: () => {
                     this.eventBus.off("loaded-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-blockref",
+                click: () => {
+                    this.eventBus.on("open-menu-blockref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-blockref",
+                click: () => {
+                    this.eventBus.off("open-menu-blockref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-fileannotationref",
+                click: () => {
+                    this.eventBus.on("open-menu-fileannotationref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-fileannotationref",
+                click: () => {
+                    this.eventBus.off("open-menu-fileannotationref", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-tag",
+                click: () => {
+                    this.eventBus.on("open-menu-tag", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-tag",
+                click: () => {
+                    this.eventBus.off("open-menu-tag", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-link",
+                click: () => {
+                    this.eventBus.on("open-menu-link", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-link",
+                click: () => {
+                    this.eventBus.off("open-menu-link", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-image",
+                click: () => {
+                    this.eventBus.on("open-menu-image", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-image",
+                click: () => {
+                    this.eventBus.off("open-menu-image", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-av",
+                click: () => {
+                    this.eventBus.on("open-menu-av", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-av",
+                click: () => {
+                    this.eventBus.off("open-menu-av", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-content",
+                click: () => {
+                    this.eventBus.on("open-menu-content", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-content",
+                click: () => {
+                    this.eventBus.off("open-menu-content", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-breadcrumbmore",
+                click: () => {
+                    this.eventBus.on("open-menu-breadcrumbmore", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-breadcrumbmore",
+                click: () => {
+                    this.eventBus.off("open-menu-breadcrumbmore", this.eventBusLog);
                 }
             }]
         });
