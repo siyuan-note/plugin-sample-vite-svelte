@@ -93,7 +93,7 @@ if (targetDir === '') {
     log('"targetDir" is empty, try to get SiYuan directory automatically....')
     let res = await getSiYuanDir();
     
-    if (res === null) {
+    if (res === null || res === undefined || res.length === 0) {
         log('Failed! You can set the plugin directory in scripts/make_dev_link.js and try again');
         process.exit(1);
     }
