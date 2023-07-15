@@ -3,7 +3,7 @@
 
 [中文版](./README_zh_CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.1.8](https://github.com/siyuan-note/plugin-sample/tree/v0.1.8).
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.1.10](https://github.com/siyuan-note/plugin-sample/tree/v0.1.10)
 
 
 
