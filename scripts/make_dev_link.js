@@ -54,12 +54,12 @@ async function getSiYuanDir() {
         if (response.ok) {
             conf = await response.json();
         } else {
-            error(`HTTP-Error: ${response.status}`);
+            error(`\tHTTP-Error: ${response.status}`);
             return null;
         }
     } catch (e) {
-        error("Error:", e);
-        error("Please make sure SiYuan is running!!!");
+        error(`\tError: ${e}`);
+        error("\tPlease make sure SiYuan is running!!!");
         return null;
     }
     return conf.data;
@@ -67,9 +67,9 @@ async function getSiYuanDir() {
 
 async function chooseTarget(workspaces) {
     let count = workspaces.length;
-    log(`Got ${count} SiYuan ${count > 1 ? 'workspaces' : 'workspace'}`)
+    log(`>>> Got ${count} SiYuan ${count > 1 ? 'workspaces' : 'workspace'}`)
     for (let i = 0; i < workspaces.length; i++) {
-        log(`[${i}] ${workspaces[i].path}`);
+        log(`\t[${i}] ${workspaces[i].path}`);
     }
 
     if (count == 1) {
@@ -80,7 +80,7 @@ async function chooseTarget(workspaces) {
             output: process.stdout
         });
         let index = await new Promise((resolve, reject) => {
-            rl.question(`Please select a workspace[0-${count-1}]: `, (answer) => {
+            rl.question(`\tPlease select a workspace[0-${count-1}]: `, (answer) => {
                 resolve(answer);
             });
         });
@@ -89,17 +89,30 @@ async function chooseTarget(workspaces) {
     }
 }
 
+log('>>> Try to visit constant "targetDir" in make_dev_link.js...')
+
 if (targetDir === '') {
-    log('"targetDir" is empty, try to get SiYuan directory automatically....')
+    log('>>> Constant "targetDir" is empty, try to get SiYuan directory automatically....')
     let res = await getSiYuanDir();
     
     if (res === null || res === undefined || res.length === 0) {
-        log('Failed! You can set the plugin directory in scripts/make_dev_link.js and try again');
-        process.exit(1);
+        log('>>> Can not get SiYuan directory automatically, try to visit environment variable "SIYUAN_PLUGIN_DIR"....');
+
+        // console.log(process.env)
+        let env = process.env?.SIYUAN_PLUGIN_DIR;
+        if (env !== undefined && env !== null && env !== '') {
+            targetDir = env;
+            log(`\tGot target directory from environment variable "SIYUAN_PLUGIN_DIR": ${targetDir}`);
+        } else {
+            error('\tCan not get SiYuan directory from environment variable "SIYUAN_PLUGIN_DIR", failed!');
+            process.exit(1);
+        }
+    } else {
+        targetDir = await chooseTarget(res);
     }
 
-    targetDir = await chooseTarget(res);
-    log(`Got target directory: ${targetDir}`);
+
+    log(`>>> Successfully got target directory: ${targetDir}`);
 }
 
 //Check
