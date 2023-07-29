@@ -67,3 +67,16 @@ type doOperation = {
     previousID: BlockId;
     retData: null;
 }
+
+interface Window {
+    siyuan: {
+        notebooks: any;
+        menus: any;
+        dialogs: any;
+        blockPanels: any;
+        storage: any;
+        user: any;
+        ws: any;
+        languages: any;
+    };
+}
