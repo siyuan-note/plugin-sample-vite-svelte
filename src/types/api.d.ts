@@ -1,3 +1,9 @@
+interface IResGetNotebookConf {
+    box: string;
+    conf: NotebookConf;
+    name: string;
+}
+
 interface IReslsNotebooks {
     notebooks: Notebook[];
 }
