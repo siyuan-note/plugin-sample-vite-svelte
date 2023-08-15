@@ -2,7 +2,7 @@
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.1.8",
+  "version": "0.1.12",
   "minAppVersion": "2.9.0",
   "backends": ["all"],
   "frontends": ["all"],
