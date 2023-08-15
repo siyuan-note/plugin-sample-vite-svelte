@@ -328,6 +328,27 @@ export async function readDir(path: string): Promise<IResReadDir> {
     return request(url, data);
 }
 
+// /api/export/exportResources
+/*
+{
+  "paths": [
+    "/conf/appearance/boot",
+    "/conf/appearance/langs",
+    "/conf/appearance/emojis/conf.json",
+    "/conf/appearance/icons/index.html",
+  ],
+  "name": "zip-file-name"
+}
+*/
+export async function exportResources(paths: string[], name: string): Promise<IResExportResources> {
+    let data = {
+        paths: paths,
+        name: name
+    }
+    let url = '/api/export/exportResources';
+    return request(url, data);
+}
+
 
 export async function exportMdContent(id: DocumentId): Promise<IResExportMdContent> {
     let data = {
@@ -344,6 +365,23 @@ export async function pandoc(args: PandocArgs[]) {
     }
     let url = '/api/convert/pandoc';
     return request(url, data);
+}
+
+// **************************************** Network ****************************************
+export async function forwardProxy(
+    url: string, method: string, payload: any,
+    headers: any[], timeout: number = 7000, contentType: string = "text/html"
+): Promise<IResForwardProxy> {
+    let data = {
+        url: url,
+        method: method,
+        timeout: timeout,
+        contentType: contentType,
+        headers: headers,
+        payload: payload
+    }
+    let url1 = '/api/network/forwardProxy';
+    return request(url1, data);
 }
 
 

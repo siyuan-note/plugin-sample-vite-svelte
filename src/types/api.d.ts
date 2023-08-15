@@ -30,6 +30,7 @@ interface IResGetTemplates {
 
 interface IResReadDir {
     isDir: boolean;
+    isSymlink: boolean;
     name: string;
 }
 
@@ -41,5 +42,18 @@ interface IResExportMdContent {
 interface IResBootProgress {
     progress: number;
     details: string;
+}
+
+interface IResForwardProxy {
+    body: string;
+    contentType: string;
+    elapsed: number;
+    headers: { [key: string]: string };
+    status: number;
+    url: string;
+}
+
+interface IResExportResources {
+    path: string;
 }
 
