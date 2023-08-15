@@ -108,7 +108,16 @@ export default class PluginSample extends Plugin {
             hotkey: "⇧⌘M",
             callback: () => {
                 this.showDialog();
-            }
+            },
+            fileTreeCallback: (file: any) => {
+                console.log(file, "fileTreeCallback");
+            },
+            editorCallback: (protyle: any) => {
+                console.log(protyle, "editorCallback");
+            },
+            dockCallback: (element: HTMLElement) => {
+                console.log(element, "dockCallback");
+            },
         });
 
         this.addDock({
@@ -535,6 +544,30 @@ export default class PluginSample extends Plugin {
                 label: "Off input-search",
                 click: () => {
                     this.eventBus.off("input-search", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-siyuan-url-plugin",
+                click: () => {
+                    this.eventBus.on("open-siyuan-url-plugin", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-siyuan-url-plugin",
+                click: () => {
+                    this.eventBus.off("open-siyuan-url-plugin", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-siyuan-url-block",
+                click: () => {
+                    this.eventBus.on("open-siyuan-url-block", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-siyuan-url-block",
+                click: () => {
+                    this.eventBus.off("open-siyuan-url-block", this.eventBusLog);
                 }
             }]
         });
