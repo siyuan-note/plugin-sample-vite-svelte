@@ -18,11 +18,8 @@ async function request(url: string, data: any) {
 
 // **************************************** Noteboook ****************************************
 
-export type ReslsNotebooks = {
-    notebooks: Notebook[];
-}
 
-export async function lsNotebooks(): Promise<ReslsNotebooks> {
+export async function lsNotebooks(): Promise<IReslsNotebooks> {
     let url = '/api/notebook/lsNotebooks';
     return request(url, '');
 }
@@ -141,12 +138,8 @@ export async function getHPathByID(id: BlockId): Promise<string> {
 }
 
 // **************************************** Asset Files ****************************************
-export type ResUpload = {
-    errFiles: string[];
-    succMap: { [key: string]: string };
-}
 
-export async function upload(assetsDirPath: string, files: any[]): Promise<ResUpload> {
+export async function upload(assetsDirPath: string, files: any[]): Promise<IResUpload> {
     let form = new FormData();
     form.append('assetsDirPath', assetsDirPath);
     for (let file of files) {
@@ -157,12 +150,8 @@ export async function upload(assetsDirPath: string, files: any[]): Promise<ResUp
 }
 
 // **************************************** Block ****************************************
-export type ResdoOperations = {
-    doOperations: doOperation[];
-    undoOperations: doOperation[] | null;
-}
 type DataType = "markdown" | "dom";
-export async function insertBlock(dataType: DataType, data: string, previousID: BlockId): Promise<ResdoOperations> {
+export async function insertBlock(dataType: DataType, data: string, previousID: BlockId): Promise<IResdoOperations> {
     let data1 = {
         dataType: dataType,
         data: data,
@@ -173,7 +162,7 @@ export async function insertBlock(dataType: DataType, data: string, previousID: 
 }
 
 
-export async function appendBlock(dataType: DataType, data: string, parentID: BlockId | DocumentId): Promise<ResdoOperations> {
+export async function appendBlock(dataType: DataType, data: string, parentID: BlockId | DocumentId): Promise<IResdoOperations> {
     let data1 = {
         dataType: dataType,
         data: data,
@@ -184,7 +173,7 @@ export async function appendBlock(dataType: DataType, data: string, parentID: Bl
 }
 
 
-export async function updateBlock(dataType: DataType, data: string, id: BlockId): Promise<ResdoOperations> {
+export async function updateBlock(dataType: DataType, data: string, id: BlockId): Promise<IResdoOperations> {
     let data1 = {
         dataType: dataType,
         data: data,
@@ -195,7 +184,7 @@ export async function updateBlock(dataType: DataType, data: string, id: BlockId)
 }
 
 
-export async function deleteBlock(id: BlockId): Promise<ResdoOperations> {
+export async function deleteBlock(id: BlockId): Promise<IResdoOperations> {
     let data = {
         id: id
     }
@@ -204,7 +193,7 @@ export async function deleteBlock(id: BlockId): Promise<ResdoOperations> {
 }
 
 
-export async function moveBlock(id: BlockId, previousID: PreviousID | null = null, parentID: ParentID | null = null): Promise<ResdoOperations> {
+export async function moveBlock(id: BlockId, previousID: PreviousID | null = null, parentID: ParentID | null = null): Promise<IResdoOperations> {
     let data = {
         id: id,
         previousID: previousID,
@@ -215,12 +204,7 @@ export async function moveBlock(id: BlockId, previousID: PreviousID | null = nul
 }
 
 
-export type ResGetBlockKramdown = {
-    id: BlockId;
-    kramdown: string;
-}
-
-export async function getBlockKramdown(id: BlockId): Promise<ResGetBlockKramdown> {
+export async function getBlockKramdown(id: BlockId): Promise<IResGetBlockKramdown> {
     let data = {
         id: id
     }
@@ -228,12 +212,8 @@ export async function getBlockKramdown(id: BlockId): Promise<ResGetBlockKramdown
     return request(url, data);
 }
 
-export type ChildBlock = {
-    id: BlockId;
-    type: BlockType;
-    subtype?: BlockSubType;
-}
-export async function getChildBlocks(id: BlockId): Promise<ChildBlock[]> {
+
+export async function getChildBlocks(id: BlockId): Promise<IResGetChildBlock[]> {
     let data = {
         id: id
     }
@@ -288,11 +268,7 @@ export async function getBlockByID(blockId: string): Promise<Block> {
 
 // **************************************** Template ****************************************
 
-export type ResGetTemplates = {
-    content: string;
-    path: string;
-}
-export async function render(id: DocumentId, path: string): Promise<ResGetTemplates> {
+export async function render(id: DocumentId, path: string): Promise<IResGetTemplates> {
     let data = {
         id: id,
         path: path
@@ -343,11 +319,8 @@ export async function removeFile(path: string) {
 }
 
 
-export type ResReadDir = {
-    isDir: boolean;
-    name: string;
-}
-export async function readDir(path: string): Promise<ResReadDir> {
+
+export async function readDir(path: string): Promise<IResReadDir> {
     let data = {
         path: path
     }
@@ -356,11 +329,7 @@ export async function readDir(path: string): Promise<ResReadDir> {
 }
 
 
-export type ResExportMdContent = {
-    hPath: string;
-    content: string;
-}
-export async function exportMdContent(id: DocumentId): Promise<ResExportMdContent> {
+export async function exportMdContent(id: DocumentId): Promise<IResExportMdContent> {
     let data = {
         id: id
     }
@@ -379,11 +348,8 @@ export async function pandoc(args: PandocArgs[]) {
 
 
 // **************************************** System ****************************************
-export type ResBootProgress = {
-    progress: number;
-    details: string;
-}
-export async function bootProgress(): Promise<ResBootProgress> {
+
+export async function bootProgress(): Promise<IResBootProgress> {
     return request('/api/system/bootProgress', {});
 }
 
