@@ -397,8 +397,8 @@ export async function pushErrMsg(msg: string, timeout: number = 7000) {
 
 // **************************************** Network ****************************************
 export async function forwardProxy(
-    url: string, method: string, payload: any,
-    headers: any[], timeout: number = 7000, contentType: string = "text/html"
+    url: string, method: string = 'GET', payload: any = {},
+    headers: any[] = [], timeout: number = 7000, contentType: string = "text/html"
 ): Promise<IResForwardProxy> {
     let data = {
         url: url,
