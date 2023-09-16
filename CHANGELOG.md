@@ -1,4 +1,20 @@
-## 0.2.0
+# Changelog
+
+## 0.2.3 2023-09-05
+
+* [Plugin API add openWindow and command.globalCallback](https://github.com/siyuan-note/siyuan/issues/9032)
+
+## 0.2.2 2023-08-29
+
+* [Add plugin event bus `destroy-protyle`](https://github.com/siyuan-note/siyuan/issues/9033)
+* [Add plugin event bus `loaded-protyle-dynamic`](https://github.com/siyuan-note/siyuan/issues/9021)
+
+## 0.2.1 2023-08-21
+
+* [Plugin API add getOpenedTab method](https://github.com/siyuan-note/siyuan/issues/9002)
+* [Plugin API custom.fn => custom.id in openTab](https://github.com/siyuan-note/siyuan/issues/8944)
+
+## 0.2.0 2023-08-15
 
 * [Add plugin event bus `open-siyuan-url-plugin` and `open-siyuan-url-block`](https://github.com/siyuan-note/siyuan/pull/8927)
 
