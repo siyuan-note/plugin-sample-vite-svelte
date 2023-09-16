@@ -18,6 +18,8 @@ import "@/index.scss";
 import HelloExample from "@/hello.svelte";
 import SettingPannel from "@/libs/setting-panel.svelte";
 
+import { SettingUtils } from "./libs/setting-utils";
+
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
@@ -27,6 +29,7 @@ export default class PluginSample extends Plugin {
     private customTab: () => IModel;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
+    private settingUtils: SettingUtils;
 
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
@@ -158,32 +161,66 @@ export default class PluginSample extends Plugin {
             }
         });
 
-        const textareaElement = document.createElement("textarea");
-        this.setting = new Setting({
-            confirmCallback: () => {
-                this.saveData(STORAGE_NAME, { readonlyText: textareaElement.value });
+        this.settingUtils = new SettingUtils(this, STORAGE_NAME);
+        this.settingUtils.addItem({
+            key: "Input",
+            value: "",
+            type: "textinput",
+            title: "Readonly text",
+            description: "Input description",
+        });
+        this.settingUtils.addItem({
+            key: "InputArea",
+            value: "",
+            type: "textarea",
+            title: "Readonly text",
+            description: "Input description",
+        });
+        this.settingUtils.addItem({
+            key: "Select",
+            value: 1,
+            type: "select",
+            title: "Readonly text",
+            description: "Select description",
+            select: {
+                options: [
+                    {
+                        val: 1,
+                        text: "Option 1"
+                    },
+                    {
+                        val: 2,
+                        text: "Option 2"
+                    }
+                ]
             }
         });
-        this.setting.addItem({
-            title: "Readonly text",
-            createActionElement: () => {
-                textareaElement.className = "b3-text-field fn__block";
-                textareaElement.placeholder = "Readonly text in the menu";
-                textareaElement.value = this.data[STORAGE_NAME].readonlyText;
-                return textareaElement;
-            },
+        this.settingUtils.addItem({
+            key: "Slider",
+            value: 50,
+            type: "slider",
+            title: "Slider text",
+            description: "Slider description",
+            slider: {
+                min: 0,
+                max: 100,
+                step: 1,
+            }
         });
-        const btnaElement = document.createElement("button");
-        btnaElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
-        btnaElement.textContent = "Open";
-        btnaElement.addEventListener("click", () => {
-            window.open("https://github.com/siyuan-note/plugin-sample-vite-svelte");
+        this.settingUtils.addItem({
+            key: "Btn",
+            value: "",
+            type: "button",
+            title: "Button",
+            description: "Button description",
+            button: {
+                label: "Button",
+                callback: () => {
+                    showMessage("Button clicked");
+                }
+            }
         });
-        this.setting.addItem({
-            title: "Open plugin url",
-            description: "Open plugin url in browser",
-            actionElement: btnaElement,
-        });
+        this.settingUtils.load();
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
