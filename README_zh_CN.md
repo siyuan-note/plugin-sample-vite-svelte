@@ -195,6 +195,8 @@ PR 社区集市仓库。
 
 ## 如何去掉 svelte 依赖
 
+> 无 Svelte 依赖版: https://github.com/frostime/plugin-sample-vite
+
 本插件使用 vite 打包，并提供了 svelte 框架依赖。不过实际情况下可能有些开发者并不想要 svelte，只希望使用 vite 打包。
 
 实际上你可以完全不做任何修改，就可以在不使用 svelte 的前提下使用这个模板。与 svelte 编译的编译相关的部分是以插件的形式载入到 vite 的工作流中，所以即使你的项目里面没有 svelte，也不会有太大的影响。

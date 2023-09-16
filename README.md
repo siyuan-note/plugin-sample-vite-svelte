@@ -204,6 +204,8 @@ The github action is included in this sample, you can use it to publish your new
 
 ## How to remove svelte dependencies
 
+> Pure vite without svelte: https://github.com/frostime/plugin-sample-vite
+
 This plugin is packaged in vite and provides a dependency on the svelte framework. However, in practice some developers may not want to use svelte and only want to use the vite package.
 
 In fact you can use this template without using svelte without any modifications at all. The compilation-related parts of the svelte compilation are loaded into the vite workflow as plugins, so even if you don't have svelte in your project, it won't matter much.
