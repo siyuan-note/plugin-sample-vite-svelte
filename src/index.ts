@@ -177,6 +177,13 @@ export default class PluginSample extends Plugin {
             description: "Input description",
         });
         this.settingUtils.addItem({
+            key: "Check",
+            value: true,
+            type: "checkbox",
+            title: "Checkbox text",
+            description: "Check description",
+        });
+        this.settingUtils.addItem({
             key: "Select",
             value: 1,
             type: "select",
@@ -220,7 +227,6 @@ export default class PluginSample extends Plugin {
                 }
             }
         });
-        this.settingUtils.load();
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
@@ -235,12 +241,14 @@ export default class PluginSample extends Plugin {
     }
 
     onLayoutReady() {
-        this.loadData(STORAGE_NAME);
+        // this.loadData(STORAGE_NAME);
+        this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
     }
 
-    onunload() {
+    async onunload() {
         console.log(this.i18n.byePlugin);
+        await this.settingUtils.save();
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
     }

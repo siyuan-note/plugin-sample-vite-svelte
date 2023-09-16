@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2023-09-16 18:05:00
+ * @FilePath     : /src/libs/setting-utils.ts
+ * @LastEditTime : 2023-09-16 18:17:03
+ * @Description  : A utility for siyuan plugin settings
+ */
+
 import { Plugin, Setting } from 'siyuan';
 
 export class SettingUtils {
@@ -33,6 +42,9 @@ export class SettingUtils {
                 item.value = data?.[key] ?? item.value;
             }
         }
+        this.plugin.data[this.name] = this.dump();
+        console.log(data);
+        return data;
     }
 
     async save() {
@@ -89,12 +101,15 @@ export class SettingUtils {
             case 'slider':
                 let sliderElement: HTMLInputElement = document.createElement('input');
                 sliderElement.type = 'range';
-                sliderElement.className = 'b3-slider fn__size200';
+                sliderElement.className = 'b3-slider fn__size200 b3-tooltips b3-tooltips__n';
                 sliderElement.ariaLabel = item.value;
                 sliderElement.min = item.slider?.min.toString() ?? '0';
                 sliderElement.max = item.slider?.max.toString() ?? '100';
                 sliderElement.step = item.slider?.step.toString() ?? '1';
                 sliderElement.value = item.value;
+                sliderElement.onchange = () => {
+                    sliderElement.ariaLabel = sliderElement.value;
+                }
                 itemElement = sliderElement;
                 break;
             case 'textinput':
@@ -154,6 +169,7 @@ export class SettingUtils {
     private updateValue(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
+        console.log(element, element?.value);
         switch (item.type) {
             case 'checkbox':
                 item.value = element.checked;
@@ -162,7 +178,7 @@ export class SettingUtils {
                 item.value = element.value;
                 break;
             case 'slider':
-                item.value = element.value;
+                item.value = parseInt(element.value);
                 break;
             case 'textinput':
                 item.value = element.value;
