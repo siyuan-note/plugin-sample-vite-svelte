@@ -11,7 +11,7 @@ import {
     IModel,
     Setting,
     fetchPost,
-    Protyle
+    Protyle, openWindow
 } from "siyuan";
 import "@/index.scss";
 
@@ -105,7 +105,7 @@ export default class PluginSample extends Plugin {
 
         this.addCommand({
             langKey: "showDialog",
-            hotkey: "⇧⌘M",
+            hotkey: "⇧⌘O",
             callback: () => {
                 this.showDialog();
             },
@@ -117,6 +117,13 @@ export default class PluginSample extends Plugin {
             },
             dockCallback: (element: HTMLElement) => {
                 console.log(element, "dockCallback");
+            },
+        });
+        this.addCommand({
+            langKey: "getTab",
+            hotkey: "⇧⌘M",
+            globalCallback: () => {
+                console.log(this.getOpenedTab());
             },
         });
 
@@ -267,7 +274,7 @@ export default class PluginSample extends Plugin {
         });
         if (!this.isMobile) {
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconFace",
                 label: "Open Custom Tab",
                 click: () => {
                     const tab = openTab({
@@ -278,14 +285,14 @@ export default class PluginSample extends Plugin {
                             data: {
                                 text: "This is my custom tab",
                             },
-                            fn: this.customTab
+                            id: this.name + TAB_TYPE
                         },
                     });
                     console.log(tab);
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconImage",
                 label: "Open Asset Tab(open help first)",
                 click: () => {
                     const tab = openTab({
@@ -298,7 +305,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconFile",
                 label: "Open Doc Tab(open help first)",
                 click: async () => {
                     const tab = await openTab({
@@ -311,7 +318,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconSearch",
                 label: "Open Search Tab",
                 click: () => {
                     const tab = openTab({
@@ -324,7 +331,7 @@ export default class PluginSample extends Plugin {
                 }
             });
             menu.addItem({
-                icon: "iconLayoutBottom",
+                icon: "iconRiffCard",
                 label: "Open Card Tab",
                 click: () => {
                     const tab = openTab({
@@ -345,6 +352,15 @@ export default class PluginSample extends Plugin {
                         defIds: ["20230415111858-vgohvf3", "20200813131152-0wk5akh"],
                         x: window.innerWidth - 768 - 120,
                         y: 32
+                    });
+                }
+            });
+            menu.addItem({
+                icon: "iconOpenWindow",
+                label: "Open Doc Window(open help first)",
+                click: () => {
+                    openWindow({
+                        doc: {id: "20200812220555-lj3enxa"}
                     });
                 }
             });
@@ -430,6 +446,30 @@ export default class PluginSample extends Plugin {
                 label: "On loaded-protyle",
                 click: () => {
                     this.eventBus.on("loaded-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On loaded-protyle-dynamic",
+                click: () => {
+                    this.eventBus.on("loaded-protyle-dynamic", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off loaded-protyle-dynamic",
+                click: () => {
+                    this.eventBus.off("loaded-protyle-dynamic", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On destroy-protyle",
+                click: () => {
+                    this.eventBus.on("destroy-protyle", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off destroy-protyle",
+                click: () => {
+                    this.eventBus.off("destroy-protyle", this.eventBusLog);
                 }
             }, {
                 icon: "iconClose",
