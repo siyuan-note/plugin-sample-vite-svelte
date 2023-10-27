@@ -85,27 +85,6 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
 
-        let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                app: this.app,
-            }
-        });
-        this.customTab = this.addTab({
-            type: TAB_TYPE,
-            init() {
-                this.element.appendChild(tabDiv);
-                console.log(this.element);
-            },
-            beforeDestroy() {
-                console.log("before destroy tab:", TAB_TYPE);
-            },
-            destroy() {
-                console.log("destroy tab:", TAB_TYPE);
-            }
-        });
-
         this.addCommand({
             langKey: "showDialog",
             hotkey: "⇧⌘O",
@@ -244,6 +223,26 @@ export default class PluginSample extends Plugin {
         // this.loadData(STORAGE_NAME);
         this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
+        let tabDiv = document.createElement("div");
+        new HelloExample({
+            target: tabDiv,
+            props: {
+                app: this.app,
+            }
+        });
+        this.customTab = this.addTab({
+            type: TAB_TYPE,
+            init() {
+                this.element.appendChild(tabDiv);
+                console.log(this.element);
+            },
+            beforeDestroy() {
+                console.log("before destroy tab:", TAB_TYPE);
+            },
+            destroy() {
+                console.log("destroy tab:", TAB_TYPE);
+            }
+        });
     }
 
     async onunload() {
