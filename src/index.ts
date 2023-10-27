@@ -11,7 +11,7 @@ import {
     IModel,
     Setting,
     fetchPost,
-    Protyle, openWindow
+    Protyle, openWindow, IOperation
 } from "siyuan";
 import "@/index.scss";
 
@@ -68,7 +68,7 @@ export default class PluginSample extends Plugin {
         });
 
         const statusIconTemp = document.createElement("template");
-        statusIconTemp.innerHTML = `<div class="toolbar__item b3-tooltips b3-tooltips__w" aria-label="Remove plugin-sample Data">
+        statusIconTemp.innerHTML = `<div class="toolbar__item ariaLabel" aria-label="Remove plugin-sample Data">
     <svg>
         <use xlink:href="#iconTrashcan"></use>
     </svg>
@@ -83,27 +83,6 @@ export default class PluginSample extends Plugin {
         });
         this.addStatusBar({
             element: statusIconTemp.content.firstElementChild as HTMLElement,
-        });
-
-        let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                app: this.app,
-            }
-        });
-        this.customTab = this.addTab({
-            type: TAB_TYPE,
-            init() {
-                this.element.appendChild(tabDiv);
-                console.log(this.element);
-            },
-            beforeDestroy() {
-                console.log("before destroy tab:", TAB_TYPE);
-            },
-            destroy() {
-                console.log("destroy tab:", TAB_TYPE);
-            }
         });
 
         this.addCommand({
@@ -244,6 +223,26 @@ export default class PluginSample extends Plugin {
         // this.loadData(STORAGE_NAME);
         this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
+        let tabDiv = document.createElement("div");
+        new HelloExample({
+            target: tabDiv,
+            props: {
+                app: this.app,
+            }
+        });
+        this.customTab = this.addTab({
+            type: TAB_TYPE,
+            init() {
+                this.element.appendChild(tabDiv);
+                console.log(this.element);
+            },
+            beforeDestroy() {
+                console.log("before destroy tab:", TAB_TYPE);
+            },
+            destroy() {
+                console.log("destroy tab:", TAB_TYPE);
+            }
+        });
     }
 
     async onunload() {
@@ -272,19 +271,38 @@ export default class PluginSample extends Plugin {
         });
     }
 
+    private eventBusPaste(event: any) {
+        // 如果需异步处理请调用 preventDefault， 否则会进行默认处理
+        event.preventDefault();
+        // 如果使用了 preventDefault，必须调用 resolve，否则程序会卡死
+        event.detail.resolve({
+            textPlain: event.detail.textPlain.trim(),
+        });
+    }
+
     private eventBusLog({ detail }: any) {
         console.log(detail);
     }
 
     private blockIconEvent({ detail }: any) {
-        const ids: string[] = [];
-        detail.blockElements.forEach((item: HTMLElement) => {
-            ids.push(item.getAttribute("data-node-id"));
-        });
         detail.menu.addItem({
             iconHTML: "",
-            type: "readonly",
-            label: "IDs<br>" + ids.join("<br>"),
+            label: this.i18n.removeSpace,
+            click: () => {
+                const doOperations: IOperation[] = [];
+                detail.blockElements.forEach((item: HTMLElement) => {
+                    const editElement = item.querySelector('[contenteditable="true"]');
+                    if (editElement) {
+                        editElement.textContent = editElement.textContent.replace(/ /g, "");
+                        doOperations.push({
+                            id: item.dataset.nodeId,
+                            data: item.outerHTML,
+                            action: "update"
+                        });
+                    }
+                });
+                detail.protyle.getInstance().transaction(doOperations);
+            }
         });
     }
 
@@ -488,9 +506,15 @@ export default class PluginSample extends Plugin {
                 }
             }, {
                 icon: "iconSelect",
-                label: "On loaded-protyle",
+                label: "On loaded-protyle-static",
                 click: () => {
-                    this.eventBus.on("loaded-protyle", this.eventBusLog);
+                    this.eventBus.on("loaded-protyle-static", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off loaded-protyle-static",
+                click: () => {
+                    this.eventBus.off("loaded-protyle-static", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
@@ -517,10 +541,16 @@ export default class PluginSample extends Plugin {
                     this.eventBus.off("destroy-protyle", this.eventBusLog);
                 }
             }, {
-                icon: "iconClose",
-                label: "Off loaded-protyle",
+                icon: "iconSelect",
+                label: "On open-menu-doctree",
                 click: () => {
-                    this.eventBus.off("loaded-protyle", this.eventBusLog);
+                    this.eventBus.on("open-menu-doctree", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-doctree",
+                click: () => {
+                    this.eventBus.off("open-menu-doctree", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
@@ -629,6 +659,18 @@ export default class PluginSample extends Plugin {
                 label: "Off input-search",
                 click: () => {
                     this.eventBus.off("input-search", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On paste",
+                click: () => {
+                    this.eventBus.on("paste", this.eventBusPaste);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off paste",
+                click: () => {
+                    this.eventBus.off("paste", this.eventBusPaste);
                 }
             }, {
                 icon: "iconSelect",

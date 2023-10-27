@@ -6,7 +6,7 @@
     export let app;
 
     let time: string = "";
-    let ver: string;
+    let ver: string = "";
 
     let divProtyle: HTMLDivElement;
     let protyle: any;

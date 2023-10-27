@@ -2,10 +2,17 @@
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.2.3",
-  "minAppVersion": "2.10.3",
-  "backends": ["all"],
-  "frontends": ["all"],
+  "version": "0.2.6",
+  "minAppVersion": "2.10.12",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "frontends": [
+    "desktop",
+    "desktop-window"
+  ],
   "displayName": {
     "en_US": "Plugin sample with vite and svelte",
     "zh_CN": "插件样例 vite + svelte 版"
