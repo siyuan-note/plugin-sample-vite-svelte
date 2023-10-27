@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-09-16 18:05:00
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2023-09-16 18:17:03
+ * @LastEditTime : 2023-10-27 22:12:37
  * @Description  : A utility for siyuan plugin settings
  */
 
@@ -17,7 +17,7 @@ export class SettingUtils {
     settings: Map<string, ISettingItem> = new Map();
     elements: Map<string, HTMLElement> = new Map();
 
-    constructor(plugin: Plugin, name?: string, width?: string, height?: string, callback?: (data: any) => void) {
+    constructor(plugin: Plugin, name?: string, callback?: (data: any) => void, width?: string, height?: string) {
         this.name = name ?? 'settings';
         this.plugin = plugin;
         this.file = this.name.endsWith('.json') ? this.name : `${this.name}.json`;
