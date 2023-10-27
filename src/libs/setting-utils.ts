@@ -17,7 +17,7 @@ export class SettingUtils {
     settings: Map<string, ISettingItem> = new Map();
     elements: Map<string, HTMLElement> = new Map();
 
-    constructor(plugin: Plugin, name?: string, width?: string, height?: string) {
+    constructor(plugin: Plugin, name?: string, width?: string, height?: string, callback?: (data: any) => void) {
         this.name = name ?? 'settings';
         this.plugin = plugin;
         this.file = this.name.endsWith('.json') ? this.name : `${this.name}.json`;
@@ -29,8 +29,12 @@ export class SettingUtils {
                     this.updateValue(key);
                 }
                 let data = this.dump();
-                this.plugin.data[this.name] = data;
-                this.save();
+                if (callback !== undefined) {
+                    callback(data);
+                } else {
+                    this.plugin.data[this.name] = data;
+                    this.save();
+                }
             }
         });
     }
