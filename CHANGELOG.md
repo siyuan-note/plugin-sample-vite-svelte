@@ -1,7 +1,23 @@
 # Changelog
 
+## 0.2.7 2023-10
+
+## 0.2.6 2023-10-24
+
+* [Deprecated `loaded-protyle` use `loaded-protyle-static` instead](https://github.com/siyuan-note/siyuan/issues/9468)
+
+## 0.2.5 2023-10-10
+
+* [Add plugin event bus `open-menu-doctree`](https://github.com/siyuan-note/siyuan/issues/9351)
+
+## 0.2.4 2023-09-19
+
+* Supports use in windows
+* [Add plugin function `transaction`](https://github.com/siyuan-note/siyuan/issues/9172)
+
 ## 0.2.3 2023-09-05
 
+* [Add plugin function `transaction`](https://github.com/siyuan-note/siyuan/issues/9172)
 * [Plugin API add openWindow and command.globalCallback](https://github.com/siyuan-note/siyuan/issues/9032)
 
 ## 0.2.2 2023-08-29
