@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-09-16 18:05:00
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2023-10-27 22:12:37
+ * @LastEditTime : 2023-10-28 16:52:01
  * @Description  : A utility for siyuan plugin settings
  */
 
@@ -41,13 +41,13 @@ export class SettingUtils {
 
     async load() {
         let data = await this.plugin.loadData(this.file);
+        console.debug('Load config:', data);
         if (data) {
             for (let [key, item] of this.settings) {
                 item.value = data?.[key] ?? item.value;
             }
         }
         this.plugin.data[this.name] = this.dump();
-        console.log(data);
         return data;
     }
 
@@ -159,6 +159,7 @@ export class SettingUtils {
                 break;
             case 'slider':
                 element.value = item.value;
+                element.ariaLabel = item.value;
                 break;
             case 'textinput':
                 element.value = item.value;
@@ -173,7 +174,7 @@ export class SettingUtils {
     private updateValue(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
-        console.log(element, element?.value);
+        // console.debug(element, element?.value);
         switch (item.type) {
             case 'checkbox':
                 item.value = element.checked;
@@ -182,7 +183,7 @@ export class SettingUtils {
                 item.value = element.value;
                 break;
             case 'slider':
-                item.value = parseInt(element.value);
+                item.value = element.value;
                 break;
             case 'textinput':
                 item.value = element.value;
