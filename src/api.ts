@@ -6,7 +6,6 @@
  * API 文档见 [API_zh_CN.md](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
  */
 
-import { time } from "console";
 import { fetchSyncPost, IWebSocketData } from "siyuan";
 
 
