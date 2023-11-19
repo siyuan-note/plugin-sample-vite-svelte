@@ -3,7 +3,7 @@
 
 [中文版](./README_zh_CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.2.6](https://github.com/siyuan-note/plugin-sample/tree/v0.2.6)
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.2.8](https://github.com/siyuan-note/plugin-sample/tree/v0.2.8)
 
 
 
@@ -98,7 +98,10 @@ conveniently.
     "custom": [
       "https://ld246.com/sponsor"
     ]
-  }
+  },
+  "keywords": [
+    "sample", "示例"
+  ]
 }
 ```
 
@@ -137,6 +140,7 @@ conveniently.
     * `patreon`: Patreon name
     * `github`: GitHub login name
     * `custom`: Custom sponsorship link list
+* `keywords`: Search keyword list, used for marketplace search function
 
 ## Package
 

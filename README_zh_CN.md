@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例和 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.2.6](https://github.com/siyuan-note/plugin-sample/tree/v0.2.6)
+> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.2.8](https://github.com/siyuan-note/plugin-sample/tree/v0.2.8)
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -95,7 +95,10 @@
     "custom": [
       "https://ld246.com/sponsor"
     ]
-  }
+  },
+  "keywords": [
+    "sample", "示例"
+  ]
 }
 ```
 
@@ -133,6 +136,7 @@
   * `patreon`：Patreon 名称
   * `github`：GitHub 登录名
   * `custom`：自定义赞助链接列表
+* `keywords`：搜索关键字列表，用于集市搜索功能
 
 ## 打包
 

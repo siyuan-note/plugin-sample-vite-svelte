@@ -6,7 +6,6 @@
  * API 文档见 [API_zh_CN.md](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
  */
 
-import { time } from "console";
 import { fetchSyncPost, IWebSocketData } from "siyuan";
 
 
@@ -129,6 +128,16 @@ export async function getHPathByID(id: BlockId): Promise<string> {
         id: id
     };
     let url = '/api/filetree/getHPathByID';
+    return request(url, data);
+}
+
+
+export async function getIDsByHPath(notebook: NotebookId, path: string): Promise<BlockId[]> {
+    let data = {
+        notebook: notebook,
+        path: path
+    };
+    let url = '/api/filetree/getIDsByHPath';
     return request(url, data);
 }
 
