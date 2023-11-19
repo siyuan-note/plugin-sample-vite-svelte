@@ -131,6 +131,16 @@ export async function getHPathByID(id: BlockId): Promise<string> {
     return request(url, data);
 }
 
+
+export async function getIDsByHPath(notebook: NotebookId, path: string): Promise<BlockId[]> {
+    let data = {
+        notebook: notebook,
+        path: path
+    };
+    let url = '/api/filetree/getIDsByHPath';
+    return request(url, data);
+}
+
 // **************************************** Asset Files ****************************************
 
 export async function upload(assetsDirPath: string, files: any[]): Promise<IResUpload> {
