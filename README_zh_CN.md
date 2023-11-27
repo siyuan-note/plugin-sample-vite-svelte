@@ -9,6 +9,9 @@
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
 3. 内置对 svelte 框架的支持
+  
+   > 如果不想要 svelte，请移步 [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 
 ## 开始
