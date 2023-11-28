@@ -2,13 +2,13 @@
     import { createEventDispatcher } from "svelte";
     export let type: string; // Setting Type
     export let title: string; // Displayint Setting Title
-    export let text: string; // Displaying Setting Text
+    export let description: string; // Displaying Setting Text
     export let settingKey: string;
     export let settingValue: any;
 
     //Optional
     export let placeholder: string = ""; // Use it if type is input
-    export let options: { [key: string]: string } = {}; // Use it if type is select
+    export let options: { [key: string | number]: string } = {}; // Use it if type is select
     export let slider: {
         min: number;
         max: number;
@@ -30,7 +30,7 @@
     <div class="fn__flex-1">
         {title}
         <div class="b3-label__text">
-            {text}
+            {@html description}
         </div>
     </div>
     <span class="fn__space" />
@@ -50,6 +50,14 @@
             class="b3-text-field fn__flex-center fn__size200"
             id={settingKey}
             {placeholder}
+            bind:value={settingValue}
+            on:change={changed}
+        />
+    {:else if type === "number"}
+        <input
+            class="b3-text-field fn__flex-center fn__size200"
+            id={settingKey}
+            type="number"
             bind:value={settingValue}
             on:change={changed}
         />

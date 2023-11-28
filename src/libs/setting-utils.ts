@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-09-16 18:05:00
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2023-10-28 16:52:01
+ * @LastEditTime : 2023-11-28 21:16:36
  * @Description  : A utility for siyuan plugin settings
  */
 
@@ -93,10 +93,12 @@ export class SettingUtils {
             case 'select':
                 let selectElement: HTMLSelectElement = document.createElement('select');
                 selectElement.className = "b3-select fn__flex-center fn__size200";
-                for (let option of item.select?.options ?? []) {
+                let options = item.select?.options ?? {};
+                for (let val in options) {
                     let optionElement = document.createElement('option');
-                    optionElement.value = option.val;
-                    optionElement.text = option.text;
+                    let text = options[val];
+                    optionElement.value = val;
+                    optionElement.text = text;
                     selectElement.appendChild(optionElement);
                 }
                 selectElement.value = item.value;

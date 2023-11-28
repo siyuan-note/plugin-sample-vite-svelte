@@ -17,7 +17,7 @@ import {
 import "@/index.scss";
 
 import HelloExample from "@/hello.svelte";
-import SettingPannel from "@/libs/setting-panel.svelte";
+import SettingExample from "@/setting-example.svelte";
 
 import { SettingUtils } from "./libs/setting-utils";
 
@@ -173,16 +173,10 @@ export default class PluginSample extends Plugin {
             title: "Readonly text",
             description: "Select description",
             select: {
-                options: [
-                    {
-                        val: 1,
-                        text: "Option 1"
-                    },
-                    {
-                        val: 2,
-                        text: "Option 2"
-                    }
-                ]
+                options: {
+                    1: "Option 1",
+                    2: "Option 2"
+                }
             }
         });
         this.settingUtils.addItem({
@@ -270,7 +264,7 @@ export default class PluginSample extends Plugin {
                 pannel.$destroy();
             }
         });
-        let pannel = new SettingPannel({
+        let pannel = new SettingExample({
             target: dialog.element.querySelector("#SettingPanel"),
         });
     }
