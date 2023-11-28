@@ -1,99 +1,101 @@
-<script>
-    import SettingItem from "@/libs/setting-item.svelte";
-    import { showMessage } from "siyuan";
-    import { onMount, onDestroy } from 'svelte';
-    onMount(() => {
-        showMessage("Setting panel opened");
-    });
-    onDestroy(() => {
-        showMessage("Setting panel closed");
-    });
+<script lang="ts">
+    import SettingPanel from "./libs/setting-panel.svelte";
+
+    let groups: string[] = ["🌈 Default"];
+    let focusGroup = groups[0];
+
+    const SettingItems: ISettingItem[] = [
+        {
+            type: 'checkbox',
+            title: 'checkbox',
+            description: 'checkbox',
+            key: 'a',
+            value: true
+        },
+        {
+            type: 'textinput',
+            title: 'text',
+            description: 'This is a text',
+            key: 'b',
+            value: 'This is a text',
+            placeholder: 'placeholder'
+        },
+        {
+            type: 'select',
+            title: 'select',
+            description: 'select',
+            key: 'c',
+            value: 'x',
+            options: {
+                x: 'x',
+                y: 'y',
+                z: 'z'
+            }
+        },
+        {
+            type: 'slider',
+            title: 'slider',
+            description: 'slider',
+            key: 'd',
+            value: 50,
+            slider: {
+                min: 0,
+                max: 100,
+                step: 1
+            }
+        }
+    ];
+
+    /********** Events **********/
+    interface ChangeEvent {
+        group: string;
+        key: string;
+        value: any;
+    }
+
+    const onChanged = ({ detail }: CustomEvent<ChangeEvent>) => {
+        if (detail.group === groups[0]) {
+            // setting.set(detail.key, detail.value);
+        }
+    };
 </script>
 
-<!--
-You can use this template to quickly create a setting panel,
-with the same UI style in SiYuan
--->
-
-<div class="config__tab-container">
-    <div data-type="Header" class="fn__flex b3-label">
-        <div class="fn_flex-1">
-            <h4>This setting panel is provided by a svelte component</h4>
-            <div class="b3-label__text">
-                <span class="fn__flex-1">
-                    See:
-                    <pre style="display: inline">/lib/setting-pannel.svelte</pre>
-                </span>
+<div class="fn__flex-1 fn__flex config__panel">
+    <ul class="b3-tab-bar b3-list b3-list--background">
+        {#each groups as group}
+            <li
+                data-name="editor"
+                class:b3-list-item--focus={group === focusGroup}
+                class="b3-list-item"
+                on:click={() => {
+                    focusGroup = group;
+                }}
+                on:keydown={() => {}}
+            >
+                <span class="b3-list-item__text">{group}</span>
+            </li>
+        {/each}
+    </ul>
+    <div class="config__tab-wrap">
+        <SettingPanel
+            group={groups[0]}
+            settingItems={SettingItems}
+            display={focusGroup === groups[0]}
+            on:changed={onChanged}
+        >
+            <div class="fn__flex b3-label">
+                💡 This is our default settings.
             </div>
-        </div>
+        </SettingPanel>
     </div>
-    <SettingItem
-        type="checkbox"
-        title="Checkbox"
-        description="This is a <b>checkbox</b>"
-        settingKey="Checkbox"
-        settingValue={true}
-        on:changed={(event) => {
-            showMessage(
-                `Checkbox changed: ${event.detail.key} = ${event.detail.value}`
-            );
-        }}
-    />
-    <SettingItem
-        type="input"
-        title="Input"
-        description="This is an input"
-        settingKey="Input"
-        settingValue=""
-        placeholder="Input something"
-        on:changed={(event) => {
-            showMessage(
-                `Input changed: ${event.detail.key} = ${event.detail.value}`
-            );
-        }}
-    />
-    <SettingItem
-        type="button"
-        title="Button"
-        description="This is a button"
-        settingKey="Button"
-        settingValue="Click me"
-        on:clicked={() => {
-            showMessage("Button clicked");
-        }}
-    />
-    <SettingItem
-        type="select"
-        title="Select"
-        description="This is a select"
-        settingKey="Select"
-        settingValue="left"
-        options={{
-            left: "Left",
-            center: "Center",
-            right: "Right",
-        }}
-        on:changed={(event) => {
-            showMessage(
-                `Select changed: ${event.detail.key} = ${event.detail.value}`
-            );
-        }}
-    />
-    <SettingItem
-        type="slider"
-        title="Slide"
-        description="This is a slide"
-        settingKey="Slide"
-        settingValue={50}
-        slider={{
-            min: 0,
-            max: 100,
-            step: 1,
-        }}
-        on:changed={(event) => {
-            showMessage(
-                `Slide changed: ${event.detail.key} = ${event.detail.value}`
-            );
-        }}
-    />
 </div>
+
+<style lang="scss">
+    .config__panel {
+        height: 100%;
+    }
+    .config__panel > ul > li {
+        padding-left: 1rem;
+    }
+</style>
+

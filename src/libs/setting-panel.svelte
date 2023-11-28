@@ -3,7 +3,7 @@
  Author       : frostime
  Date         : 2023-07-01 19:23:50
  FilePath     : /src/libs/setting-panel.svelte
- LastEditTime : 2023-11-28 21:23:56
+ LastEditTime : 2023-11-28 21:45:10
  Description  : 
 -->
 <script lang="ts">
@@ -36,8 +36,8 @@
             description={item.description}
             settingKey={item.key}
             settingValue={item.value}
-            placeholder={item?.text.placeholder}
-            options={item?.select.options}
+            placeholder={item?.placeholder}
+            options={item?.options}
             slider={item?.slider}
             on:click={onClick}
             on:changed={onChanged}

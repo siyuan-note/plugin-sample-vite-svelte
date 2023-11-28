@@ -172,11 +172,9 @@ export default class PluginSample extends Plugin {
             type: "select",
             title: "Readonly text",
             description: "Select description",
-            select: {
-                options: {
-                    1: "Option 1",
-                    2: "Option 2"
-                }
+            options: {
+                1: "Option 1",
+                2: "Option 2"
             }
         });
         this.settingUtils.addItem({
@@ -256,7 +254,7 @@ export default class PluginSample extends Plugin {
     openDIYSetting(): void {
         let dialog = new Dialog({
             title: "SettingPannel",
-            content: `<div id="SettingPanel"></div>`,
+            content: `<div id="SettingPanel" style="height: 100%;"></div>`,
             width: "600px",
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
