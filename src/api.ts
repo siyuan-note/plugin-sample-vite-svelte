@@ -224,6 +224,24 @@ export async function moveBlock(id: BlockId, previousID?: PreviousID, parentID?:
 }
 
 
+export async function foldBlock(id: BlockId) {
+    let data = {
+        id: id
+    }
+    let url = '/api/block/foldBlock';
+    return request(url, data);
+}
+
+
+export async function unfoldBlock(id: BlockId) {
+    let data = {
+        id: id
+    }
+    let url = '/api/block/unfoldBlock';
+    return request(url, data);
+}
+
+
 export async function getBlockKramdown(id: BlockId): Promise<IResGetBlockKramdown> {
     let data = {
         id: id
