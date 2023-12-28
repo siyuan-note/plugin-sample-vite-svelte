@@ -12,7 +12,8 @@ import {
     Protyle,
     openWindow,
     IOperation,
-    Constants
+    Constants,
+    openMobileFileById
 } from "siyuan";
 import "@/index.scss";
 
@@ -124,20 +125,34 @@ export default class PluginSample extends Plugin {
             resize() {
                 console.log(DOCK_TYPE + " resize");
             },
-            init() {
-                this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
-    <div class="block__icons">
-        <div class="block__logo">
-            <svg><use xlink:href="#iconEmoji"></use></svg>
-            Custom Dock
-        </div>
-        <span class="fn__flex-1 fn__space"></span>
-        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
-    </div>
-    <div class="fn__flex-1 plugin-sample__custom-dock">
-        ${this.data.text}
-    </div>
-</div>`;
+            update() {
+                console.log(DOCK_TYPE + " update");
+            },
+            init: (dock) => {
+                if (this.isMobile) {
+                    dock.element.innerHTML = `<div class="toolbar toolbar--border toolbar--dark">
+                    <svg class="toolbar__icon"><use xlink:href="#iconEmoji"></use></svg>
+                        <div class="toolbar__text">Custom Dock</div>
+                    </div>
+                    <div class="fn__flex-1 plugin-sample__custom-dock">
+                        ${dock.data.text}
+                    </div>
+                    </div>`;
+                } else {
+                    dock.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
+                    <div class="block__icons">
+                        <div class="block__logo">
+                            <svg><use xlink:href="#iconEmoji"></use></svg>
+                            Custom Dock
+                        </div>
+                        <span class="fn__flex-1 fn__space"></span>
+                        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
+                    </div>
+                    <div class="fn__flex-1 plugin-sample__custom-dock">
+                        ${dock.data.text}
+                    </div>
+                    </div>`;
+                }
             },
             destroy() {
                 console.log("destroy dock:", DOCK_TYPE);
@@ -421,6 +436,14 @@ export default class PluginSample extends Plugin {
                     openWindow({
                         doc: {id: "20200812220555-lj3enxa"}
                     });
+                }
+            });
+        } else {
+            menu.addItem({
+                icon: "iconFile",
+                label: "Open Doc(open help first)",
+                click: () => {
+                    openMobileFileById(this.app, "20200812220555-lj3enxa");
                 }
             });
         }

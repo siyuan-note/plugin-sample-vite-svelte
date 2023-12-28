@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.2 2024-01
+
+## 0.3.1 2023-12-06
+
+* [Support `Dock Plugin` and `Command Palette` on mobile](https://github.com/siyuan-note/siyuan/issues/9926)
+
+## 0.3.0 2023-12-05
+
+* Upgrade Siyuan to 0.9.0
+* Support more platforms
+
+## 0.2.9 2023-11-28
+
+* [Add plugin method `openMobileFileById`](https://github.com/siyuan-note/siyuan/issues/9738)
+
+
 ## 0.2.8 2023-11-15
 
 * [`resize` cannot be triggered after dragging to unpin the dock](https://github.com/siyuan-note/siyuan/issues/9640)
