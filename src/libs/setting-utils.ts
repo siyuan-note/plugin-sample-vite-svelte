@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-09-16 18:05:00
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2023-11-28 21:46:29
+ * @LastEditTime : 2023-12-28 18:10:12
  * @Description  : A utility for siyuan plugin settings
  */
 
@@ -129,6 +129,13 @@ export class SettingUtils {
                 textareaElement.className = "b3-text-field fn__block";
                 textareaElement.value = item.value;
                 itemElement = textareaElement;
+                break;
+            case 'number':
+                let numberElement: HTMLInputElement = document.createElement('input');
+                numberElement.type = 'number';
+                numberElement.className = 'b3-text-field fn__flex-center fn__size200';
+                numberElement.value = item.value;
+                itemElement = numberElement;
                 break;
             case 'button':
                 let buttonElement: HTMLButtonElement = document.createElement('button');

@@ -1,4 +1,4 @@
-type TSettingItemType = "checkbox" | "select" | "textinput" | "textarea" | "slider" | "button";
+type TSettingItemType = "checkbox" | "select" | "textinput" | "textarea" | "number" | "slider" | "button";
 interface ISettingItem {
     key: string;
     value: any;
