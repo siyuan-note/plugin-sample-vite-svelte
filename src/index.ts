@@ -163,6 +163,13 @@ export default class PluginSample extends Plugin {
         });
 
         this.settingUtils = new SettingUtils(this, STORAGE_NAME);
+
+        try {
+            this.settingUtils.load();
+        } catch (error) {
+            console.error("Error loading settings storage, probably empty config json:", error);
+        }
+
         this.settingUtils.addItem({
             key: "Input",
             value: "",
@@ -220,6 +227,13 @@ export default class PluginSample extends Plugin {
                 }
             }
         });
+        this.settingUtils.addItem({
+            key: "Hint",
+            value: "",
+            type: "hint",
+            title: this.i18n.hintTitle,
+            description: this.i18n.hintDesc,
+        });
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
@@ -269,6 +283,14 @@ export default class PluginSample extends Plugin {
         // this.loadData(STORAGE_NAME);
         this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
+
+        console.log(
+            "Official settings value calling example:\n" +
+            this.settingUtils.get("InputArea") + "\n" +
+            this.settingUtils.get("Slider") + "\n" +
+            this.settingUtils.get("Select") + "\n"
+        );
+
         let tabDiv = document.createElement("div");
         new HelloExample({
             target: tabDiv,
