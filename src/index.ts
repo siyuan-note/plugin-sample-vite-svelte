@@ -13,7 +13,10 @@ import {
     openWindow,
     IOperation,
     Constants,
-    openMobileFileById
+    openMobileFileById,
+    lockScreen,
+    ICard,
+    ICardData
 } from "siyuan";
 import "@/index.scss";
 
@@ -227,6 +230,38 @@ export default class PluginSample extends Plugin {
             }
         }];
 
+        this.protyleOptions = {
+            toolbar: ["block-ref",
+                "a",
+                "|",
+                "text",
+                "strong",
+                "em",
+                "u",
+                "s",
+                "mark",
+                "sup",
+                "sub",
+                "clear",
+                "|",
+                "code",
+                "kbd",
+                "tag",
+                "inline-math",
+                "inline-memo",
+                "|",
+                {
+                    name: "insert-smail-emoji",
+                    icon: "iconEmoji",
+                    hotkey: "⇧⌘I",
+                    tipPosition: "n",
+                    tip: this.i18n.insertEmoji,
+                    click(protyle: Protyle) {
+                        protyle.insert("😊");
+                    }
+                }],
+        };
+
         console.log(this.i18n.helloPlugin);
     }
 
@@ -261,6 +296,23 @@ export default class PluginSample extends Plugin {
         await this.settingUtils.save();
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
+    }
+
+    uninstall() {
+        console.log("uninstall");
+    }
+
+    async updateCards(options: ICardData) {
+        options.cards.sort((a: ICard, b: ICard) => {
+            if (a.blockID < b.blockID) {
+                return -1;
+            }
+            if (a.blockID > b.blockID) {
+                return 1;
+            }
+            return 0;
+        });
+        return options;
     }
 
     /**
@@ -447,6 +499,13 @@ export default class PluginSample extends Plugin {
                 }
             });
         }
+        menu.addItem({
+            icon: "iconLock",
+            label: "Lockscreen",
+            click: () => {
+                lockScreen(this.app);
+            }
+        });
         menu.addItem({
             icon: "iconScrollHoriz",
             label: "Event Bus",
@@ -678,6 +737,18 @@ export default class PluginSample extends Plugin {
                 label: "Off open-menu-breadcrumbmore",
                 click: () => {
                     this.eventBus.off("open-menu-breadcrumbmore", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On open-menu-inbox",
+                click: () => {
+                    this.eventBus.on("open-menu-inbox", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off open-menu-inbox",
+                click: () => {
+                    this.eventBus.off("open-menu-inbox", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",

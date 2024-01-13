@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.1](https://github.com/siyuan-note/plugin-sample/tree/v0.3.1)
+> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.2](https://github.com/siyuan-note/plugin-sample/tree/v0.3.2)
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
