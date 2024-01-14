@@ -30,23 +30,7 @@ export default defineConfig({
                 {
                     src: "./README*.md",
                     dest: "./",
-                },
-                {
-                    src: "./icon.png",
-                    dest: "./",
-                },
-                {
-                    src: "./preview.png",
-                    dest: "./",
-                },
-                {
-                    src: "./plugin.json",
-                    dest: "./",
-                },
-                {
-                    src: "./src/i18n/**",
-                    dest: "./i18n/",
-                },
+                }
             ],
         }),
     ],
@@ -91,9 +75,8 @@ export default defineConfig({
                             name: 'watch-external',
                             async buildStart() {
                                 const files = await fg([
-                                    'src/i18n/*.json',
+                                    'public/**',
                                     './README*.md',
-                                    './plugin.json'
                                 ]);
                                 for (let file of files) {
                                     this.addWatchFile(file);
