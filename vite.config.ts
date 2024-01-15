@@ -30,6 +30,10 @@ export default defineConfig({
                 {
                     src: "./README*.md",
                     dest: "./",
+                },
+                {
+                    src: "./plugin.json",
+                    dest: "./",
                 }
             ],
         }),
@@ -77,6 +81,7 @@ export default defineConfig({
                                 const files = await fg([
                                     'public/**',
                                     './README*.md',
+                                    './plugin.json'
                                 ]);
                                 for (let file of files) {
                                     this.addWatchFile(file);
