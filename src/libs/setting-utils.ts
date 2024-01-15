@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2023 by frostime. All Rights Reserved.
  * @Author       : frostime
- * @Date         : 2023-09-16 18:05:00
+ * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2023-12-28 18:10:12
- * @Description  : A utility for siyuan plugin settings
+ * @LastEditTime : 2024-01-15 20:45:16
+ * @Description  : 
  */
 
 import { Plugin, Setting } from 'siyuan';
@@ -26,7 +26,7 @@ export class SettingUtils {
             height: height,
             confirmCallback: () => {
                 for (let key of this.settings.keys()) {
-                    this.updateValue(key);
+                    this.updateValueFromElement(key);
                 }
                 let data = this.dump();
                 if (callback !== undefined) {
@@ -34,6 +34,12 @@ export class SettingUtils {
                 } else {
                     this.plugin.data[this.name] = data;
                     this.save();
+                }
+            },
+            destroyCallback: () => {
+                //从值恢复元素
+                for (let key of this.settings.keys()) {
+                    this.updateElementFromValue(key);
                 }
             }
         });
@@ -54,6 +60,7 @@ export class SettingUtils {
     async save() {
         let data = this.dump();
         await this.plugin.saveData(this.file, this.dump());
+        console.debug('Save config:', data);
         return data;
     }
 
@@ -64,6 +71,14 @@ export class SettingUtils {
      */
     get(key: string) {
         return this.settings.get(key)?.value;
+    }
+
+    set(key: string, value: any) {
+        let item = this.settings.get(key);
+        if (item) {
+            item.value = value;
+            this.updateElementFromValue(key);
+        }
     }
 
     /**
@@ -161,7 +176,7 @@ export class SettingUtils {
         })
     }
 
-    private getElement(key: string) {
+    getElement(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
         switch (item.type) {
@@ -185,7 +200,7 @@ export class SettingUtils {
         return element;
     }
 
-    private updateValue(key: string) {
+    private updateValueFromElement(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
         // console.debug(element, element?.value);
@@ -204,6 +219,28 @@ export class SettingUtils {
                 break;
             case 'textarea':
                 item.value = element.value;
+                break;
+        }
+    }
+
+    private updateElementFromValue(key: string) {
+        let item = this.settings.get(key);
+        let element = this.elements.get(key) as any;
+        switch (item.type) {
+            case 'checkbox':
+                element.checked = item.value;
+                break;
+            case 'select':
+                element.value = item.value;
+                break;
+            case 'slider':
+                element.value = item.value;
+                break;
+            case 'textinput':
+                element.value = item.value;
+                break;
+            case 'textarea':
+                element.value = item.value;
                 break;
         }
     }
