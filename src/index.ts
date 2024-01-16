@@ -941,7 +941,7 @@ export default class PluginSample extends Plugin {
 
     async appendCurrentDeviceIntoList() {
         try {
-            // await!!!!!
+            // 注意await
             var current_device_info = await this.fetchCurrentDeviceInfo();
 
             var enableDeviceList = this.settingUtils.get("enableDeviceList");
