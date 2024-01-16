@@ -228,6 +228,46 @@ export default class PluginSample extends Plugin {
             }
         });
         this.settingUtils.addItem({
+            key: "onlyEnableListedDevices",
+            value: false,
+            type: "checkbox",
+            title: this.i18n.onlyEnableListedDevices,
+            description: this.i18n.onlyEnableListedDevicesDesc,
+        });
+        this.settingUtils.addItem({
+            key: "enableDeviceList",
+            value: "",
+            type: "textarea",
+            title: this.i18n.enableDeviceList,
+            description: this.i18n.enableDeviceListDesc,
+        });
+        this.settingUtils.addItem({
+            key: "addCurrentDeviceIntoList",
+            value: "",
+            type: "button",
+            title: this.i18n.addCurrentDeviceIntoList,
+            description: this.i18n.addCurrentDeviceIntoListDesc,
+            button: {
+                label: this.i18n.addCurrentDeviceIntoListLabel,
+                callback: () => {
+                    this.appendCurrentDeviceIntoList();
+                }
+            }
+        });
+        this.settingUtils.addItem({
+            key: "removeCurrentDeviceFromList",
+            value: "",
+            type: "button",
+            title: this.i18n.removeCurrentDeviceFromList,
+            description: this.i18n.removeCurrentDeviceFromListDesc,
+            button: {
+                label: this.i18n.removeCurrentDeviceFromListLabel,
+                callback: () => {
+                    this.removeCurrentDeviceFromList();
+                }
+            }
+        });
+        this.settingUtils.addItem({
             key: "Hint",
             value: "",
             type: "hint",
@@ -290,6 +330,29 @@ export default class PluginSample extends Plugin {
             this.settingUtils.get("Slider") + "\n" +
             this.settingUtils.get("Select") + "\n"
         );
+
+        // within layoutready async caller sample
+        const layoutReadyAsyncHandler = async () => {
+            try {
+
+                /*分设备caller真值表：
+                当前设备真， 仅允许开关开，后半段为假 ：真||假： 执行
+                当前设备真， 仅允许开关关，后半段为真 ：真||真： 执行
+                当前设备假， 仅允许开关开，后半段为假 ：假||假： 不执行
+                当前设备假， 仅允许开关关，后半段为真 ：假||真： 执行
+                */
+                if ((await this.currentDeviceInList() || !this.settingUtils.get("onlyEnableListedDevices"))) {
+                    console.log("per device enable logic: true\nAKA device in list or onlyEnableListedDevices is false");
+                }else{
+                    console.log("per device enable logic: false\nAKA device not in list and onlyEnableListedDevices is true");
+                }
+
+            }
+            catch (error) {
+                console.error("within layoutready async caller calling fail", error);
+            }
+        }
+        layoutReadyAsyncHandler();
 
         let tabDiv = document.createElement("div");
         new HelloExample({
@@ -851,5 +914,85 @@ export default class PluginSample extends Plugin {
                 isLeft: true,
             });
         }
+    }
+
+    async currentDeviceInList() {
+        try {
+            var current_device_info = await this.fetchCurrentDeviceInfo();
+
+            var enableDeviceList = await this.settingUtils.get("enableDeviceList");
+            var enableDeviceListArray = enableDeviceList.split("\n");
+
+            return enableDeviceListArray.includes(current_device_info);
+        } catch (error) {
+            console.error("Error checking if current device is enabled:", error);
+        }
+    }
+
+
+    fetchCurrentDeviceInfo(): Promise<string> {
+        var current_device_uuid = window.siyuan.config.system.id;
+        var current_device_name = window.siyuan.config.system.name;
+        var current_device_info = current_device_uuid + " " + current_device_name;
+
+        return Promise.resolve(current_device_info.toString());
+    }
+
+
+    async appendCurrentDeviceIntoList() {
+        try {
+            // await!!!!!
+            var current_device_info = await this.fetchCurrentDeviceInfo();
+
+            var enableDeviceList = this.settingUtils.get("enableDeviceList");
+            var enableDeviceListArray = enableDeviceList.split("\n");
+            var enableDeviceListArrayLength = enableDeviceListArray.length;
+            var enableDeviceListArrayLast = enableDeviceListArray[enableDeviceListArrayLength - 1];
+
+            // remove empty line
+            if (enableDeviceListArrayLast === "") {
+                enableDeviceListArray.pop();
+            }
+
+            enableDeviceListArray.push(current_device_info);
+
+            var enableDeviceListArrayString = enableDeviceListArray.join("\n");
+
+            this.settingUtils.assignValue("enableDeviceList", enableDeviceListArrayString);
+            this.settingUtils.save();
+        } catch (error) {
+            console.error("Error appending current device into list:", error);
+        }
+    }
+
+
+
+    async removeCurrentDeviceFromList() {
+
+        try {
+
+            var current_device_info = await this.fetchCurrentDeviceInfo();
+
+            var enableDeviceList = this.settingUtils.get("enableDeviceList");
+            var enableDeviceListArray = enableDeviceList.split("\n");
+
+            // make sure visited the entire list
+            for (var i = enableDeviceListArray.length - 1; i >= 0; i--) {
+                var deviceInfo = enableDeviceListArray[i];
+
+                if (deviceInfo === current_device_info) {
+                    enableDeviceListArray.splice(i, 1);
+                }
+            }
+
+            // reassemble list
+            var enableDeviceListArrayString = enableDeviceListArray.join("\n");
+
+            this.settingUtils.assignValue("enableDeviceList", enableDeviceListArrayString);
+            this.settingUtils.save();
+        } catch (error) {
+            console.error("Error removing current device from list:", error);
+        }
+
     }
 }
