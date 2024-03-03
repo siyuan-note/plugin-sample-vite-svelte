@@ -120,6 +120,7 @@ export default class PluginSample extends Plugin {
                 size: { width: 200, height: 0 },
                 icon: "iconSaving",
                 title: "Custom Dock",
+                hotkey: "⌥⌘W",
             },
             data: {
                 text: "This is my custom dock"
@@ -591,6 +592,18 @@ export default class PluginSample extends Plugin {
                 label: "Off click-editortitleicon",
                 click: () => {
                     this.eventBus.off("click-editortitleicon", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-flashcard-action",
+                click: () => {
+                    this.eventBus.on("click-flashcard-action", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-flashcard-action",
+                click: () => {
+                    this.eventBus.off("click-flashcard-action", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",
