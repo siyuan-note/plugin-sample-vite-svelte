@@ -120,6 +120,7 @@ export default class PluginSample extends Plugin {
                 size: { width: 200, height: 0 },
                 icon: "iconSaving",
                 title: "Custom Dock",
+                hotkey: "⌥⌘W",
             },
             data: {
                 text: "This is my custom dock"
@@ -145,11 +146,11 @@ export default class PluginSample extends Plugin {
                     dock.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
                     <div class="block__icons">
                         <div class="block__logo">
-                            <svg><use xlink:href="#iconEmoji"></use></svg>
+                            <svg class="block__logoicon"><use xlink:href="#iconEmoji"></use></svg>
                             Custom Dock
                         </div>
                         <span class="fn__flex-1 fn__space"></span>
-                        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
+                        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg class="block__logoicon"><use xlink:href="#iconMin"></use></svg></span>
                     </div>
                     <div class="fn__flex-1 plugin-sample__custom-dock">
                         ${dock.data.text}
@@ -654,6 +655,18 @@ export default class PluginSample extends Plugin {
                 label: "Off click-editortitleicon",
                 click: () => {
                     this.eventBus.off("click-editortitleicon", this.eventBusLog);
+                }
+            }, {
+                icon: "iconSelect",
+                label: "On click-flashcard-action",
+                click: () => {
+                    this.eventBus.on("click-flashcard-action", this.eventBusLog);
+                }
+            }, {
+                icon: "iconClose",
+                label: "Off click-flashcard-action",
+                click: () => {
+                    this.eventBus.off("click-flashcard-action", this.eventBusLog);
                 }
             }, {
                 icon: "iconSelect",

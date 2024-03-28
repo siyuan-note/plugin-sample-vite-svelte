@@ -1,6 +1,24 @@
 # Changelog
 
-## 0.3.2 2024-01
+## 0.3.5 2024-03
+
+## 0.3.4 2024-02-20
+
+* [Add plugin event bus `click-flashcard-action`](https://github.com/siyuan-note/siyuan/issues/10318)
+
+## 0.3.3 2024-01-24
+
+* Update dock icon class
+
+## 0.3.2 2024-01-09
+
+* [Add plugin `protyleOptions`](https://github.com/siyuan-note/siyuan/issues/10090)
+* [Add plugin api `uninstall`](https://github.com/siyuan-note/siyuan/issues/10063)
+* [Add plugin method `updateCards`](https://github.com/siyuan-note/siyuan/issues/10065)
+* [Add plugin function `lockScreen`](https://github.com/siyuan-note/siyuan/issues/10063)
+* [Add plugin event bus `lock-screen`](https://github.com/siyuan-note/siyuan/pull/9967)
+* [Add plugin event bus `open-menu-inbox`](https://github.com/siyuan-note/siyuan/pull/9967)
+
 
 ## 0.3.1 2023-12-06
 

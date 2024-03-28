@@ -3,7 +3,7 @@
 
 [中文版](./README_zh_CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.2](https://github.com/siyuan-note/plugin-sample/tree/v0.3.2)
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.4](https://github.com/siyuan-note/plugin-sample/tree/v0.3.4)
 
 
 
@@ -233,3 +233,56 @@ If you insist on removing all svelte dependencies so that they do not pollute yo
     - Line 20: `svelte(),`
 4. delete line 37 of `tsconfig.json` from `"svelte"` 5.
 5. re-run `pnpm i`
+
+## Developer's Guide
+
+Developers of SiYuan need to pay attention to the following specifications.
+
+### 1. File Reading and Writing Specifications
+
+If plugins or external extensions require direct reading or writing of files under the `data` directory, please use the kernel API to achieve this. **Do not call `fs` or other electron or nodejs APIs directly**, as it may result in data loss during synchronization and cause damage to cloud data.
+
+Related APIs can be found at: `/api/file/*` (e.g., `/api/file/getFile`).
+
+### 2. Daily Note Attribute Specifications
+
+When creating a diary in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
+
+> For more details, please refer to [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807).
+
+Developers should pay attention to the following when developing the functionality to manually create Daily Notes:
+
+- If `/api/filetree/createDailyNote` is called to create a diary, the attribute will be automatically added to the document, and developers do not need to handle it separately.
+- If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a diary), please manually add this attribute to the document.
+
+Here is a reference code:
+
+```ts
+/*
+ * Copyright (c) 2023 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Url          : https://github.com/frostime/siyuan-dailynote-today/blob/v1.3.0/src/func/dailynote/dn-attr.ts
+ */
+
+export function formatDate(date?: Date, sep=''): string {
+    date = date === undefined ? new Date() : date;
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return `${year}${sep}${month < 10 ? '0' + month : month}${sep}${day < 10 ? '0' + day : day}`;
+}
+
+/**
+ * Set custom attribute: `custom-dailynote-yyyyMMdd`: yyyyMMdd
+ * https://github.com/siyuan-note/siyuan/issues/9807
+ * @param doc_id Id of daily note
+ */
+export function setCustomDNAttr(doc_id: string, date?: Date) {
+    let td = formatDate(date);
+    let attr = `custom-dailynote-${td}`;
+    // 构建 attr: td
+    let attrs: { [key: string]: string } = {};
+    attrs[attr] = td;
+    serverApi.setBlockAttrs(doc_id, attrs);
+}
+```
