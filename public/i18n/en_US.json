@@ -15,6 +15,16 @@
     "hello": {
         "makesure": "Before using this template, please read the <a href=\"https://github.com/siyuan-note/plugin-sample\">offical sample</a>, make sure that you've known about the pipeline for plugin developing."
     },
+    "onlyEnableListedDevices": "Enable Only on Listed Devices",
+    "onlyEnableListedDevicesDesc": "When the switch is on, this plugin enabled only on the devices listed in the list. When the switch is off, this plugin enabled on all devices.",
+    "enableDeviceList": "List of Enabled Devices",
+    "enableDeviceListDesc": "Devices listed in the table will enable this plugin function when the switch is on. Please avoid manual editing of this table as much as possible.",
+    "addCurrentDeviceIntoList": "Add Current Device to List",
+    "addCurrentDeviceIntoListDesc": "Add the current device to the table.",
+    "addCurrentDeviceIntoListLabel": "Add",
+    "removeCurrentDeviceFromList": "Remove Current Device from List",
+    "removeCurrentDeviceFromListDesc": "Remove the current device from the table.",
+    "removeCurrentDeviceFromListLabel": "Remove",
     "hintTitle":"About",
     "hintDesc":"<a href='https://github.com/siyuan-note/plugin-sample-vite-svelte'>plugin-sample-vite-svelte</a><br>@frostime<br>@88250<br>@zxkmm"
 }

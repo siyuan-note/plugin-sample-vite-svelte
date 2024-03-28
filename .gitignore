@@ -8,3 +8,6 @@ dev
 dist
 build
 tmp
+
+# soft link maker script
+/scripts/make_dev_link.js

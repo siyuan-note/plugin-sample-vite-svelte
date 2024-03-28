@@ -15,6 +15,16 @@
     "hello": {
         "makesure": "使用这个模板之前，请阅读<a href=\"https://github.com/siyuan-note/plugin-sample\">官方教程</a>, 确保自己已经理解了插件的基本开发流程。"
     },
+    "onlyEnableListedDevices": "只在以下设备上启用",
+    "onlyEnableListedDevicesDesc": "当打开开关时，只在表中列出的设备上启用该插件功能。当关闭开关时，在所有设备上启用该插件功能。",
+    "enableDeviceList": "启用的设备的列表",
+    "enableDeviceListDesc": "表中列出的设备会在开关打开时启用该插件功能。请尽量避免手动编辑此表",
+    "addCurrentDeviceIntoList": "添加当前设备",
+    "addCurrentDeviceIntoListDesc": "把当前设备添加到表中",
+    "addCurrentDeviceIntoListLabel": "添加",
+    "removeCurrentDeviceFromList": "移除当前设备",
+    "removeCurrentDeviceFromListDesc": "把当前设备从表中移除",
+    "removeCurrentDeviceFromListLabel": "移除",
     "hintTitle":"关于",
     "hintDesc":"<a href='https://github.com/siyuan-note/plugin-sample-vite-svelte'>🔗 plugin-sample-vite-svelte</a><br>💻 @frostime<br>💻 @88250<br>💻 @zxkmm"
 
