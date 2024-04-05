@@ -80,6 +80,20 @@ export class SettingUtils {
             this.updateElementFromValue(key);
         }
     }
+    /**
+     * Set and save setting item value
+     * If you want to set and save immediately you can use this method
+     * @param key key name
+     * @param value value
+     */
+    async setAndSave(key: string, value: any) {
+        let item = this.settings.get(key);
+        if (item) {
+            item.value = value;
+            this.updateElementFromValue(key);
+            await this.save()
+        }
+    }
 
     /**
      * Disable setting item
