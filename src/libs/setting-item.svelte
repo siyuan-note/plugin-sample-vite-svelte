@@ -31,7 +31,7 @@
         {title}
         <div class="b3-label__text">
             {@html description}
-        </div>
+        </div> 
     </div>
     <span class="fn__space" />
     <!-- <slot /> -->
