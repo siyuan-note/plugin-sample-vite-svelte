@@ -65,8 +65,11 @@ complete the following tasks:
 * Meta information about the plugin itself, such as plugin description and readme
     * `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
-    * src/i18n/*.json language configuration files
+    * public/i18n/*.json language configuration files
     * Use `this.i18.key` to get the text in the code
+* YAML Support
+  * This template specifically supports I18n based on YAML syntax, see `public/i18n/zh_CN.yaml`
+  * During compilation, the defined YAML files will be automatically translated into JSON files and placed in the dist or dev directory.
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
 conveniently.
