@@ -191,6 +191,11 @@ export default class PluginSample extends Plugin {
             type: "checkbox",
             title: "Checkbox text",
             description: "Check description",
+            checkbox: {
+                callback: () => {
+                    console.log("Checkbox clicked");
+                }
+            }
         });
         this.settingUtils.addItem({
             key: "Select",

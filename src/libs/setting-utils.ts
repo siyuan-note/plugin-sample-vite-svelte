@@ -104,6 +104,7 @@ export class SettingUtils {
                 element.checked = item.value;
                 element.className = "b3-switch fn__flex-center";
                 itemElement = element;
+                element.onchange = item.checkbox?.callback ?? (() => { });
                 break;
             case 'select':
                 let selectElement: HTMLSelectElement = document.createElement('select');
