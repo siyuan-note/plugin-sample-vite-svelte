@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-05 21:27:55
  * @FilePath     : /yaml-plugin.js
- * @LastEditTime : 2024-04-05 22:37:40
+ * @LastEditTime : 2024-04-05 22:53:34
  * @Description  : 去妮玛的 json 格式，我就是要用 yaml 写 i18n
  */
 // plugins/vite-plugin-parse-yaml.js
@@ -29,15 +29,6 @@ export default function vitePluginYamlI18n(options = {}) {
 
             if (!fs.existsSync(outDir)) {
                 fs.mkdirSync(outDir, { recursive: true });
-            }
-
-            //Remove yaml under outDir, which is auto-moved by vite
-            const outFiles = fs.readdirSync(outDir);
-            for (const file of outFiles) {
-                if (file.endsWith('.yaml') || file.endsWith('.yml')) {
-                    console.log(`-- Remove yaml file ${file} under dist`);
-                    fs.unlinkSync(resolve(outDir, file));
-                }
             }
 
             //Parse yaml file, output to json
