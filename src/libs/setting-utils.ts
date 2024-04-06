@@ -65,7 +65,7 @@ export class SettingUtils {
     }
 
     /**
-     * Get setting item value
+     * read the data after saving
      * @param key key name
      * @returns setting item value
      */
@@ -73,6 +73,27 @@ export class SettingUtils {
         return this.settings.get(key)?.value;
     }
 
+    /**
+      * Read in real time, 
+      * do not read from the configuration file
+      * @param key key name
+      * @returns value in html 
+      */
+    take(key: string) {
+        let item = this.getElement(key)
+        this.settings.set(key, item)
+        if (item.type === 'button') {
+            return item.value
+        }
+        return item.value
+    }
+
+    /**
+     * Set data to this.settings, 
+     * but do not save it to the configuration file
+     * @param key key name
+     * @param value value
+     */
     set(key: string, value: any) {
         let item = this.settings.get(key);
         if (item) {
@@ -80,6 +101,7 @@ export class SettingUtils {
             this.updateElementFromValue(key);
         }
     }
+
     /**
      * Set and save setting item value
      * If you want to set and save immediately you can use this method
@@ -96,6 +118,18 @@ export class SettingUtils {
     }
 
     /**
+     * Read data from html and save it
+     * @param key key name
+     * @param value value
+     * @return value in html 
+     */
+    async takeAndSave(key: string) {
+        let value = this.take(key)
+        await this.save()
+        return value
+    }
+
+    /**
      * Disable setting item
      * @param key key name
      */
@@ -105,6 +139,7 @@ export class SettingUtils {
             element.disabled = true;
         }
     }
+
     /**
      * Enable setting item
      * @param key key name
@@ -122,6 +157,8 @@ export class SettingUtils {
      */
     dump(): Object {
         let data: any = {};
+
+
         for (let [key, item] of this.settings) {
             if (item.type === 'button') continue;
             data[key] = item.value;
@@ -139,7 +176,7 @@ export class SettingUtils {
                 element.checked = item.value;
                 element.className = "b3-switch fn__flex-center";
                 itemElement = element;
-                element.onchange = item.checkbox?.callback ?? (() => { });
+                element.onchange = item.action?.callback ?? (() => { });
                 break;
             case 'select':
                 let selectElement: HTMLSelectElement = document.createElement('select');
@@ -153,6 +190,7 @@ export class SettingUtils {
                     selectElement.appendChild(optionElement);
                 }
                 selectElement.value = item.value;
+                selectElement.onchange = item.action?.callback ?? (() => { });
                 itemElement = selectElement;
                 break;
             case 'slider':
@@ -166,6 +204,7 @@ export class SettingUtils {
                 sliderElement.value = item.value;
                 sliderElement.onchange = () => {
                     sliderElement.ariaLabel = sliderElement.value;
+                    item.action?.callback();
                 }
                 itemElement = sliderElement;
                 break;
@@ -173,12 +212,15 @@ export class SettingUtils {
                 let textInputElement: HTMLInputElement = document.createElement('input');
                 textInputElement.className = 'b3-text-field fn__flex-center fn__size200';
                 textInputElement.value = item.value;
+                textInputElement.onkeyup = item.action?.callback ?? (() => { });
                 itemElement = textInputElement;
+
                 break;
             case 'textarea':
                 let textareaElement: HTMLTextAreaElement = document.createElement('textarea');
                 textareaElement.className = "b3-text-field fn__block";
                 textareaElement.value = item.value;
+                textareaElement.onkeyup = item.action?.callback ?? (() => { });
                 itemElement = textareaElement;
                 break;
             case 'number':
@@ -192,7 +234,7 @@ export class SettingUtils {
                 let buttonElement: HTMLButtonElement = document.createElement('button');
                 buttonElement.className = "b3-button b3-button--outline fn__flex-center fn__size200";
                 buttonElement.innerText = item.button?.label ?? 'Button';
-                buttonElement.onclick = item.button?.callback ?? (() => {});
+                buttonElement.onclick = item.button?.callback ?? (() => { });
                 itemElement = buttonElement;
                 break;
             case 'hint':
@@ -212,11 +254,18 @@ export class SettingUtils {
         })
     }
 
+    /**
+     * Set the value in the setting to the value of the element 
+     * and return the element information
+     * @param key key name
+     * @returns element
+     */
     getElement(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
         switch (item.type) {
             case 'checkbox':
+                element.value = element.checked ? true : false;
                 element.checked = item.value;
                 break;
             case 'select':

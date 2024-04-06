@@ -12,7 +12,7 @@ interface ISettingItem {
         step: number;
     };
     options?: { [key: string | number]: string };
-    checkbox?: {
+    action?: {
         callback: () => void;
     }
     button?: {
