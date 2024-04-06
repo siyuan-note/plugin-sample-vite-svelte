@@ -178,6 +178,7 @@ export default class PluginSample extends Plugin {
             title: "Readonly text",
             description: "Input description",
             action: {
+                // Called when focus is lost and content changes
                 callback: () => {
                     // Return data and save it in real time
                     let value = this.settingUtils.takeAndSave("Input")
@@ -191,6 +192,7 @@ export default class PluginSample extends Plugin {
             type: "textarea",
             title: "Readonly text",
             description: "Input description",
+            // Called when focus is lost and content changes
             action: {
                 callback: () => {
                     // Read data in real time

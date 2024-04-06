@@ -212,7 +212,7 @@ export class SettingUtils {
                 let textInputElement: HTMLInputElement = document.createElement('input');
                 textInputElement.className = 'b3-text-field fn__flex-center fn__size200';
                 textInputElement.value = item.value;
-                textInputElement.onkeyup = item.action?.callback ?? (() => { });
+                textInputElement.onchange = item.action?.callback ?? (() => { });
                 itemElement = textInputElement;
 
                 break;
@@ -220,7 +220,7 @@ export class SettingUtils {
                 let textareaElement: HTMLTextAreaElement = document.createElement('textarea');
                 textareaElement.className = "b3-text-field fn__block";
                 textareaElement.value = item.value;
-                textareaElement.onkeyup = item.action?.callback ?? (() => { });
+                textareaElement.onchange = item.action?.callback ?? (() => { });
                 itemElement = textareaElement;
                 break;
             case 'number':
