@@ -63,6 +63,7 @@
 <div class="fn__flex-1 fn__flex config__panel">
     <ul class="b3-tab-bar b3-list b3-list--background">
         {#each groups as group}
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
             <li
                 data-name="editor"
                 class:b3-list-item--focus={group === focusGroup}
