@@ -249,43 +249,12 @@ Related APIs can be found at: `/api/file/*` (e.g., `/api/file/getFile`).
 
 ### 2. Daily Note Attribute Specifications
 
-When creating a diary in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
+When creating a daily note in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
 
 > For more details, please refer to [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807).
 
 Developers should pay attention to the following when developing the functionality to manually create Daily Notes:
 
-- If `/api/filetree/createDailyNote` is called to create a diary, the attribute will be automatically added to the document, and developers do not need to handle it separately.
-- If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a diary), please manually add this attribute to the document.
+* If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
+* If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
 
-Here is a reference code:
-
-```ts
-/*
- * Copyright (c) 2023 by frostime. All Rights Reserved.
- * @Author       : frostime
- * @Url          : https://github.com/frostime/siyuan-dailynote-today/blob/v1.3.0/src/func/dailynote/dn-attr.ts
- */
-
-export function formatDate(date?: Date, sep=''): string {
-    date = date === undefined ? new Date() : date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${sep}${month < 10 ? '0' + month : month}${sep}${day < 10 ? '0' + day : day}`;
-}
-
-/**
- * Set custom attribute: `custom-dailynote-yyyyMMdd`: yyyyMMdd
- * https://github.com/siyuan-note/siyuan/issues/9807
- * @param doc_id Id of daily note
- */
-export function setCustomDNAttr(doc_id: string, date?: Date) {
-    let td = formatDate(date);
-    let attr = `custom-dailynote-${td}`;
-    // 构建 attr: td
-    let attrs: { [key: string]: string } = {};
-    attrs[attr] = td;
-    serverApi.setBlockAttrs(doc_id, attrs);
-}
-```
