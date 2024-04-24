@@ -265,14 +265,12 @@ export class SettingUtils {
         switch (item.type) {
             case 'checkbox':
                 item.value = element.checked ? true : false;
-                element.checked = element.value;
                 break;
             case 'select':
                 item.value = element.value;
                 break;
             case 'slider':
                 item.value = element.value;
-                element.ariaLabel = item.value;
                 break;
             case 'textinput':
                 item.value = element.value;
