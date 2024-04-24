@@ -255,8 +255,7 @@ export class SettingUtils {
     }
 
     /**
-     * Set the value in the setting to the value of the element 
-     * and return the element information
+     * return the element information
      * @param key key name
      * @returns element
      */
@@ -265,21 +264,21 @@ export class SettingUtils {
         let element = this.elements.get(key) as any;
         switch (item.type) {
             case 'checkbox':
-                element.value = element.checked ? true : false;
-                element.checked = item.value;
+                item.value = element.checked ? true : false;
+                element.checked = element.value;
                 break;
             case 'select':
-                element.value = item.value;
+                item.value = element.value;
                 break;
             case 'slider':
-                element.value = item.value;
+                item.value = element.value;
                 element.ariaLabel = item.value;
                 break;
             case 'textinput':
-                element.value = item.value;
+                item.value = element.value;
                 break;
             case 'textarea':
-                element.value = item.value;
+                item.value = element.value;
                 break;
         }
         return element;
