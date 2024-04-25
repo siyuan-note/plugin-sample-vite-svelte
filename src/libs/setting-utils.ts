@@ -80,12 +80,12 @@ export class SettingUtils {
       * @returns value in html 
       */
     take(key: string) {
-        let item = this.getElement(key)
-        this.settings.set(key, item)
-        if (item.type === 'button') {
-            return item.value
+        let element = this.elements.get(key) as any;
+        if (!element){
+            return
         }
-        return item.value
+        this.settings.set(key, element.value)
+        return element.value 
     }
 
     /**
@@ -329,5 +329,5 @@ export class SettingUtils {
                 break;
         }
     }
-
+ 
 }
