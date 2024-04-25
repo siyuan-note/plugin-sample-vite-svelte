@@ -246,11 +246,9 @@ export default class PluginSample extends Plugin {
                 step: 1,
             },
             action:{
-                // The callback is called after the action of Silder changes, 
-                // so it should be the this.settingUtils.get() method.
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.get("Slider")
+                    let value = this.settingUtils.take("Slider")
                     console.log(value);
                 }
             }

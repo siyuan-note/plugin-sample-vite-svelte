@@ -51,8 +51,6 @@ export class SettingUtils {
         if (data) {
             for (let [key, item] of this.settings) {
                 item.value = data?.[key] ?? item.value;
-                this.updateElementFromValue(key);
-
             }
         }
         this.plugin.data[this.name] = this.dump();
@@ -82,12 +80,12 @@ export class SettingUtils {
       * @returns value in html 
       */
     take(key: string) {
-        let item = this.getElement(key)
-        this.settings.set(key, item)
-        if (item.type === 'button') {
-            return item.value
+        let element = this.elements.get(key) as any;
+        if (!element){
+            return
         }
-        return item.value
+        this.settings.set(key, element.value)
+        return element.value 
     }
 
     /**
@@ -257,7 +255,8 @@ export class SettingUtils {
     }
 
     /**
-     * return the element information
+     * Set the value in the setting to the value of the element 
+     * and return the element information
      * @param key key name
      * @returns element
      */
@@ -266,19 +265,21 @@ export class SettingUtils {
         let element = this.elements.get(key) as any;
         switch (item.type) {
             case 'checkbox':
-                item.value = element.checked ? true : false;
+                element.value = element.checked ? true : false;
+                element.checked = item.value;
                 break;
             case 'select':
-                item.value = element.value;
+                element.value = item.value;
                 break;
             case 'slider':
-                item.value = element.value;
+                element.value = item.value;
+                element.ariaLabel = item.value;
                 break;
             case 'textinput':
-                item.value = element.value;
+                element.value = item.value;
                 break;
             case 'textarea':
-                item.value = element.value;
+                element.value = item.value;
                 break;
         }
         return element;
@@ -328,5 +329,5 @@ export class SettingUtils {
                 break;
         }
     }
-
+ 
 }
