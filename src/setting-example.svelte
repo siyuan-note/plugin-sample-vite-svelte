@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { showMessage } from "siyuan";
     import SettingPanel from "./libs/setting-panel.svelte";
 
     let groups: string[] = ["🌈 Default"];
@@ -43,6 +44,19 @@
                 max: 100,
                 step: 1
             }
+        },
+        {
+            type: 'button',
+            title: 'button',
+            description: 'This is a button',
+            key: 'e',
+            value: 'Click Button',
+            button: {
+                label: 'Click Me',
+                callback: () => {
+                    showMessage('Hello, world!');
+                }
+            }
         }
     ];
 
@@ -56,6 +70,8 @@
     const onChanged = ({ detail }: CustomEvent<ChangeEvent>) => {
         if (detail.group === groups[0]) {
             // setting.set(detail.key, detail.value);
+            //Please add your code here
+            //Udpate the plugins setting data, don't forget to call plugin.save() for data persistence
         }
     };
 </script>
@@ -83,6 +99,7 @@
             settingItems={SettingItems}
             display={focusGroup === groups[0]}
             on:changed={onChanged}
+            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
         >
             <div class="fn__flex b3-label">
                 💡 This is our default settings.

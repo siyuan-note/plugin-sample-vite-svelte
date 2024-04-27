@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-01-15 20:45:16
+ * @LastEditTime : 2024-04-27 16:38:09
  * @Description  : 
  */
 
@@ -329,5 +329,4 @@ export class SettingUtils {
                 break;
         }
     }
- 
 }

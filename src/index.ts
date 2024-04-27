@@ -382,7 +382,7 @@ export default class PluginSample extends Plugin {
         let dialog = new Dialog({
             title: "SettingPannel",
             content: `<div id="SettingPanel" style="height: 100%;"></div>`,
-            width: "600px",
+            width: "800px",
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
                 //You'd better destroy the component when the dialog is closed

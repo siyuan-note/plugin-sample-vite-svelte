@@ -14,11 +14,16 @@
         max: number;
         step: number;
     } = { min: 0, max: 100, step: 1 }; // Use it if type is slider
+    export let button: {
+        label: string;
+        callback: () => void;
+    } = { label: settingValue, callback: () => {} }; // Use it if type is button
 
     const dispatch = createEventDispatcher();
 
-    function clicked() {
-        dispatch("clicked");
+    function click() {
+        button?.callback();
+        dispatch("click", { key: settingKey });
     }
 
     function changed() {
@@ -66,9 +71,9 @@
         <button
             class="b3-button b3-button--outline fn__flex-center fn__size200"
             id={settingKey}
-            on:click={clicked}
+            on:click={click}
         >
-            {settingValue}
+            {button.label}
         </button>
     {:else if type === "select"}
         <!-- Dropdown select -->
