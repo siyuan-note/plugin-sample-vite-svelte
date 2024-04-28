@@ -164,13 +164,6 @@ export default class PluginSample extends Plugin {
         });
 
         this.settingUtils = new SettingUtils(this, STORAGE_NAME);
-
-        try {
-            this.settingUtils.load();
-        } catch (error) {
-            console.error("Error loading settings storage, probably empty config json:", error);
-        }
-
         this.settingUtils.addItem({
             key: "Input",
             value: "",
@@ -273,6 +266,13 @@ export default class PluginSample extends Plugin {
             title: this.i18n.hintTitle,
             description: this.i18n.hintDesc,
         });
+
+        try {
+            this.settingUtils.load();
+        } catch (error) {
+            console.error("Error loading settings storage, probably empty config json:", error);
+        }
+
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
