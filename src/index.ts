@@ -163,7 +163,9 @@ export default class PluginSample extends Plugin {
             }
         });
 
-        this.settingUtils = new SettingUtils(this, STORAGE_NAME);
+        this.settingUtils = new SettingUtils({
+            plugin: this, name: STORAGE_NAME
+        });
         this.settingUtils.addItem({
             key: "Input",
             value: "",

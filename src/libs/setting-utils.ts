@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-04-28 17:43:43
+ * @LastEditTime : 2024-04-28 17:49:31
  * @Description  : 
  */
 
@@ -49,20 +49,26 @@ export class SettingUtils {
     settings: Map<string, ISettingItem> = new Map();
     elements: Map<string, HTMLElement> = new Map();
 
-    constructor(plugin: Plugin, name?: string, callback?: (data: any) => void, width?: string, height?: string) {
-        this.name = name ?? 'settings';
-        this.plugin = plugin;
+    constructor(args: {
+        plugin: Plugin,
+        name?: string,
+        callback?: (data: any) => void,
+        width?: string,
+        height?: string
+    }) {
+        this.name = args.name ?? 'settings';
+        this.plugin = args.plugin;
         this.file = this.name.endsWith('.json') ? this.name : `${this.name}.json`;
         this.plugin.setting = new Setting({
-            width: width,
-            height: height,
+            width: args.width,
+            height: args.height,
             confirmCallback: () => {
                 for (let key of this.settings.keys()) {
                     this.updateValueFromElement(key);
                 }
                 let data = this.dump();
-                if (callback !== undefined) {
-                    callback(data);
+                if (args.callback !== undefined) {
+                    args.callback(data);
                 }
                 this.plugin.data[this.name] = data;
                 this.save();
