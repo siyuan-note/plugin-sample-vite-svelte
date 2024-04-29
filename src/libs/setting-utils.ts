@@ -3,34 +3,44 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-04-28 17:49:31
+ * @LastEditTime : 2024-04-29 17:17:19
  * @Description  : 
  */
 
 import { Plugin, Setting } from 'siyuan';
 
-const valueOf = (ele: HTMLElement) => {
+const valueOf = (ele: HTMLElement, parseNumber: Function=parseInt) => {
+    let val: any = null;
     if (ele instanceof HTMLInputElement) {
         if (ele.type === 'checkbox') {
-            return ele.checked;
+            val = ele.checked;
         } else {
-            return ele.value;
+            if (ele.type === 'number') {
+                val = parseNumber(ele.value);
+            } else {
+                val = ele.value;
+            }
         }
     } else if (ele instanceof HTMLSelectElement) {
-        return ele.value;
+        val = ele.value;
     } else if (ele instanceof HTMLTextAreaElement) {
-        return ele.value;
+        val = ele.value;
     } else {
-        return ele.textContent;
+        val = ele?.textContent;
     }
+    return val;
 }
 
 const setValue = (ele: HTMLElement, value: any) => {
+    if (ele === null || ele === undefined) return;
     if (ele instanceof HTMLInputElement) {
         if (ele.type === 'checkbox') {
             ele.checked = value;
         } else {
             ele.value = value;
+        }
+        if (ele.type === 'range') {
+            ele.ariaLabel = value;
         }
     } else if (ele instanceof HTMLSelectElement) {
         ele.value = value;
@@ -74,7 +84,7 @@ export class SettingUtils {
                 this.save();
             },
             destroyCallback: () => {
-                //从值恢复元素
+                //Restore the original value
                 for (let key of this.settings.keys()) {
                     this.updateElementFromValue(key);
                 }
@@ -197,8 +207,6 @@ export class SettingUtils {
      */
     dump(): Object {
         let data: any = {};
-
-
         for (let [key, item] of this.settings) {
             if (item.type === 'button') continue;
             data[key] = item.value;
@@ -208,6 +216,33 @@ export class SettingUtils {
 
     addItem(item: ISettingItem) {
         this.settings.set(item.key, item);
+        if (item.createElement === undefined) {
+            let itemElement = this.createDefaultElement(item);
+            this.elements.set(item.key, itemElement);
+            this.plugin.setting.addItem({
+                title: item.title,
+                description: item?.description,
+                createActionElement: () => {
+                    this.updateElementFromValue(item.key);
+                    let element = this.getElement(item.key);
+                    return element;
+                }
+            });
+        } else {
+            this.plugin.setting.addItem({
+                title: item.title,
+                description: item?.description,
+                createActionElement: () => {
+                    let val = this.get(item.key);
+                    let element = item.createElement(val);
+                    this.elements.set(item.key, element);
+                    return element;
+                }
+            });
+        }
+    }
+
+    createDefaultElement(item: ISettingItem) {
         let itemElement: HTMLElement;
         switch (item.type) {
             case 'checkbox':
@@ -283,16 +318,7 @@ export class SettingUtils {
                 itemElement = hintElement;
                 break;
         }
-        this.elements.set(item.key, itemElement);
-        this.plugin.setting.addItem({
-            title: item.title,
-            description: item?.description,
-            createActionElement: () => {
-                this.updateElementFromValue(item.key);
-                let element = this.getElement(item.key);
-                return element;
-            }
-        })
+        return itemElement;
     }
 
     /**
@@ -309,50 +335,52 @@ export class SettingUtils {
     private updateValueFromElement(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
-        switch (item.type) {
-            case 'checkbox':
-                item.value = element.checked;
-                break;
-            case 'select':
-                item.value = element.value;
-                break;
-            case 'slider':
-                item.value = element.value;
-                break;
-            case 'textinput':
-                item.value = element.value;
-                break;
-            case 'textarea':
-                item.value = element.value;
-                break;
-            case 'number':
-                item.value = parseInt(element.value);
-                break;
-        }
+        item.value = valueOf(element);
+        // switch (item.type) {
+        //     case 'checkbox':
+        //         item.value = element.checked;
+        //         break;
+        //     case 'select':
+        //         item.value = element.value;
+        //         break;
+        //     case 'slider':
+        //         item.value = element.value;
+        //         break;
+        //     case 'textinput':
+        //         item.value = element.value;
+        //         break;
+        //     case 'textarea':
+        //         item.value = element.value;
+        //         break;
+        //     case 'number':
+        //         item.value = parseInt(element.value);
+        //         break;
+        // }
     }
 
     private updateElementFromValue(key: string) {
         let item = this.settings.get(key);
         let element = this.elements.get(key) as any;
-        switch (item.type) {
-            case 'checkbox':
-                element.checked = item.value;
-                break;
-            case 'select':
-                element.value = item.value;
-                break;
-            case 'slider':
-                element.value = item.value;
-                break;
-            case 'textinput':
-                element.value = item.value;
-                break;
-            case 'textarea':
-                element.value = item.value;
-                break;
-            case 'number':
-                element.value = item.value;
-                break;
-        }
+        setValue(element, item.value);
+        // switch (item.type) {
+        //     case 'checkbox':
+        //         element.checked = item.value;
+        //         break;
+        //     case 'select':
+        //         element.value = item.value;
+        //         break;
+        //     case 'slider':
+        //         element.value = item.value;
+        //         break;
+        //     case 'textinput':
+        //         element.value = item.value;
+        //         break;
+        //     case 'textarea':
+        //         element.value = item.value;
+        //         break;
+        //     case 'number':
+        //         element.value = item.value;
+        //         break;
+        // }
     }
 }

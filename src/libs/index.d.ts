@@ -19,4 +19,5 @@ interface ISettingItem {
         label: string;
         callback: () => void;
     }
+    createElement?: (currentVal: any) => HTMLElement;
 }
