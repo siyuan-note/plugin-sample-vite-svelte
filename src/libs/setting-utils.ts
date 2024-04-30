@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-04-29 17:17:19
+ * @LastEditTime : 2024-04-30 15:50:07
  * @Description  : 
  */
 
@@ -56,7 +56,7 @@ export class SettingUtils {
     name: string;
     file: string;
 
-    settings: Map<string, ISettingItem> = new Map();
+    settings: Map<string, ISettingItemCore> = new Map();
     elements: Map<string, HTMLElement> = new Map();
 
     constructor(args: {
@@ -214,7 +214,7 @@ export class SettingUtils {
         return data;
     }
 
-    addItem(item: ISettingItem) {
+    addItem(item: ISettingUtilsItem) {
         this.settings.set(item.key, item);
         if (item.createElement === undefined) {
             let itemElement = this.createDefaultElement(item);
@@ -242,7 +242,7 @@ export class SettingUtils {
         }
     }
 
-    createDefaultElement(item: ISettingItem) {
+    createDefaultElement(item: ISettingUtilsItem) {
         let itemElement: HTMLElement;
         switch (item.type) {
             case 'checkbox':
