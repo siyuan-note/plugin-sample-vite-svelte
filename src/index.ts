@@ -176,7 +176,7 @@ export default class PluginSample extends Plugin {
                 // Called when focus is lost and content changes
                 callback: () => {
                     // Return data and save it in real time
-                    let value = this.settingUtils.takeAndSave("Input")
+                    let value = this.settingUtils.takeAndSave("Input");
                     console.log(value);
                 }
             }
@@ -191,7 +191,7 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.take("InputArea")
+                    let value = this.settingUtils.take("InputArea");
                     console.log(value);
                 }
             }
@@ -205,8 +205,8 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Return data and save it in real time
-                    let value = !this.settingUtils.get("Check")
-                     this.settingUtils.set("Check", value)
+                    let value = !this.settingUtils.get("Check");
+                    this.settingUtils.set("Check", value);
                     console.log(value);
                 }
             }
@@ -224,7 +224,7 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.take("Select")
+                    let value = this.settingUtils.take("Select");
                     console.log(value);
                 }
             }
@@ -244,7 +244,7 @@ export default class PluginSample extends Plugin {
             action:{
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.take("Slider")
+                    let value = this.settingUtils.take("Slider");
                     console.log(value);
                 }
             }

@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-19 18:30:12
  * @FilePath     : /src/libs/index.d.ts
- * @LastEditTime : 2024-04-30 15:53:15
+ * @LastEditTime : 2024-04-30 16:26:23
  * @Description  : 
  */
 type TSettingItemType = "checkbox" | "select" | "textinput" | "textarea" | "number" | "slider" | "button" | "hint";
@@ -38,4 +38,6 @@ interface ISettingUtilsItem extends ISettingItem {
         callback: () => void;
     }
     createElement?: (currentVal: any) => HTMLElement;
+    getEleVal?: (ele: HTMLElement) => any;
+    setEleVal?: (ele: HTMLElement, val: any) => void;
 }
