@@ -3,10 +3,10 @@
  * @Author       : frostime
  * @Date         : 2024-04-19 18:30:12
  * @FilePath     : /src/libs/index.d.ts
- * @LastEditTime : 2024-04-30 16:26:23
+ * @LastEditTime : 2024-04-30 16:39:54
  * @Description  : 
  */
-type TSettingItemType = "checkbox" | "select" | "textinput" | "textarea" | "number" | "slider" | "button" | "hint";
+type TSettingItemType = "checkbox" | "select" | "textinput" | "textarea" | "number" | "slider" | "button" | "hint" | "custom";
 
 interface ISettingItemCore {
     type: TSettingItemType;

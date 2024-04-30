@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-04-30 16:28:00
+ * @LastEditTime : 2024-04-30 16:42:23
  * @Description  : 
  */
 
@@ -21,7 +21,7 @@ const createDefaultGetter = (type: TSettingItemType) => {
         case 'checkbox':
             getter = (ele: HTMLInputElement) => {
                 return ele.checked;
-            }
+            };
             break;
         case 'select':
         case 'slider':
@@ -29,7 +29,7 @@ const createDefaultGetter = (type: TSettingItemType) => {
         case 'textarea':
             getter = (ele: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
                 return ele.value;
-            }
+            };
             break;
         case 'number':
             getter = (ele: HTMLInputElement) => {
@@ -37,9 +37,7 @@ const createDefaultGetter = (type: TSettingItemType) => {
             }
             break;
         default:
-            getter = (ele: HTMLElement) => {
-                return ele?.textContent;
-            }
+            getter = () => null;
             break;
     }
     return getter;
@@ -57,7 +55,7 @@ const createDefaultSetter = (type: TSettingItemType) => {
         case 'checkbox':
             setter = (ele: HTMLInputElement, value: any) => {
                 ele.checked = value;
-            }
+            };
             break;
         case 'select':
         case 'slider':
@@ -66,7 +64,10 @@ const createDefaultSetter = (type: TSettingItemType) => {
         case 'number':
             setter = (ele: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, value: any) => {
                 ele.value = value;
-            }
+            };
+            break;
+        default:
+            setter = () => {};
             break;
     }
     return setter;
@@ -240,6 +241,13 @@ export class SettingUtils {
 
     addItem(item: ISettingUtilsItem) {
         this.settings.set(item.key, item);
+        const IsCustom = item.type === 'custom';
+        let error = IsCustom && (item.createElement === undefined || item.getEleVal === undefined || item.setEleVal === undefined);
+        if (error) {
+            console.error('The custom setting item must have createElement, getEleVal and setEleVal methods');
+            return;
+        }
+
         if (item.getEleVal === undefined) {
             item.getEleVal = createDefaultGetter(item.type);
         }

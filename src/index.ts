@@ -31,7 +31,7 @@ const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private customTab: () => IModel;
+    customTab: () => IModel;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
@@ -263,6 +263,28 @@ export default class PluginSample extends Plugin {
             }
         });
         this.settingUtils.addItem({
+            key: "Custom Element",
+            value: "",
+            type: "custom",
+            direction: "row",
+            title: "Custom Element",
+            description: "Custom Element description",
+            //Any custom element must offer the following methods
+            createElement: (currentVal: any) => {
+                let div = document.createElement('div');
+                div.style.border = "1px solid var(--b3-theme-primary)";
+                div.contentEditable = "true";
+                div.textContent = currentVal;
+                return div;
+            },
+            getEleVal: (ele: HTMLElement) => {
+                return ele.textContent;
+            },
+            setEleVal: (ele: HTMLElement, val: any) => {
+                ele.textContent = val;
+            }
+        });
+        this.settingUtils.addItem({
             key: "Hint",
             value: "",
             type: "hint",
@@ -437,7 +459,7 @@ export default class PluginSample extends Plugin {
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
             width: this.isMobile ? "92vw" : "720px",
-            destroyCallback(options) {
+            destroyCallback() {
                 // hello.$destroy();
             },
         });
