@@ -235,6 +235,7 @@ export default class PluginSample extends Plugin {
             type: "slider",
             title: "Slider text",
             description: "Slider description",
+            direction: "column",
             slider: {
                 min: 0,
                 max: 100,

@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-04-30 15:50:07
+ * @LastEditTime : 2024-04-30 16:09:54
  * @Description  : 
  */
 
@@ -222,6 +222,7 @@ export class SettingUtils {
             this.plugin.setting.addItem({
                 title: item.title,
                 description: item?.description,
+                direction: item?.direction,
                 createActionElement: () => {
                     this.updateElementFromValue(item.key);
                     let element = this.getElement(item.key);
@@ -232,6 +233,7 @@ export class SettingUtils {
             this.plugin.setting.addItem({
                 title: item.title,
                 description: item?.description,
+                direction: item?.direction,
                 createActionElement: () => {
                     let val = this.get(item.key);
                     let element = item.createElement(val);
@@ -334,6 +336,7 @@ export class SettingUtils {
 
     private updateValueFromElement(key: string) {
         let item = this.settings.get(key);
+        if (item.type === 'button') return;
         let element = this.elements.get(key) as any;
         item.value = valueOf(element);
         // switch (item.type) {
@@ -360,6 +363,7 @@ export class SettingUtils {
 
     private updateElementFromValue(key: string) {
         let item = this.settings.get(key);
+        if (item.type === 'button') return;
         let element = this.elements.get(key) as any;
         setValue(element, item.value);
         // switch (item.type) {
