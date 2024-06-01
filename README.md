@@ -11,7 +11,7 @@
 2. Use symbolic linking instead of putting the project into the plugins directory program development
 3. Built-in support for the svelte framework
 
-     > If don't want svelte, turn to this template: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+     > **If don't want svelte, turn to this template**: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
