@@ -6,7 +6,7 @@
  * API 文档见 [API_zh_CN.md](https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md)
  */
 
-import { fetchSyncPost, IWebSocketData } from "siyuan";
+import { fetchPost, fetchSyncPost, IWebSocketData } from "siyuan";
 
 
 export async function request(url: string, data: any) {
@@ -328,12 +328,11 @@ export async function getFile(path: string): Promise<any> {
         path: path
     }
     let url = '/api/file/getFile';
-    try {
-        let file = await fetchSyncPost(url, data);
-        return file;
-    } catch (error_msg) {
-        return null;
-    }
+    return new Promise((resolve, _) => {
+        fetchPost(url, data, (content: any) => {
+            resolve(content)
+        });
+    });
 }
 
 export async function putFile(path: string, isDir: boolean, file: any) {
