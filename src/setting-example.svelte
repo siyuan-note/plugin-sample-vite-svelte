@@ -22,6 +22,15 @@
             placeholder: 'placeholder'
         },
         {
+            type: 'textarea',
+            title: 'textarea',
+            description: 'This is a textarea',
+            key: 'b2',
+            value: 'This is a textarea',
+            placeholder: 'placeholder',
+            direction: 'row'
+        },
+        {
             type: 'select',
             title: 'select',
             description: 'select',

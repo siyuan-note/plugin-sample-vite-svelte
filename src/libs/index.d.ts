@@ -28,12 +28,12 @@ interface ISettingItemCore {
 interface ISettingItem extends ISettingItemCore {
     title: string;
     description: string;
+    direction?: "row" | "column";
 }
 
 
 //Interface for setting-utils
 interface ISettingUtilsItem extends ISettingItem {
-    direction?: "row" | "column";
     action?: {
         callback: () => void;
     }
