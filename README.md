@@ -12,6 +12,7 @@
 3. Built-in support for the svelte framework
 
      > **If don't want svelte, turn to this template**: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+     > **We also provide with a vite+solidjs template**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
