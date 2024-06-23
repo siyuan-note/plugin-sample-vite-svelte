@@ -31,7 +31,7 @@ const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private customTab: () => IModel;
+    customTab: () => IModel;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
@@ -163,20 +163,23 @@ export default class PluginSample extends Plugin {
             }
         });
 
-        this.settingUtils = new SettingUtils(this, STORAGE_NAME);
-
-        try {
-            this.settingUtils.load();
-        } catch (error) {
-            console.error("Error loading settings storage, probably empty config json:", error);
-        }
-
+        this.settingUtils = new SettingUtils({
+            plugin: this, name: STORAGE_NAME
+        });
         this.settingUtils.addItem({
             key: "Input",
             value: "",
             type: "textinput",
             title: "Readonly text",
             description: "Input description",
+            action: {
+                // Called when focus is lost and content changes
+                callback: () => {
+                    // Return data and save it in real time
+                    let value = this.settingUtils.takeAndSave("Input");
+                    console.log(value);
+                }
+            }
         });
         this.settingUtils.addItem({
             key: "InputArea",
@@ -184,6 +187,14 @@ export default class PluginSample extends Plugin {
             type: "textarea",
             title: "Readonly text",
             description: "Input description",
+            // Called when focus is lost and content changes
+            action: {
+                callback: () => {
+                    // Read data in real time
+                    let value = this.settingUtils.take("InputArea");
+                    console.log(value);
+                }
+            }
         });
         this.settingUtils.addItem({
             key: "Check",
@@ -191,16 +202,31 @@ export default class PluginSample extends Plugin {
             type: "checkbox",
             title: "Checkbox text",
             description: "Check description",
+            action: {
+                callback: () => {
+                    // Return data and save it in real time
+                    let value = !this.settingUtils.get("Check");
+                    this.settingUtils.set("Check", value);
+                    console.log(value);
+                }
+            }
         });
         this.settingUtils.addItem({
             key: "Select",
             value: 1,
             type: "select",
-            title: "Readonly text",
+            title: "Select",
             description: "Select description",
             options: {
                 1: "Option 1",
                 2: "Option 2"
+            },
+            action: {
+                callback: () => {
+                    // Read data in real time
+                    let value = this.settingUtils.take("Select");
+                    console.log(value);
+                }
             }
         });
         this.settingUtils.addItem({
@@ -209,10 +235,18 @@ export default class PluginSample extends Plugin {
             type: "slider",
             title: "Slider text",
             description: "Slider description",
+            direction: "column",
             slider: {
                 min: 0,
                 max: 100,
                 step: 1,
+            },
+            action:{
+                callback: () => {
+                    // Read data in real time
+                    let value = this.settingUtils.take("Slider");
+                    console.log(value);
+                }
             }
         });
         this.settingUtils.addItem({
@@ -226,6 +260,28 @@ export default class PluginSample extends Plugin {
                 callback: () => {
                     showMessage("Button clicked");
                 }
+            }
+        });
+        this.settingUtils.addItem({
+            key: "Custom Element",
+            value: "",
+            type: "custom",
+            direction: "row",
+            title: "Custom Element",
+            description: "Custom Element description",
+            //Any custom element must offer the following methods
+            createElement: (currentVal: any) => {
+                let div = document.createElement('div');
+                div.style.border = "1px solid var(--b3-theme-primary)";
+                div.contentEditable = "true";
+                div.textContent = currentVal;
+                return div;
+            },
+            getEleVal: (ele: HTMLElement) => {
+                return ele.textContent;
+            },
+            setEleVal: (ele: HTMLElement, val: any) => {
+                ele.textContent = val;
             }
         });
         this.settingUtils.addItem({
@@ -275,6 +331,13 @@ export default class PluginSample extends Plugin {
             title: this.i18n.hintTitle,
             description: this.i18n.hintDesc,
         });
+
+        try {
+            this.settingUtils.load();
+        } catch (error) {
+            console.error("Error loading settings storage, probably empty config json:", error);
+        }
+
 
         this.protyleSlash = [{
             filter: ["insert emoji 😊", "插入表情 😊", "crbqwx"],
@@ -379,7 +442,6 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.byePlugin);
-        await this.settingUtils.save();
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
     }
@@ -408,7 +470,7 @@ export default class PluginSample extends Plugin {
         let dialog = new Dialog({
             title: "SettingPannel",
             content: `<div id="SettingPanel" style="height: 100%;"></div>`,
-            width: "600px",
+            width: "800px",
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
                 //You'd better destroy the component when the dialog is closed
@@ -460,7 +522,7 @@ export default class PluginSample extends Plugin {
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
             width: this.isMobile ? "92vw" : "720px",
-            destroyCallback(options) {
+            destroyCallback() {
                 // hello.$destroy();
             },
         });

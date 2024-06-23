@@ -3,7 +3,7 @@
 
 [中文版](./README_zh_CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.4](https://github.com/siyuan-note/plugin-sample/tree/v0.3.4)
+> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.5](https://github.com/siyuan-note/plugin-sample/tree/v0.3.5)
 
 
 
@@ -11,7 +11,9 @@
 2. Use symbolic linking instead of putting the project into the plugins directory program development
 3. Built-in support for the svelte framework
 
-     > If don't want svelte, turn to this template: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+     > **If don't want svelte, turn to this template**: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+     >
+     > **We also provide with a vite+solidjs template**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
@@ -65,8 +67,11 @@ complete the following tasks:
 * Meta information about the plugin itself, such as plugin description and readme
     * `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
-    * src/i18n/*.json language configuration files
+    * public/i18n/*.json language configuration files
     * Use `this.i18.key` to get the text in the code
+* YAML Support
+  * This template specifically supports I18n based on YAML syntax, see `public/i18n/zh_CN.yaml`
+  * During compilation, the defined YAML files will be automatically translated into JSON files and placed in the dist or dev directory.
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
 conveniently.
@@ -246,43 +251,12 @@ Related APIs can be found at: `/api/file/*` (e.g., `/api/file/getFile`).
 
 ### 2. Daily Note Attribute Specifications
 
-When creating a diary in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
+When creating a daily note in SiYuan, a custom-dailynote-yyyymmdd attribute will be automatically added to the document to distinguish it from regular documents.
 
 > For more details, please refer to [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807).
 
 Developers should pay attention to the following when developing the functionality to manually create Daily Notes:
 
-- If `/api/filetree/createDailyNote` is called to create a diary, the attribute will be automatically added to the document, and developers do not need to handle it separately.
-- If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a diary), please manually add this attribute to the document.
+* If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
+* If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
 
-Here is a reference code:
-
-```ts
-/*
- * Copyright (c) 2023 by frostime. All Rights Reserved.
- * @Author       : frostime
- * @Url          : https://github.com/frostime/siyuan-dailynote-today/blob/v1.3.0/src/func/dailynote/dn-attr.ts
- */
-
-export function formatDate(date?: Date, sep=''): string {
-    date = date === undefined ? new Date() : date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${sep}${month < 10 ? '0' + month : month}${sep}${day < 10 ? '0' + day : day}`;
-}
-
-/**
- * Set custom attribute: `custom-dailynote-yyyyMMdd`: yyyyMMdd
- * https://github.com/siyuan-note/siyuan/issues/9807
- * @param doc_id Id of daily note
- */
-export function setCustomDNAttr(doc_id: string, date?: Date) {
-    let td = formatDate(date);
-    let attr = `custom-dailynote-${td}`;
-    // 构建 attr: td
-    let attrs: { [key: string]: string } = {};
-    attrs[attr] = td;
-    serverApi.setBlockAttrs(doc_id, attrs);
-}
-```

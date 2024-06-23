@@ -1,10 +1,13 @@
-/**
- * Copyright (c) 2023 frostime. All rights reserved.
+/*
+ * Copyright (c) 2024 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2023-08-15 10:28:10
+ * @FilePath     : /src/types/index.d.ts
+ * @LastEditTime : 2024-06-08 20:50:53
+ * @Description  : Frequently used data structures in SiYuan
  */
 
-/**
- * Frequently used data structures in SiYuan
- */
+
 type DocumentId = string;
 type BlockId = string;
 type NotebookId = string;
@@ -28,7 +31,25 @@ type NotebookConf = {
     dailyNoteTemplatePath: string;
 }
 
-type BlockType = "d" | "s" | "h" | "t" | "i" | "p" | "f" | "audio" | "video" | "other";
+type BlockType = 
+    | 'd'
+    | 'p'
+    | 'query_embed'
+    | 'l'
+    | 'i'
+    | 'h'
+    | 'iframe'
+    | 'tb'
+    | 'b'
+    | 's'
+    | 'c'
+    | 'widget'
+    | 't'
+    | 'html'
+    | 'm'
+    | 'av'
+    | 'audio';
+
 
 type BlockSubType = "d1" | "d2" | "s1" | "s2" | "s3" | "t1" | "t2" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "table" | "task" | "toggle" | "latex" | "quote" | "html" | "code" | "footnote" | "cite" | "collection" | "bookmark" | "attachment" | "comment" | "mindmap" | "spreadsheet" | "calendar" | "image" | "audio" | "video" | "other";
 
@@ -70,6 +91,7 @@ type doOperation = {
 
 interface Window {
     siyuan: {
+        config: any;
         notebooks: any;
         menus: any;
         dialogs: any;
@@ -78,5 +100,7 @@ interface Window {
         user: any;
         ws: any;
         languages: any;
+        emojis: any;
     };
+    Lute: any;
 }

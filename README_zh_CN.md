@@ -4,13 +4,15 @@
 [English](./README.md)
 
 
-> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.4](https://github.com/siyuan-note/plugin-sample/tree/v0.3.4)
+> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.3.5](https://github.com/siyuan-note/plugin-sample/tree/v0.3.5)
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
 3. 内置对 svelte 框架的支持
   
-   > 如果不想要 svelte，请移步 [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+   > **如果不想要 svelte，请移步这个模板:** [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
+   >
+   > **这里还提供了一个 vite+solidjs 的模板**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 
@@ -62,9 +64,12 @@
 * 插件自身的元信息，比如插件描述和自述文件
   * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
-  * src/i18n/*.json 语言配置文件
+  * public/i18n/*.json 语言配置文件
   * 代码中使用 `this.i18.key` 获取文本
 * 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
+* yaml 支持
+  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh_CN.yaml`
+  * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。
 
@@ -234,47 +239,15 @@ PR 社区集市仓库。
 
 插件或者外部扩展如果有直接读取或者写入 data 下文件的需求，请通过调用内核 API 来实现，**不要自行调用 `fs` 或者其他 electron、nodejs API**，否则可能会导致数据同步时分块丢失，造成云端数据损坏。
 
-相关 API 见: `/api/file/*`（例如 `/api/file/getFile` 等）。
+相关 API 见 `/api/file/*`（例如 `/api/file/getFile` 等）。
 
 ### 2. Daily Note 属性规范
 
-思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性, 以方便将日记文档同普通文档区分。
+思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性，以方便将日记文档同普通文档区分。
 
 > 详情请见 [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807)。
 
 开发者在开发手动创建 Daily Note 的功能时请注意：
 
-- 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理。
-- 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性。
-
-参考代码:
-
-```ts
-/*
- * Copyright (c) 2023 by frostime. All Rights Reserved.
- * @Author       : frostime
- * @Url          : https://github.com/frostime/siyuan-dailynote-today/blob/v1.3.0/src/func/dailynote/dn-attr.ts
- */
-
-export function formatDate(date?: Date, sep=''): string {
-    date = date === undefined ? new Date() : date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${sep}${month < 10 ? '0' + month : month}${sep}${day < 10 ? '0' + day : day}`;
-}
-
-/**
- * Set custom attribute: `custom-dailynote-yyyyMMdd`: yyyyMMdd
- * https://github.com/siyuan-note/siyuan/issues/9807
- * @param doc_id Id of daily note
- */
-export function setCustomDNAttr(doc_id: string, date?: Date) {
-    let td = formatDate(date);
-    let attr = `custom-dailynote-${td}`;
-    // 构建 attr: td
-    let attrs: { [key: string]: string } = {};
-    attrs[attr] = td;
-    serverApi.setBlockAttrs(doc_id, attrs);
-}
-```
+* 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理
+* 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性
