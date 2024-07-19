@@ -2,10 +2,10 @@
     import { showMessage } from "siyuan";
     import SettingPanel from "./libs/components/setting-panel.svelte";
 
-    let groups: string[] = ["🌈 Default"];
+    let groups: string[] = ["🌈 Group 1", "✨ Group 2"];
     let focusGroup = groups[0];
 
-    const SettingItems: ISettingItem[] = [
+    const group1Items: ISettingItem[] = [
         {
             type: 'checkbox',
             title: 'checkbox',
@@ -41,19 +41,10 @@
                 y: 'y',
                 z: 'z'
             }
-        },
-        {
-            type: 'slider',
-            title: 'slider',
-            description: 'slider',
-            key: 'd',
-            value: 50,
-            slider: {
-                min: 0,
-                max: 100,
-                step: 1
-            }
-        },
+        }
+    ];
+
+    const group2Items: ISettingItem[] = [
         {
             type: 'button',
             title: 'button',
@@ -65,6 +56,18 @@
                 callback: () => {
                     showMessage('Hello, world!');
                 }
+            }
+        },
+        {
+            type: 'slider',
+            title: 'slider',
+            description: 'slider',
+            key: 'd',
+            value: 50,
+            slider: {
+                min: 0,
+                max: 100,
+                step: 1
             }
         }
     ];
@@ -105,7 +108,7 @@
     <div class="config__tab-wrap">
         <SettingPanel
             group={groups[0]}
-            settingItems={SettingItems}
+            settingItems={group1Items}
             display={focusGroup === groups[0]}
             on:changed={onChanged}
             on:click={({ detail }) => { console.debug("Click:", detail.key); }}
@@ -113,6 +116,14 @@
             <div class="fn__flex b3-label">
                 💡 This is our default settings.
             </div>
+        </SettingPanel>
+        <SettingPanel
+            group={groups[1]}
+            settingItems={group2Items}
+            display={focusGroup === groups[1]}
+            on:changed={onChanged}
+            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
+        >
         </SettingPanel>
     </div>
 </div>
