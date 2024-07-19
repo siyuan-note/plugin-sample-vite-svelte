@@ -2,8 +2,8 @@
  Copyright (c) 2024 by frostime. All Rights Reserved.
  Author       : frostime
  Date         : 2024-06-01 20:03:50
- FilePath     : /src/libs/setting-item-wrap.svelte
- LastEditTime : 2024-06-07 19:14:28
+ FilePath     : /src/libs/components/item-wrap.svelte
+ LastEditTime : 2024-07-19 15:28:57
  Description  : The setting item container
 -->
 <script lang="ts">
@@ -18,7 +18,9 @@
             <span class="title">{title}</span>
             <div class="b3-label__text">{@html description}</div>
             <div class="fn__hr"></div>
-            <slot />
+            <div style="display: flex; flex-direction: column; gap: 5px; position: relative;">
+                <slot />
+            </div>
         </div>
     </div>
 {:else}

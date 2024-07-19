@@ -24,6 +24,7 @@ import HelloExample from "@/hello.svelte";
 import SettingExample from "@/setting-example.svelte";
 
 import { SettingUtils } from "./libs/setting-utils";
+import { svelteDialog } from "./libs/dialog";
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
@@ -455,18 +456,30 @@ export default class PluginSample extends Plugin {
     }
 
     private showDialog() {
-        let dialog = new Dialog({
+        // let dialog = new Dialog({
+        //     title: `SiYuan ${Constants.SIYUAN_VERSION}`,
+        //     content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
+        //     width: this.isMobile ? "92vw" : "720px",
+        //     destroyCallback() {
+        //         // hello.$destroy();
+        //     },
+        // });
+        // new HelloExample({
+        //     target: dialog.element.querySelector("#helloPanel"),
+        //     props: {
+        //         app: this.app,
+        //     }
+        // });
+        svelteDialog({
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
-            content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
             width: this.isMobile ? "92vw" : "720px",
-            destroyCallback() {
-                // hello.$destroy();
-            },
-        });
-        new HelloExample({
-            target: dialog.element.querySelector("#helloPanel"),
-            props: {
-                app: this.app,
+            constructor: (container: HTMLElement) => {
+                return new HelloExample({
+                    target: container,
+                    props: {
+                        app: this.app,
+                    }
+                });
             }
         });
     }

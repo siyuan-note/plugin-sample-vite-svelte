@@ -3,10 +3,11 @@
  * @Author       : frostime
  * @Date         : 2024-03-23 21:37:33
  * @FilePath     : /src/libs/dialog.ts
- * @LastEditTime : 2024-06-01 16:28:30
+ * @LastEditTime : 2024-07-19 15:34:39
  * @Description  : Kits about dialogs
  */
 import { Dialog } from "siyuan";
+import { type SvelteComponent } from "svelte";
 
 export const inputDialog = (args: {
     title: string, placeholder?: string, defaultText?: string,
@@ -119,3 +120,36 @@ export const confirmDialogSync = async (args: IConfirmDialogArgs) => {
         confirmDialog(newargs);
     });
 };
+
+
+export const simpleDialog = (args: {
+    title: string, ele: HTMLElement | DocumentFragment,
+    width?: string, height?: string,
+    callback?: () => void;
+}) => {
+    const dialog = new Dialog({
+        title: args.title,
+        content: `<div class="dialog-content" style="display: flex; height: 100%;"/>`,
+        width: args.width,
+        height: args.height,
+        destroyCallback: args.callback
+    });
+    dialog.element.querySelector(".dialog-content").appendChild(args.ele);
+    return dialog;
+}
+
+
+export const svelteDialog = (args: {
+    title: string, constructor: (container: HTMLElement) => SvelteComponent,
+    width?: string, height?: string,
+    callback?: () => void;
+}) => {
+    let container = document.createElement('div')
+    container.style.display = 'contents';
+    let component = args.constructor(container);
+    simpleDialog({...args, ele: container, callback: () => {
+        component.$destroy();
+        if (args.callback) args.callback();;
+    }});
+    return component;
+}
