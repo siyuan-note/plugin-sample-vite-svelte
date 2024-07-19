@@ -1,6 +1,6 @@
 <script lang="ts">
     import { showMessage } from "siyuan";
-    import SettingPanel from "./libs/setting-panel.svelte";
+    import SettingPanel from "./libs/components/setting-panel.svelte";
 
     let groups: string[] = ["🌈 Default"];
     let focusGroup = groups[0];
