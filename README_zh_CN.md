@@ -18,11 +18,19 @@
 
 ## 开始
 
-1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名必须和插件名称一致，默认分支必须为 `main`
+1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致，默认分支必须为 `main`
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
 3. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i` 安装所需要的依赖
-3. **自动创建符号链接**
+4. 运行 `pnpm run make-link` 命令创建符号链接 (Windows 下的开发者请参阅下方「Windows 下的 make-link」小节)
+5. 执行 `pnpm run dev` 进行实时编译
+6.  在思源中打开集市并在下载选项卡中启用插件
+
+### 设置 make-link 命令的目标目录
+
+make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插件目录下。你可以有三种方式来配置目标的思源工作空间并创建符号链接:
+
+1. **选择工作空间**
     - 打开思源笔记, 确保思源内核正在运行
     - 运行 `pnpm run make-link`, 脚本会自动检测所有思源的工作空间, 请在命令行中手动输入序号以选择工作空间
         ```bash
@@ -38,23 +46,26 @@
         Got target directory: H:\Media\SiYuan/data/plugins
         Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite-svelte
         ```
-4. **手动创建符号链接**
+2. **手动配置目标目录**
     - 打开 `./scripts/make_dev_link.js` 文件，更改 `targetDir` 为思源的插件目录 `<siyuan workspace>/data/plugins`
     - 运行 `pnpm run make-link` 命令, 如果看到类似以下的消息，说明创建成功:
-      ```bash
-      ❯❯❯ pnpm run make-link
-      > plugin-sample-vite-svelte@0.0.1 make-link H:\SrcCode\plugin-sample-vite-svelte
-      > node ./scripts/make_dev_link.js
 
-      Done! Created symlink H:/SiYuanDevSpace/data/plugins/plugin-sample-vite-svelte
-      ```
-5. **设置环境变量创建符号链接**
-    - 你也可以设置系统的环境变量 `SIYUAN_PLUGIN_DIR` 为 `/data/plugins` 的路径
-6. 执行 `pnpm run dev` 进行实时编译
-7. 在思源中打开集市并在下载选项卡中启用插件
+3. **设置环境变量创建符号链接**
+    - 设置系统的环境变量 `SIYUAN_PLUGIN_DIR` 为 `工作空间/data/plugins` 的路径
 
 
-> 注意由于使用的 make-link 脚本依赖于 `fetch`，所以如果想要使用 make-link **请保证至少安装 v18 版本的 nodejs**
+### Windows 下的 make-link
+
+由于思源升级了 Go 1.23，旧版创建的 junction link 在 windows 下无法被正常识别，故而改为创建 `dir` 符号链接。
+
+> https://github.com/siyuan-note/siyuan/issues/12399
+
+
+不过 Windows 下使用 NodeJs 创建目录符号链接可能需要管理员权限，你可以有如下几种选择:
+
+1. 在具有管理员权限的命令行中运行 `pnpm run make-link`
+2. 配置 Windows 设置，在 [系统设置-更新与安全-开发者模式] 中启用开发者模式，然后再运行 `pnpm run make-link`
+3. 运行 `pnpm run make-link-win`，该命令会使用一个 powershell 脚本来寻求管理员权限，需要在系统中开启 PowerShell 脚本执行权限
 
 
 ## 国际化

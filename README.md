@@ -20,15 +20,21 @@
 
 ## Get started
 
-1. Make a copy of this repo as a template with the `Use this template` button, please note that the repo name must be the same as the plugin name, the default branch must be `main`
+1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. Note that the repository name should match the plugin name, and the default branch must be `main`.
+2. Clone your repository to the local development folder.
+    * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
+3. Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the development folder to install the required dependencies.
+4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
+5. Execute `pnpm run dev` for real-time compilation.
+6. Open the marketplace in SiYuan and enable the plugin in the download tab.
 
-2. Clone your repo to a local development folder at any place
-    - Notice: we **don't recommand** you to place the folder under your `{workspace}/data/plugins/` folder.
+### Setting the Target Directory for the make-link Command
 
-3. Install NodeJS and pnpm, then run pnpm i in the command line under your repo folder
-4. **Auto create development symbolic links**
-    - Make sure that SiYuan is running
-    - Run `pnpm run make-link`, the script will detect all the siyuan workspace, please select the targe workspace and the script will automatically create the symbolic link under the `{workspace}/data/plugins/` folder
+The `make-link` command creates a symbolic link that binds your `dev` directory to the SiYuan plugin directory. You can configure the target SiYuan workspace and create the symbolic link in three ways:
+
+1. **Select Workspace**
+    - Open SiYuan, ensure the SiYuan kernel is running.
+    - Run `pnpm run make-link`, the script will automatically detect all SiYuan workspaces, please manually enter the number to select the workspace.
         ```bash
         >>> pnpm run make-link
         > plugin-sample-vite-svelte@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite-svelte
@@ -42,22 +48,24 @@
         Got target directory: H:\Media\SiYuan/data/plugins
         Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite-svelte
         ```
-4. **Manually create development symbolic links**
-    - Open `./scripts/make_dev_link.js` file, set `targetDir` to your SiYuan plugin directory `<siyuan workspace>/data/plugins`
-    - Run `pnpm run make-link`, succeed if following message is shown:
-      ```bash
-      >>> pnpm run make-link
-      > plugin-sample-vite-svelte@0.0.1 make-link H:\SrcCode\plugin-sample-vite-svelte
-      > node ./scripts/make_dev_link.js
+2. **Manually Configure Target Directory**
+    - Open the `./scripts/make_dev_link.js` file, change `targetDir` to the SiYuan plugin directory `<siyuan workspace>/data/plugins`.
+    - Run the `pnpm run make-link` command. If you see a message similar to the one below, it indicates successful creation:
 
-      Done! Created symlink H:/SiYuanDevSpace/data/plugins/plugin-sample-vite-svelte
-      ```
-5. **Create development symbolic links by using environment variable**
-    - You can set environment variable `SIYUAN_PLUGIN_DIR` as `/data/plugins`
-6. Execute pnpm run dev for real-time compilation
-7. Open SiYuan marketplace and enable plugin in downloaded tab
+3. **Set Environment Variable to Create Symbolic Link**
+    - Set the system environment variable `SIYUAN_PLUGIN_DIR` to the path `workspace/data/plugins`.
 
->  Notice: as the `make-link` script rely on the `fetch` function, please **ensure that at least version v18 of nodejs is installed** if you want to use make-link script.
+### make-link on Windows
+
+Due to SiYuan upgrading to Go 1.23, the old version of junction links cannot be recognized normally on Windows, so it has been changed to create `dir` symbolic links.
+
+> https://github.com/siyuan-note/siyuan/issues/12399
+
+However, creating directory symbolic links on Windows using NodeJs may require administrator privileges. You have the following options:
+
+1. Run `pnpm run make-link` in a command line with administrator privileges.
+2. Configure Windows settings, enable developer mode in [System Settings - Update & Security - Developer Mode] then run `pnpm run make-link`.
+3. Run `pnpm run make-link-win`, this command will use a PowerShell script to request administrator privileges, requiring the system to enable PowerShell script execution permissions.
 
 ## I18n
 
