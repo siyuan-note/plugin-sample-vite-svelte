@@ -11,6 +11,7 @@
     "make-link": "node --no-warnings ./scripts/make_dev_link.js",
     "make-link-win": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/elevate.ps1 -scriptPath ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
+    "update-version": "node --no-warnings ./scripts/update_version.js",
     "build": "vite build",
     "make-install": "vite build && node --no-warnings ./scripts/make_install.js"
   },
