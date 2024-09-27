@@ -26,6 +26,13 @@
 5. 执行 `pnpm run dev` 进行实时编译
 6.  在思源中打开集市并在下载选项卡中启用插件
 
+> ![TIP]
+> 你也可以使用我们维护的 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 命令行工具，在本地终端中直接构建插件。
+> 
+> 此外，对于本插件以下提及到的 `make-link` 相关的命令，后续所有更新将在 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 中进行。
+> 
+> 模板内置的 `make-link` 脚本也可能会在未来某个版本中移除，转而使用 `siyuan-plugin-cli` 工具，意在简化同时维护多个插件模板的工作量。
+
 ### 设置 make-link 命令的目标目录
 
 make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插件目录下。你可以有三种方式来配置目标的思源工作空间并创建符号链接:
