@@ -26,7 +26,7 @@
 5. 执行 `pnpm run dev` 进行实时编译
 6.  在思源中打开集市并在下载选项卡中启用插件
 
-> ![TIP]
+> [!TIP]
 > 你也可以使用我们维护的 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 命令行工具，在本地终端中直接构建插件。
 > 
 > 此外，对于本插件以下提及到的 `make-link` 相关的命令，后续所有更新将在 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 中进行。

@@ -18,7 +18,7 @@
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
 
-> ![TIP]
+> [!TIP]
 > You can also use our maintained [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) command-line tool to directly build plugins in your local terminal.
 >
 > Additionally, for the `make-link` related commands mentioned in this plugin, all future updates will be made in [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli).
