@@ -59,4 +59,4 @@ jobs:
           artifactErrorsFailBuild: true
           artifacts: "package.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: true
+          prerelease: false

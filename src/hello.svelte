@@ -1,3 +1,11 @@
+<!--
+ Copyright (c) 2024 by frostime. All Rights Reserved.
+ Author       : frostime
+ Date         : 2023-11-19 12:30:45
+ FilePath     : /src/hello.svelte
+ LastEditTime : 2024-10-16 14:37:50
+ Description  : 
+-->
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { version, sql as query } from "@/api";

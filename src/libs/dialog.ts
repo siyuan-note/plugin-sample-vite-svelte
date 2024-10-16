@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-03-23 21:37:33
  * @FilePath     : /src/libs/dialog.ts
- * @LastEditTime : 2024-07-19 15:34:39
+ * @LastEditTime : 2024-10-16 14:31:04
  * @Description  : Kits about dialogs
  */
 import { Dialog } from "siyuan";
@@ -135,7 +135,10 @@ export const simpleDialog = (args: {
         destroyCallback: args.callback
     });
     dialog.element.querySelector(".dialog-content").appendChild(args.ele);
-    return dialog;
+    return {
+        dialog,
+        close: dialog.destroy.bind(dialog)
+    };
 }
 
 
@@ -147,9 +150,15 @@ export const svelteDialog = (args: {
     let container = document.createElement('div')
     container.style.display = 'contents';
     let component = args.constructor(container);
-    simpleDialog({...args, ele: container, callback: () => {
-        component.$destroy();
-        if (args.callback) args.callback();;
-    }});
-    return component;
+    const { dialog, close } = simpleDialog({
+        ...args, ele: container, callback: () => {
+            component.$destroy();
+            if (args.callback) args.callback();
+        }
+    });
+    return {
+        component,
+        dialog,
+        close
+    }
 }
