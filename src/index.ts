@@ -80,15 +80,17 @@ export default class PluginSample extends Plugin {
 </symbol>`);
 
         let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                app: this.app,
-            }
-        });
+        let app = null;
         this.custom = this.addTab({
             type: TAB_TYPE,
             init() {
+                app = new HelloExample({
+                    target: tabDiv,
+                    props: {
+                        app: this.app,
+                        blockID: this.data.blockID
+                    }
+                });
                 this.element.appendChild(tabDiv);
                 console.log(this.element);
             },
@@ -96,6 +98,7 @@ export default class PluginSample extends Plugin {
                 console.log("before destroy tab:", TAB_TYPE);
             },
             destroy() {
+                app?.$destroy();
                 console.log("destroy tab:", TAB_TYPE);
             }
         });
@@ -464,20 +467,7 @@ export default class PluginSample extends Plugin {
     }
 
     private showDialog() {
-        // let dialog = new Dialog({
-        //     title: `SiYuan ${Constants.SIYUAN_VERSION}`,
-        //     content: `<div id="helloPanel" class="b3-dialog__content"></div>`,
-        //     width: this.isMobile ? "92vw" : "720px",
-        //     destroyCallback() {
-        //         // hello.$destroy();
-        //     },
-        // });
-        // new HelloExample({
-        //     target: dialog.element.querySelector("#helloPanel"),
-        //     props: {
-        //         app: this.app,
-        //     }
-        // });
+        const docId = this.getEditor().protyle.block.rootID;
         svelteDialog({
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             width: this.isMobile ? "92vw" : "720px",
@@ -486,6 +476,7 @@ export default class PluginSample extends Plugin {
                     target: container,
                     props: {
                         app: this.app,
+                        blockID: docId
                     }
                 });
             }
@@ -498,11 +489,19 @@ export default class PluginSample extends Plugin {
         });
         menu.addItem({
             icon: "iconSettings",
-            label: "Open Setting",
+            label: "Open SiYuan Setting",
+            click: () => {
+                openSetting(this.app);
+            }
+        });
+        menu.addItem({
+            icon: "iconSettings",
+            label: "Open Plugin Setting",
             click: () => {
                 this.openSetting();
             }
         });
+        menu.addSeparator();
         menu.addItem({
             icon: "iconDrag",
             label: "Open Attribute Panel",
@@ -532,7 +531,7 @@ export default class PluginSample extends Plugin {
         if (!this.isMobile) {
             menu.addItem({
                 icon: "iconFace",
-                label: "Open Custom Tab",
+                label: "Open Custom Tab(open doc first)",
                 click: () => {
                     const tab = openTab({
                         app: this.app,
@@ -540,7 +539,8 @@ export default class PluginSample extends Plugin {
                             icon: "iconFace",
                             title: "Custom Tab",
                             data: {
-                                text: platformUtils.isHuawei() ? "Hello, Huawei!" : "This is my custom tab",
+                                // text: platformUtils.isHuawei() ? "Hello, Huawei!" : "This is my custom tab",
+                                blockID: this.getEditor().protyle.block.rootID,
                             },
                             id: this.name + TAB_TYPE
                         },

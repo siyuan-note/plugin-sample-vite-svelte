@@ -8,35 +8,35 @@
 -->
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { version, sql as query } from "@/api";
+    // import { version } from "@/api";
     import { showMessage, fetchPost, Protyle } from "siyuan";
 
     export let app;
+    export let blockID: string;
 
     let time: string = "";
-    let ver: string = "";
 
     let divProtyle: HTMLDivElement;
     let protyle: any;
-    let blockID: string = '';
 
     onMount(async () => {
-        ver = await version();
+        // ver = await version();
         fetchPost("/api/system/currentTime", {}, (response) => {
             time = new Date(response.data).toString();
         });
-        protyle = await initProtyle();
+        if (blockID) {
+            protyle = await initProtyle();
+        } else {
+            divProtyle.innerHTML = "Please open a document first";
+        }
     });
 
     onDestroy(() => {
         showMessage("Hello panel closed");
-        protyle.destroy();
+        protyle?.destroy();
     });
 
     async function initProtyle() {
-        let sql = "SELECT * FROM blocks ORDER BY RANDOM () LIMIT 1;";
-        let blocks: Block[] = await query(sql);
-        blockID = blocks[0].id;
         return new Protyle(app, divProtyle, {
             blockId: blockID
         });
