@@ -18,13 +18,10 @@
 4. Provides a github action template to automatically generate package.zip and upload to new release
 
 
-> [!TIP]
-> You can also use our maintained [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) command-line tool to directly build plugins in your local terminal.
+> [!NOTE]
+> The current template case is based on `svelte4` version, we maintain an experimental template in the `svelte5` branch, which upgrades Svelte to 5.x version.
 >
-> Additionally, for the `make-link` related commands mentioned in this plugin, all future updates will be made in [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli).
->
-> The built-in `make-link` scripts may also be removed in a future version, in favor of using the `siyuan-plugin-cli` tool, aiming to simplify the workload of maintaining multiple plugin templates.
-
+> In the future, we will switch the default main branch to svelte5.
 
 ## Get started
 
@@ -35,6 +32,13 @@
 4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
 5. Execute `pnpm run dev` for real-time compilation.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.
+
+> [!TIP]
+> You can also use our maintained [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) command-line tool to directly build plugins in your local terminal.
+>
+> Additionally, for the `make-link` related commands mentioned in this plugin, all future updates will be made in [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli).
+>
+> The built-in `make-link` scripts may also be removed in a future version, in favor of using the `siyuan-plugin-cli` tool, aiming to simplify the workload of maintaining multiple plugin templates.
 
 ### Setting the Target Directory for the make-link Command
 

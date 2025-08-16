@@ -16,6 +16,11 @@
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 
+> [!NOTE]
+> 当前模板案例基于 `svelte4` 版本，我们在 `svelte5` 分支中维护了一个实验性模板，将 Svelte 升级至 5.x 版本。
+>
+> 未来我们会将主分支默认版本切换至 svelte5。
+
 ## 开始
 
 1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致，默认分支必须为 `main`
