@@ -3,7 +3,7 @@
     import SettingPanel from "./libs/components/setting-panel.svelte";
 
     let groups: string[] = ["🌈 Group 1", "✨ Group 2"];
-    let focusGroup = groups[0];
+    let focusGroup = $state(groups[0]);
 
     const group1Items: ISettingItem[] = [
         {
@@ -79,7 +79,7 @@
         value: any;
     }
 
-    const onChanged = ({ detail }: CustomEvent<ChangeEvent>) => {
+    const onChanged = (detail: ChangeEvent) => {
         if (detail.group === groups[0]) {
             // setting.set(detail.key, detail.value);
             //Please add your code here
@@ -91,15 +91,15 @@
 <div class="fn__flex-1 fn__flex config__panel">
     <ul class="b3-tab-bar b3-list b3-list--background">
         {#each groups as group}
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <li
                 data-name="editor"
                 class:b3-list-item--focus={group === focusGroup}
                 class="b3-list-item"
-                on:click={() => {
+                onclick={() => {
                     focusGroup = group;
                 }}
-                on:keydown={() => {}}
+                onkeydown={() => {}}
             >
                 <span class="b3-list-item__text">{group}</span>
             </li>
@@ -110,8 +110,8 @@
             group={groups[0]}
             settingItems={group1Items}
             display={focusGroup === groups[0]}
-            on:changed={onChanged}
-            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
+            onchanged={onChanged}
+            onclick={(detail) => { console.debug("Click:", detail.key); }}
         >
             <div class="fn__flex b3-label">
                 💡 This is our default settings.
@@ -121,8 +121,8 @@
             group={groups[1]}
             settingItems={group2Items}
             display={focusGroup === groups[1]}
-            on:changed={onChanged}
-            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
+            onchanged={onChanged}
+            onclick={(detail) => { console.debug("Click:", detail.key); }}
         >
         </SettingPanel>
     </div>
