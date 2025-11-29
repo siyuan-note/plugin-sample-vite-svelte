@@ -7,28 +7,42 @@
  Description  : 
 -->
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import Form from './Form';
 
-    export let group: string;
-    export let settingItems: ISettingItem[];
-    export let display: boolean = true;
-
-    const dispatch = createEventDispatcher();
-
-    function onClick( {detail}) {
-        dispatch("click", { key: detail.key });
-    }
-    function onChanged( {detail}) {
-        dispatch("changed", {group: group, ...detail});
+    interface Props {
+        group: string;
+        settingItems: ISettingItem[];
+        display?: boolean;
+        children?: import('svelte').Snippet;
+        onclick?: (detail: {key: string}) => void;
+        onchanged?: (detail: {group: string, key: string, value: any}) => void;
     }
 
-    $: fn__none = display ? "" : "fn__none";
+    let {
+        group,
+        settingItems: _settingItems,
+        display = true,
+        children,
+        onclick,
+        onchanged
+    }: Props = $props();
+
+    // 使用 $state 让 settingItems 变成响应式
+    let settingItems = $state(_settingItems);
+
+    function handleClick(detail: {key: string}) {
+        onclick?.(detail);
+    }
+    function handleChanged(detail: {key: string, value: any}) {
+        onchanged?.({group: group, key: detail.key, value: detail.value});
+    }
+
+    let fn__none = $derived(display ? "" : "fn__none");
 
 </script>
 
 <div class="config__tab-container {fn__none}" data-name={group}>
-    <slot />
+    {@render children?.()}
     {#each settingItems as item (item.key)}
         <Form.Wrap
             title={item.title}
@@ -43,8 +57,8 @@
                 options={item?.options}
                 slider={item?.slider}
                 button={item?.button}
-                on:click={onClick}
-                on:changed={onChanged}
+                onclick={handleClick}
+                onchanged={handleChanged}
             />
         </Form.Wrap>
     {/each}
