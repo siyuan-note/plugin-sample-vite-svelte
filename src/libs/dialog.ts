@@ -3,11 +3,11 @@
  * @Author       : frostime
  * @Date         : 2024-03-23 21:37:33
  * @FilePath     : /src/libs/dialog.ts
- * @LastEditTime : 2024-10-16 14:31:04
+ * @LastEditTime : 2025-08-16 15:39:48
  * @Description  : Kits about dialogs
  */
 import { Dialog } from "siyuan";
-import { type SvelteComponent } from "svelte";
+import { Component, mount, unmount } from "svelte";
 
 export const inputDialog = (args: {
     title: string, placeholder?: string, defaultText?: string,
@@ -143,21 +143,34 @@ export const simpleDialog = (args: {
 
 
 export const svelteDialog = (args: {
-    title: string, constructor: (container: HTMLElement) => SvelteComponent,
-    width?: string, height?: string,
+    title: string,
+    component: Component<any>, // Svelte 5 component constructor
+    props?: Record<string, any>,
+    width?: string,
+    height?: string,
     callback?: () => void;
 }) => {
     let container = document.createElement('div')
     container.style.display = 'contents';
-    let component = args.constructor(container);
+
+    // 内部处理 mount
+    let componentInstance = mount(args.component, {
+        target: container,
+        props: args.props || {}
+    });
+
     const { dialog, close } = simpleDialog({
-        ...args, ele: container, callback: () => {
-            component.$destroy();
+        ...args,
+        ele: container,
+        callback: () => {
+            // 内部处理 unmount
+            unmount(componentInstance);
             if (args.callback) args.callback();
         }
     });
+
     return {
-        component,
+        component: componentInstance,
         dialog,
         close
     }

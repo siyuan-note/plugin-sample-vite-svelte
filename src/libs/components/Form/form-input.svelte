@@ -1,33 +1,47 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
-    export let type: string; // Setting Type
-    export let key: string;
-    export let value: any;
-
     // Optional parameters
-    export let placeholder: string = "";
-    export let options: { [key: string | number]: string } = {};
-    export let slider: {
+    interface Props {
+        type: string;
+        key: string;
+        value: any;
+        placeholder?: string;
+        options?: { [key: string | number]: string };
+        slider?: {
         min: number;
         max: number;
         step: number;
-    } = { min: 0, max: 100, step: 1 };
-    export let button: {
+    };
+        button?: {
         label: string;
         callback?: () => void;
-    } = { label: value, callback: () => {} };
-    export let fnSize: boolean = true; // If the form input is used within setting panel context, it is usually given a fixed width by a class named "fn__size200".
-    export let style: string = ""; // Custom style
-
-    const dispatch = createEventDispatcher();
-
-    function click() {
-        button?.callback();
-        dispatch("click", { key: key });
+    };
+        fnSize?: boolean;
+        style?: string;
+        onclick?: (detail: {key: string}) => void;
+        onchanged?: (detail: {key: string, value: any}) => void;
     }
 
-    function changed() {
-        dispatch("changed", { key: key, value: value });
+    let {
+        type,
+        key,
+        value = $bindable(),
+        placeholder = "",
+        options = {},
+        slider = { min: 0, max: 100, step: 1 },
+        button = { label: value, callback: () => {} },
+        fnSize = true,
+        style = "",
+        onclick,
+        onchanged
+    }: Props = $props();
+
+    function handleClick() {
+        button?.callback();
+        onclick?.({ key: key });
+    }
+
+    function handleChanged() {
+        onchanged?.({ key: key, value: value });
     }
 </script>
 
@@ -38,7 +52,7 @@
         id={key}
         type="checkbox"
         bind:checked={value}
-        on:change={changed}
+        onchange={handleChanged}
         style={style}
     />
 {:else if type === "textinput"}
@@ -50,7 +64,7 @@
         id={key}
         {placeholder}
         bind:value={value}
-        on:change={changed}
+        onchange={handleChanged}
         style={style}
     />
 {:else if type === "textarea"}
@@ -58,8 +72,8 @@
         class="b3-text-field fn__block"
         style={`resize: vertical; height: 10em; white-space: nowrap; ${style}`}
         bind:value={value}
-        on:change={changed}
-    />
+        onchange={handleChanged}
+></textarea>
 {:else if type === "number"}
     <input
         class:b3-text-field={true}
@@ -68,7 +82,7 @@
         id={key}
         type="number"
         bind:value={value}
-        on:change={changed}
+        onchange={handleChanged}
         style={style}
     />
 {:else if type === "button"}
@@ -79,7 +93,7 @@
         class:fn__flex-center={true}
         class:fn__size200={fnSize}
         id={key}
-        on:click={click}
+        onclick={handleClick}
         style={style}
     >
         {button.label}
@@ -92,7 +106,7 @@
         class:fn__size200={fnSize}
         id="iconPosition"
         bind:value={value}
-        on:change={changed}
+        onchange={handleChanged}
         style={style}
     >
         {#each Object.entries(options) as [value, text]}
@@ -111,7 +125,7 @@
             step={slider.step}
             type="range"
             bind:value={value}
-            on:change={changed}
+            onchange={handleChanged}
             style={style}
         />
     </div>
