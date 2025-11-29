@@ -23,9 +23,9 @@ import {
     getModelByDockType,
     getAllEditor,
     Files,
-    platformUtils,
+    // platformUtils,
     openSetting,
-    openAttributePanel,
+    openAttributePanel, 
     saveLayout
 } from "siyuan";
 import "./index.scss";
@@ -36,6 +36,7 @@ import SettingExample from "@/setting-example.svelte";
 
 import { SettingUtils } from "./libs/setting-utils";
 import { svelteDialog } from "./libs/dialog";
+import { mount, unmount } from "svelte";
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
@@ -84,7 +85,7 @@ export default class PluginSample extends Plugin {
         this.custom = this.addTab({
             type: TAB_TYPE,
             init() {
-                app = new HelloExample({
+                app = mount(HelloExample, {
                     target: tabDiv,
                     props: {
                         app: this.app,
@@ -98,7 +99,8 @@ export default class PluginSample extends Plugin {
                 console.log("before destroy tab:", TAB_TYPE);
             },
             destroy() {
-                app?.$destroy();
+                // app?.$destroy();
+                app && unmount(app);
                 console.log("destroy tab:", TAB_TYPE);
             }
         });
@@ -415,18 +417,27 @@ export default class PluginSample extends Plugin {
      * A custom setting pannel provided by svelte
      */
     openSetting(): void {
-        let dialog = new Dialog({
+        // let dialog = new Dialog({
+        //     title: "SettingPannel",
+        //     content: `<div id="SettingPanel" style="height: 100%;"></div>`,
+        //     width: "800px",
+        //     destroyCallback: (options) => {
+        //         console.log("destroyCallback", options);
+        //         //You'd better destroy the component when the dialog is closed
+        //         unmount(pannel);
+        //     }
+        // });
+        // let pannel = mount(SettingExample, {
+        //     target: dialog.element.querySelector("#SettingPanel"),
+        // });
+        svelteDialog({
             title: "SettingPannel",
-            content: `<div id="SettingPanel" style="height: 100%;"></div>`,
             width: "800px",
-            destroyCallback: (options) => {
-                console.log("destroyCallback", options);
-                //You'd better destroy the component when the dialog is closed
-                pannel.$destroy();
+            height: "35rem",
+            component: SettingExample,
+            props: {
+                app: this.app,
             }
-        });
-        let pannel = new SettingExample({
-            target: dialog.element.querySelector("#SettingPanel"),
         });
     }
 
@@ -471,14 +482,10 @@ export default class PluginSample extends Plugin {
         svelteDialog({
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             width: this.isMobile ? "92vw" : "720px",
-            constructor: (container: HTMLElement) => {
-                return new HelloExample({
-                    target: container,
-                    props: {
-                        app: this.app,
-                        blockID: docId
-                    }
-                });
+            component: HelloExample,
+            props: {
+                app: this.app,
+                blockID: docId
             }
         });
     }
