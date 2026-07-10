@@ -3,7 +3,7 @@
 
 [中文版](./README.zh-CN.md)
 
-> Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)
+> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1), with selected updates from newer releases.
 
 
 
@@ -84,8 +84,8 @@ However, creating directory symbolic links on Windows using NodeJs may require a
 In terms of internationalization, our main consideration is to support multiple languages. Specifically, we need to
 complete the following tasks:
 
-* Meta information about the plugin itself, such as plugin description and readme
-    * `description` and `readme` fields in plugin.json, and the corresponding README*.md file
+* Meta information about the plugin itself, such as plugin display name, description and readme
+    * `displayName`, `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
     * public/i18n/*.json language configuration files
     * Use `this.i18.key` to get the text in the code
@@ -94,7 +94,7 @@ complete the following tasks:
   * During compilation, the defined YAML files will be automatically translated into JSON files and placed in the dist or dev directory.
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
-conveniently.
+conveniently. Unsupported languages do not need to be declared in the `displayName`, `description` and `readme` fields in plugin.json.
 
 ## plugin.json
 
@@ -170,15 +170,15 @@ conveniently.
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
-* `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
+* `displayName`: Plugin name (plain text), displayed in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
-    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
-* `description`: Plugin description, mainly used for display in the marketplace list, supports multiple languages
+    * `zh-CN`, `en` and other languages: optional, must be [BCP 47](https://tools.ietf.org/html/bcp47) tags (e.g. `zh-CN`, `zh-TW`, `en`, `ja`, `pt-BR`)
+* `description`: Plugin description (plain text), displayed in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
-    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
+    * `zh-CN`, `en` and other languages: optional, must be BCP 47 tags
 * `readme`: readme file name, mainly used to display in the marketplace details page, supports multiple languages
     * `default`: Default language, must exist
-    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
+    * `zh-CN`, `en` and other languages: optional, must be BCP 47 tags
 * `funding`: Plugin sponsorship information
     * `openCollective`: Open Collective name
     * `patreon`: Patreon name

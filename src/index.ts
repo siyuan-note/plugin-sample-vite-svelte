@@ -155,7 +155,7 @@ export default class PluginSample extends Plugin {
                             Custom Dock
                         </div>
                         <span class="fn__flex-1 fn__space"></span>
-                        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg class="block__logoicon"><use xlink:href="#iconMin"></use></svg></span>
+                        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
                     </div>
                     <div class="fn__flex-1 plugin-sample__custom-dock">
                         ${dock.data.text}
@@ -371,6 +371,8 @@ export default class PluginSample extends Plugin {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
+                }).catch(e => {
+                    showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
                 });
             });
         });
@@ -378,7 +380,9 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
         // this.loadData(STORAGE_NAME);
-        this.settingUtils.load();
+        this.settingUtils.load().catch(e => {
+            console.log(`[${this.name}] load settings [${STORAGE_NAME}] fail: `, e);
+        });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
 
         console.log(
@@ -395,9 +399,20 @@ export default class PluginSample extends Plugin {
         console.log("onunload");
     }
 
-    uninstall() {
+    async uninstall() {
         console.log("uninstall");
+        // 卸载插件时删除插件数据
+        // Delete plugin data when uninstalling the plugin
+        await this.removeData(STORAGE_NAME).catch(e => {
+            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
+        });
     }
+
+    // 使用 saveData() 存储的数据发生变更 (如多端数据同步) 时触发，注释掉则自动禁用插件再重新启用
+    // Triggered when data stored using saveData() changes (for example, multi-device data synchronization). If commented out, the plugin will be automatically disabled and then re-enabled.
+    // onDataChanged() {
+    //     console.log("onDataChanged");
+    // }
 
     async updateCards(options: ICardData) {
         options.cards.sort((a: ICard, b: ICard) => {

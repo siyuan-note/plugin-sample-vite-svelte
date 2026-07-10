@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)
+> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)，并同步了后续版本中的部分更新。
  
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -84,17 +84,16 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 
 国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
 
-* 插件自身的元信息，比如插件描述和自述文件
-  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
+* 插件自身的元信息，比如插件名称、描述和自述文件
+  * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * public/i18n/*.json 语言配置文件
   * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 * yaml 支持
   * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh-CN.yaml`
   * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
 
-建议插件至少支持英文和简体中文，这样可以方便更多人使用。
+建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
 
 ## plugin.json
 
@@ -169,15 +168,15 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
+* `displayName`：插件名称（纯文本），在插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
-* `description`：插件描述，主要用于插件集市列表中显示，支持多语言
+  * `zh-CN`、`en` 等其他语言：可选，须为 [BCP 47](https://tools.ietf.org/html/bcp47) 标签（如 `zh-CN`、`zh-TW`、`en`、`ja`、`pt-BR`）
+* `description`：插件描述（纯文本），在插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，须为 BCP 47 标签
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，须为 BCP 47 标签
 * `funding`：插件赞助信息
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称
