@@ -91,7 +91,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   * 代码中使用 `this.i18.key` 获取文本
 * 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 * yaml 支持
-  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh_CN.yaml`
+  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh-CN.yaml`
   * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。
@@ -104,7 +104,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
-  "minAppVersion": "3.2.1",
+  "minAppVersion": "3.7.0",
   "disabledInPublish": true,
   "backends": [
     "windows",
@@ -124,15 +124,15 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   ],
   "displayName": {
     "default": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
+    "zh-CN": "插件样例 vite + svelte 版"
   },
   "description": {
     "default": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
+    "zh-CN": "使用 vite 和 svelte 开发的思源插件样例"
   },
   "readme": {
     "default": "README.md",
-    "zh_CN": "README_zh_CN.md"
+    "zh-CN": "README.zh-CN.md"
   },
   "funding": {
     "openCollective": "",
@@ -171,13 +171,13 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   * `all`：所有环境
 * `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
 * `description`：插件描述，主要用于插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，建议至少提供中文和英文
 * `funding`：插件赞助信息
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称

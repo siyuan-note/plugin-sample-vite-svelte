@@ -1,7 +1,7 @@
 
 # SiYuan plugin sample with vite and svelte
 
-[中文版](./README_zh_CN.md)
+[中文版](./README.zh-CN.md)
 
 > Consistent with [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)
 
@@ -90,7 +90,7 @@ complete the following tasks:
     * public/i18n/*.json language configuration files
     * Use `this.i18.key` to get the text in the code
 * YAML Support
-  * This template specifically supports I18n based on YAML syntax, see `public/i18n/zh_CN.yaml`
+  * This template specifically supports I18n based on YAML syntax, see `public/i18n/zh-CN.yaml`
   * During compilation, the defined YAML files will be automatically translated into JSON files and placed in the dist or dev directory.
 
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
@@ -104,7 +104,7 @@ conveniently.
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
-  "minAppVersion": "3.2.1",
+  "minAppVersion": "3.7.0",
   "disabledInPublish": true,
   "backends": [
     "windows",
@@ -124,15 +124,15 @@ conveniently.
   ],
   "displayName": {
     "default": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
+    "zh-CN": "插件样例 vite + svelte 版"
   },
   "description": {
     "default": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
+    "zh-CN": "使用 vite 和 svelte 开发的思源插件样例"
   },
   "readme": {
     "default": "README.md",
-    "zh_CN": "README_zh_CN.md"
+    "zh-CN": "README.zh-CN.md"
   },
   "funding": {
     "openCollective": "",
@@ -172,13 +172,13 @@ conveniently.
   * `all`: All environments
 * `displayName`: Template display name, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
+    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
 * `description`: Plugin description, mainly used for display in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
+    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
 * `readme`: readme file name, mainly used to display in the marketplace details page, supports multiple languages
     * `default`: Default language, must exist
-    * `zh_CN`, `en_US` and other languages: optional, it is recommended to provide at least Chinese and English
+    * `zh-CN`, `en` and other languages: optional, it is recommended to provide at least Chinese and English
 * `funding`: Plugin sponsorship information
     * `openCollective`: Open Collective name
     * `patreon`: Patreon name
