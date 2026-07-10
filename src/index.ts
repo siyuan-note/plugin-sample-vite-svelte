@@ -560,6 +560,24 @@ export default class PluginSample extends Plugin {
                 }
             }
         });
+        menu.addItem({
+            icon: "iconLink",
+            label: "Call Kernel HTTP Handler",
+            click: async () => {
+                try {
+                    const response = await fetch(`/plugin/private/${this.name}/status`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    const result = await response.json();
+                    console.log("kernel HTTP result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel HTTP call failed", error);
+                    showMessage("Kernel HTTP call failed");
+                }
+            }
+        });
         menu.addSeparator();
         menu.addItem({
             icon: "iconDrag",

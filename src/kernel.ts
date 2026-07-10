@@ -24,6 +24,34 @@ api.plugin.lifecycle.onload = async () => {
         const data = await api.storage.get(STORAGE_FILE);
         return JSON.parse(await data.text());
     }, "Read the sample file stored by the kernel plugin.");
+
+    api.server.private.http.handler = async (request) => {
+        if (request.request.method !== "GET" || request.context.path !== "/status") {
+            return {
+                statusCode: 404,
+                body: {
+                    data: {
+                        type: "JSON",
+                        data: { error: "Not found" },
+                    },
+                },
+            };
+        }
+
+        return {
+            statusCode: 200,
+            body: {
+                data: {
+                    type: "JSON",
+                    data: {
+                        name: api.plugin.name,
+                        platform: api.plugin.platform,
+                        status: "running",
+                    },
+                },
+            },
+        };
+    };
 };
 
 api.plugin.lifecycle.onrunning = async () => {
