@@ -19,7 +19,7 @@
     let { app, blockID }: Props = $props();
 
     let time = $state("");
-    let divProtyle = $state<HTMLDivElement>();
+    let divProtyle: HTMLDivElement;
     let protyle: any;
 
     onMount(async () => {
