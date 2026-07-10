@@ -2,9 +2,43 @@
 
 SiYuan 从 3.7.0 开始支持 kernel plugin。一个插件包可以同时包含运行在 SiYuan 前端的 frontend plugin，以及运行在 SiYuan kernel 进程中的 kernel plugin。
 
-当能力不应依赖某个编辑器窗口时，应考虑 kernel plugin：后台任务、长期连接、插件私有文件、MCP tool 或经过认证的插件 HTTP endpoint。界面、编辑器交互、DOM 和 CSS 仍应放在 frontend plugin 中。
+kernel plugin **不是** Node.js plugin，也不会获得 SiYuan 的 Go internals。它运行在受限的 goja JavaScript runtime 中，只能通过全局 `siyuan` 对象使用 SiYuan 显式开放的 kernel capability。
 
 本 Vite + Svelte 模板提供了可执行的最小 kernel plugin。完整官方 API 示例请参阅 [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample)。
+
+## Kernel Plugin 到底解决什么问题
+
+frontend plugin 用于改变 SiYuan 的用户界面；kernel plugin 用于给正在运行的 SiYuan kernel 增加一个受控服务。
+
+例如，file-management 或 network-drive plugin 可以暴露一个返回文件或媒体响应的 route，player 通过标准 HTTP 请求这个 route；MCP plugin 可以向 SiYuan 的 MCP server 注册 tool。这些任务需要一个不依赖浏览器 tab、并且可以使用 kernel 提供的 HTTP、storage、event 和 lifecycle API 的服务。
+
+kernel plugin 可以：
+
+- 通过 `siyuan.client` 携带 kernel 签发的 plugin credentials，调用 SiYuan 已有的 HTTP、WebSocket 和 Server-Sent Events API。
+- 在自己的 storage directory 中存储和监听文件。
+- 注册供 frontend 或其他已认证 client 调用的 RPC method。
+- 注册 private HTTP、WebSocket 和 Server-Sent Events handler。
+- 注册 MCP tool。
+- 通过 lifecycle callback 管理资源，即使没有打开任何插件 UI。
+
+kernel plugin 不可以：
+
+- import 或调用 SiYuan 的 Go package、function 或 in-memory object。
+- 使用 `require`、`fs`、`child_process`、`net`、`http` 等 Node.js API 或 module。
+- 使用 `window`、`document`、编辑器实例、dialog、dock 或 CSS 等 browser/frontend API。
+- 创建匿名 public HTTP endpoint。当前生效的 server route 是 private route，受 SiYuan authentication、administrator-role 与 read-only check 保护。
+
+## HTTP Handler 是给外部提供 API 吗？
+
+是，但它是**需要认证的外部 API**，不是 public web API。SiYuan 外部的程序只要能够连接到 SiYuan HTTP server，并提供有效的 administrator credentials，例如 workspace API token，就可以调用：
+
+```text
+/plugin/private/<plugin-name>/<path>
+```
+
+anonymous caller 和 non-administrator user 不会进入 handler。public route `/plugin/public/<plugin-name>/<path>` 目前在 SiYuan kernel 中处于禁用状态。
+
+private HTTP handler 适合 companion application、local integration、media/file delivery 或 privileged automation client；不适合作为未认证 Internet webhook。
 
 ## Glossary
 
@@ -48,7 +82,7 @@ API 名称和协议名称保持英文。代码、文档和 issue 讨论中，一
 | 提供带 URL、method、status code、header 或文件响应的认证 endpoint | private HTTP handler | 使用标准 HTTP 语义，而不是为每个 route 设计一个 RPC method。 |
 | 保持双向长期连接 | private WebSocket handler 或 `siyuan.client.socket` | WebSocket 适合交互式、长期的双向消息。 |
 | 推送单向更新流 | private SSE handler 或 `siyuan.client.event` | SSE 适合进度与事件流。 |
-| 从 kernel code 调用外部 HTTP/WS/SSE 服务 | `siyuan.client` | 使用 kernel 管理的网络 client API。 |
+| 从 kernel code 调用 SiYuan HTTP/WS/SSE API | `siyuan.client` | 使用 kernel API gateway 与 plugin credentials。 |
 | 向 AI client 暴露插件能力 | `siyuan.mcp.registerTool` | 注册带命名空间的 MCP tool。 |
 
 ### RPC 还是 HTTP？
@@ -158,7 +192,7 @@ const status = JSON.parse(await data.text());
 await siyuan.storage.remove("jobs/status.json");
 ```
 
-storage path 相对于 `data/storage/petal/<plugin-name>/`。`storage.get()` 返回惰性数据对象；根据需要只使用一次解码方法，例如 `text()` 或 `json()`。
+storage path 相对于该插件由 kernel 管理的 storage directory。`storage.get()` 返回惰性数据对象；根据需要只使用一次解码方法，例如 `text()` 或 `json()`。
 
 ## RPC 示例
 
@@ -325,7 +359,7 @@ kernel plugin 使用普通 SiYuan 集市插件的发布流程：
 | `siyuan.mcp.registerTool` | 向 AI client 暴露边界清晰的插件操作。 |
 | `siyuan.server.private.ws` | 交互式双向消息，例如远程控制 channel。 |
 | `siyuan.server.private.es` | 向 client 推送单向的实时进度或事件流。 |
-| `siyuan.client.fetch/socket/event` | 从 kernel code 调用或订阅外部服务。 |
+| `siyuan.client.fetch/socket/event` | 从 kernel code 调用或订阅 SiYuan HTTP、WebSocket 或 SSE API。 |
 | `siyuan.storage.watcher` | 插件私有文件发生变化时作出反应。 |
 | `siyuan.event` | 通过 kernel event bridge 接收和发布事件。 |
 

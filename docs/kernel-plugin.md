@@ -1,10 +1,44 @@
 # SiYuan Kernel Plugin Guide
 
-SiYuan 3.7.0 introduced kernel plugins. A plugin package can now contain frontend code for the SiYuan UI and kernel code for the SiYuan kernel process.
+SiYuan 3.7.0 introduced kernel plugins. A plugin package can now contain frontend code for the SiYuan UI and kernel code that runs inside the SiYuan kernel process.
 
-Use a kernel plugin when a capability should not belong to one editor window: background work, persistent connections, plugin-owned files, MCP tools, or an authenticated plugin HTTP endpoint. Keep UI, editor interaction, DOM, and CSS in the frontend plugin.
+A kernel plugin is **not** a Node.js plugin and it does not receive SiYuan's Go internals. It runs in a sandboxed goja JavaScript runtime and receives only the kernel capabilities that SiYuan exposes through the global `siyuan` object.
 
 This Vite + Svelte template contains a small executable kernel plugin. The complete official API sample is [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample).
+
+## What a Kernel Plugin Is For
+
+A frontend plugin changes the SiYuan user interface. A kernel plugin adds a controlled service to the running SiYuan kernel.
+
+For example, a file-management or network-drive plugin can expose a route that returns a file or media response; a player can request that route through standard HTTP; an MCP plugin can register a tool for SiYuan's MCP server. These tasks need a service that is independent of a browser tab and can use kernel-provided HTTP, storage, event, and lifecycle APIs.
+
+A kernel plugin can:
+
+- Call SiYuan's existing HTTP, WebSocket, and Server-Sent Events APIs through `siyuan.client`, using the plugin's kernel-issued credentials.
+- Store and watch files in its own storage directory.
+- Register RPC methods for frontend or other authenticated clients.
+- Register private HTTP, WebSocket, and Server-Sent Events handlers.
+- Register MCP tools.
+- Start and stop resources through lifecycle callbacks, even when no plugin UI is open.
+
+A kernel plugin cannot:
+
+- Import or call SiYuan's Go packages, functions, or in-memory objects.
+- Use Node.js APIs or modules such as `require`, `fs`, `child_process`, `net`, or `http`.
+- Use browser and frontend APIs such as `window`, `document`, editor instances, dialogs, docks, or CSS.
+- Create an anonymous public HTTP endpoint. The active server route is private and protected by SiYuan authentication, administrator-role, and read-only checks.
+
+## Is the HTTP Handler an External API?
+
+Yes, but it is an **authenticated external API**, not a public web API. A program outside SiYuan can call:
+
+```text
+/plugin/private/<plugin-name>/<path>
+```
+
+when it can reach the SiYuan HTTP server and provides valid administrator credentials, such as the workspace API token. Anonymous callers and non-administrator users do not reach the handler. The public route `/plugin/public/<plugin-name>/<path>` is currently disabled in the SiYuan kernel.
+
+Use a private HTTP handler for a companion application, a local integration, media/file delivery, or a privileged automation client. Do not use it for an unauthenticated Internet webhook.
 
 ## Glossary
 
@@ -48,7 +82,7 @@ These runtime guarantees are why `minAppVersion` must remain at least `3.7.0` fo
 | Offer an authenticated endpoint with URLs, methods, status codes, headers, or files | private HTTP handler | Use standard HTTP semantics rather than inventing an RPC method for every route. |
 | Keep a bidirectional connection open | private WebSocket handler or `siyuan.client.socket` | WebSocket fits interactive, long-lived two-way messaging. |
 | Push a one-way stream of updates | private SSE handler or `siyuan.client.event` | SSE fits progress feeds and event streams. |
-| Call an external HTTP/WS/SSE service from kernel code | `siyuan.client` | Kernel-managed network client APIs. |
+| Call a SiYuan HTTP/WS/SSE API from kernel code | `siyuan.client` | Uses the kernel's API gateway and plugin credentials. |
 | Expose a capability to an AI client | `siyuan.mcp.registerTool` | Registers a namespaced MCP tool. |
 
 ### RPC or HTTP?
@@ -158,7 +192,7 @@ const status = JSON.parse(await data.text());
 await siyuan.storage.remove("jobs/status.json");
 ```
 
-Paths are relative to `data/storage/petal/<plugin-name>/`. `storage.get()` returns a lazy data object. Consume it once with the decoder you need, such as `text()` or `json()`.
+Paths are relative to the kernel-managed storage directory for this plugin. `storage.get()` returns a lazy data object. Consume it once with the decoder you need, such as `text()` or `json()`.
 
 ## RPC Example
 
@@ -325,7 +359,7 @@ Do not publish a kernel-dependent package with `minAppVersion` below `3.7.0`.
 | `siyuan.mcp.registerTool` | Expose a well-defined plugin action to an AI client. |
 | `siyuan.server.private.ws` | Interactive two-way messages, such as a remote control channel. |
 | `siyuan.server.private.es` | One-way live progress or event feed to a client. |
-| `siyuan.client.fetch/socket/event` | Call or subscribe to external services from kernel code. |
+| `siyuan.client.fetch/socket/event` | Call or subscribe to SiYuan HTTP, WebSocket, or SSE APIs from kernel code. |
 | `siyuan.storage.watcher` | React when plugin-owned files change. |
 | `siyuan.event` | Receive and publish events through the kernel event bridge. |
 
