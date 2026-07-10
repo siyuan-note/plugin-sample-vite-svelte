@@ -15,6 +15,7 @@
    > **这里还提供了一个 vite+solidjs 的模板**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
+5. 包含一个最小 SiYuan 3.7.0 kernel plugin 示例
 
 > [!NOTE]
 > 当前模板案例基于 `svelte4` 版本，我们在 `svelte5` 分支中维护了一个实验性模板，将 Svelte 升级至 5.x 版本。
@@ -95,6 +96,12 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 
 建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
 
+## Kernel Plugin
+
+SiYuan 3.7.0 引入了 kernel plugin。本模板在 `src/kernel.ts` 中提供最小 kernel plugin 示例，并在构建时与 frontend plugin 一起输出为 `kernel.js`。
+
+该示例覆盖 lifecycle hooks、kernel logs、scoped storage、frontend-to-kernel RPC calls 和 kernel-to-frontend notifications。开发指南见 [docs/kernel-plugin.zh-CN.md](./docs/kernel-plugin.zh-CN.md)。完整 API 覆盖请查看 [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample)。
+
 ## plugin.json
 
 ```json
@@ -104,6 +111,16 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
   "minAppVersion": "3.7.0",
+  "kernels": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
   "disabledInPublish": true,
   "backends": [
     "windows",
@@ -153,6 +170,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
+* `kernels`：kernel plugin 需要的 kernel 环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
@@ -192,6 +210,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 * icon.png (160*160)
 * index.css
 * index.js
+* kernel.js
 * plugin.json
 * preview.png (1024*768)
 * README*.md

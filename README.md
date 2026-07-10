@@ -16,6 +16,7 @@
      > **We also provide with a vite+solidjs template**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
+5. Includes a minimal SiYuan 3.7.0 kernel plugin demo
 
 
 > [!NOTE]
@@ -96,6 +97,12 @@ complete the following tasks:
 It is recommended that the plugin supports at least English and Simplified Chinese, so that more people can use it more
 conveniently. Unsupported languages do not need to be declared in the `displayName`, `description` and `readme` fields in plugin.json.
 
+## Kernel Plugin
+
+SiYuan 3.7.0 introduced kernel plugins. This template includes a minimal kernel plugin in `src/kernel.ts` and builds it to `kernel.js` together with the frontend plugin.
+
+The sample covers lifecycle hooks, kernel logs, scoped storage, frontend-to-kernel RPC calls, and kernel-to-frontend notifications. Read [docs/kernel-plugin.md](./docs/kernel-plugin.md) for the development guide. For full API coverage, see [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample).
+
 ## plugin.json
 
 ```json
@@ -105,6 +112,16 @@ conveniently. Unsupported languages do not need to be declared in the `displayNa
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
   "minAppVersion": "3.7.0",
+  "kernels": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
   "disabledInPublish": true,
   "backends": [
     "windows",
@@ -155,6 +172,7 @@ conveniently. Unsupported languages do not need to be declared in the `displayNa
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
+* `kernels`: Kernel environments required by the kernel plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
   * `windows`: Windows desktop
   * `linux`: Linux desktop
@@ -195,6 +213,7 @@ least the following files:
 * icon.png (160*160)
 * index.css
 * index.js
+* kernel.js
 * plugin.json
 * preview.png (1024*768)
 * README*.md

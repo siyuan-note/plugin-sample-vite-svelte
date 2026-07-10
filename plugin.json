@@ -4,6 +4,16 @@
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
   "minAppVersion": "3.7.0",
+  "kernels": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
   "disabledInPublish": true,
   "backends": [
     "windows",

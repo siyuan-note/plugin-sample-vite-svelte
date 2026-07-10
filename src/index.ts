@@ -26,7 +26,8 @@ import {
     platformUtils,
     openSetting,
     openAttributePanel,
-    saveLayout
+    saveLayout,
+    IKernelPluginState
 } from "siyuan";
 import "./index.scss";
 import { IMenuItem } from "siyuan/types";
@@ -68,6 +69,9 @@ export default class PluginSample extends Plugin {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
         console.log("loading plugin-sample", this.i18n);
+
+        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
@@ -395,6 +399,8 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.byePlugin);
+        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
+        this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
     }
@@ -413,6 +419,15 @@ export default class PluginSample extends Plugin {
     // onDataChanged() {
     //     console.log("onDataChanged");
     // }
+
+    private readonly onKernelPluginNotify = async (message: string) => {
+        console.log("kernel plugin notify", message);
+        showMessage(`[kernel] ${message}`);
+    };
+
+    private readonly onKernelPluginStateChange = ({ detail }: CustomEvent<IKernelPluginState>) => {
+        console.log("kernel-plugin-state-change", detail);
+    };
 
     async updateCards(options: ICardData) {
         options.cards.sort((a: ICard, b: ICard) => {
@@ -514,6 +529,35 @@ export default class PluginSample extends Plugin {
             label: "Open Plugin Setting",
             click: () => {
                 this.openSetting();
+            }
+        });
+        menu.addSeparator();
+        menu.addItem({
+            icon: "iconInfo",
+            label: "Call Kernel Plugin",
+            click: async () => {
+                try {
+                    const result = await this.kernel.rpc.call.echo("Hello from frontend", new Date().toISOString());
+                    console.log("kernel echo result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel echo failed", error);
+                    showMessage("Kernel plugin call failed");
+                }
+            }
+        });
+        menu.addItem({
+            icon: "iconFile",
+            label: "Read Kernel Storage",
+            click: async () => {
+                try {
+                    const result = await this.kernel.rpc.call.readSampleStorage();
+                    console.log("kernel storage result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel storage read failed", error);
+                    showMessage("Kernel storage read failed");
+                }
             }
         });
         menu.addSeparator();
