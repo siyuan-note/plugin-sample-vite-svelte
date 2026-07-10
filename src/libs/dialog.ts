@@ -150,21 +150,22 @@ export const svelteDialog = (args: {
     height?: string,
     callback?: () => void;
 }) => {
-    const { component, props, callback, ...dialogArgs } = args;
-    const container = document.createElement("div");
-    container.style.display = "contents";
+    let container = document.createElement('div')
+    container.style.display = 'contents';
 
-    const componentInstance = mount(component, {
+    // 内部处理 mount
+    let componentInstance = mount(args.component, {
         target: container,
-        props: props ?? {}
+        props: args.props || {}
     });
 
     const { dialog, close } = simpleDialog({
-        ...dialogArgs,
+        ...args,
         ele: container,
         callback: () => {
+            // 内部处理 unmount
             unmount(componentInstance);
-            callback?.();
+            if (args.callback) args.callback();
         }
     });
 

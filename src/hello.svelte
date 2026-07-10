@@ -18,9 +18,12 @@
 
     let { app, blockID }: Props = $props();
 
-    let time = $state("");
-    let divProtyle: HTMLDivElement;
+    let time: string = $state("");
+    // let ver: string = "";
+
+    let divProtyle: HTMLDivElement = $state();
     let protyle: any;
+    // let blockID: string = $state('');
 
     onMount(async () => {
         // ver = await version();

@@ -463,7 +463,10 @@ export default class PluginSample extends Plugin {
             title: "SettingPannel",
             width: "800px",
             height: "35rem",
-            component: SettingExample
+            component: SettingExample,
+            props: {
+                app: this.app,
+            }
         });
     }
 
