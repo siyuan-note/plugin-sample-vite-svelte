@@ -2,7 +2,6 @@ import {
     Plugin,
     showMessage,
     confirm,
-    Dialog,
     Menu,
     openTab,
     adaptHotkey,
@@ -464,10 +463,7 @@ export default class PluginSample extends Plugin {
             title: "SettingPannel",
             width: "800px",
             height: "35rem",
-            component: SettingExample,
-            props: {
-                app: this.app,
-            }
+            component: SettingExample
         });
     }
 

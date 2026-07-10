@@ -27,8 +27,7 @@
         onchanged
     }: Props = $props();
 
-    // 使用 $state 让 settingItems 变成响应式
-    let settingItems = $state(_settingItems);
+    let settingItems = $derived(_settingItems);
 
     function handleClick(detail: {key: string}) {
         onclick?.(detail);
