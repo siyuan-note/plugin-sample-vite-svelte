@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)
+> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)，并同步了后续版本中的部分更新。
  
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -15,6 +15,7 @@
    > **这里还提供了一个 vite+solidjs 的模板**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
+5. 包含一个最小 SiYuan 3.7.0 kernel plugin 示例
 
 > [!NOTE]
 > 当前模板案例基于 `svelte4` 版本，我们在 `svelte5` 分支中维护了一个实验性模板，将 Svelte 升级至 5.x 版本。
@@ -84,17 +85,22 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 
 国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
 
-* 插件自身的元信息，比如插件描述和自述文件
-  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
+* 插件自身的元信息，比如插件名称、描述和自述文件
+  * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * public/i18n/*.json 语言配置文件
   * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
 * yaml 支持
-  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh_CN.yaml`
+  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh-CN.yaml`
   * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
 
-建议插件至少支持英文和简体中文，这样可以方便更多人使用。
+建议插件至少支持英文和简体中文，这样可以方便更多人使用。不支持的语种不需要在 plugin.json 中的 `displayName`、`description` 和 `readme` 字段中声明。
+
+## Kernel Plugin
+
+SiYuan 3.7.0 引入了 kernel plugin。本模板在 `src/kernel.ts` 中提供最小 kernel plugin 示例，并在构建时与 frontend plugin 一起输出为 `kernel.js`。
+
+该示例覆盖 lifecycle hooks、kernel logs、scoped storage、frontend-to-kernel RPC calls 和 kernel-to-frontend notifications。开发指南见 [docs/kernel-plugin.zh-CN.md](./docs/kernel-plugin.zh-CN.md)。完整 API 覆盖请查看 [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample)。
 
 ## plugin.json
 
@@ -104,7 +110,17 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.4.1",
-  "minAppVersion": "3.2.1",
+  "minAppVersion": "3.7.0",
+  "kernels": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
   "disabledInPublish": true,
   "backends": [
     "windows",
@@ -124,15 +140,15 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   ],
   "displayName": {
     "default": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
+    "zh-CN": "插件样例 vite + svelte 版"
   },
   "description": {
     "default": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
+    "zh-CN": "使用 vite 和 svelte 开发的思源插件样例"
   },
   "readme": {
     "default": "README.md",
-    "zh_CN": "README_zh_CN.md"
+    "zh-CN": "README.zh-CN.md"
   },
   "funding": {
     "openCollective": "",
@@ -154,6 +170,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
+* `kernels`：kernel plugin 需要的 kernel 环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
@@ -169,15 +186,15 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
+* `displayName`：插件名称（纯文本），在插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `description`：插件描述，主要用于插件集市列表中显示，支持多语言
+  * `zh-CN`、`en` 等其他语言：可选，须为 [BCP 47](https://tools.ietf.org/html/bcp47) 标签（如 `zh-CN`、`zh-TW`、`en`、`ja`、`pt-BR`）
+* `description`：插件描述（纯文本），在插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，须为 BCP 47 标签
 * `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
   * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
+  * `zh-CN`、`en` 等其他语言：可选，须为 BCP 47 标签
 * `funding`：插件赞助信息
   * `openCollective`：Open Collective 名称
   * `patreon`：Patreon 名称
@@ -193,6 +210,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 * icon.png (160*160)
 * index.css
 * index.js
+* kernel.js
 * plugin.json
 * preview.png (1024*768)
 * README*.md

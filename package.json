@@ -8,12 +8,16 @@
   "author": "frostime",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development VITE_SOURCEMAP=inline vite build --watch",
-    "build": "cross-env NODE_ENV=production vite build",
+    "dev": "run-p dev:app dev:kernel",
+    "dev:app": "cross-env NODE_ENV=development VITE_SOURCEMAP=inline VITE_BUILD_TARGET=app vite build --watch",
+    "dev:kernel": "cross-env NODE_ENV=development VITE_SOURCEMAP=inline VITE_BUILD_TARGET=kernel vite build --watch",
+    "build": "run-s build:app build:kernel",
+    "build:app": "cross-env NODE_ENV=production VITE_BUILD_TARGET=app vite build",
+    "build:kernel": "cross-env NODE_ENV=production VITE_BUILD_TARGET=kernel vite build",
     "make-link": "node --no-warnings ./scripts/make_dev_link.js",
     "make-link-win": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/elevate.ps1 -scriptPath ./scripts/make_dev_link.js",
     "update-version": "node --no-warnings ./scripts/update_version.js",
-    "make-install": "vite build && node --no-warnings ./scripts/make_install.js"
+    "make-install": "pnpm run build && node --no-warnings ./scripts/make_install.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
@@ -24,9 +28,10 @@
     "glob": "^10.0.0",
     "js-yaml": "^4.1.0",
     "minimist": "^1.2.8",
+    "npm-run-all": "^4.1.5",
     "rollup-plugin-livereload": "^2.0.5",
     "sass": "^1.63.3",
-    "siyuan": "1.1.2",
+    "siyuan": "1.2.2",
     "svelte": "^4.2.20",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3",

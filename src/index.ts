@@ -26,7 +26,8 @@ import {
     platformUtils,
     openSetting,
     openAttributePanel,
-    saveLayout
+    saveLayout,
+    IKernelPluginState
 } from "siyuan";
 import "./index.scss";
 import { IMenuItem } from "siyuan/types";
@@ -68,6 +69,9 @@ export default class PluginSample extends Plugin {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
         console.log("loading plugin-sample", this.i18n);
+
+        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
@@ -155,7 +159,7 @@ export default class PluginSample extends Plugin {
                             Custom Dock
                         </div>
                         <span class="fn__flex-1 fn__space"></span>
-                        <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg class="block__logoicon"><use xlink:href="#iconMin"></use></svg></span>
+                        <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
                     </div>
                     <div class="fn__flex-1 plugin-sample__custom-dock">
                         ${dock.data.text}
@@ -371,6 +375,8 @@ export default class PluginSample extends Plugin {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
+                }).catch(e => {
+                    showMessage(`[${this.name}] remove data [${STORAGE_NAME}] fail: `, e);
                 });
             });
         });
@@ -378,7 +384,9 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
         // this.loadData(STORAGE_NAME);
-        this.settingUtils.load();
+        this.settingUtils.load().catch(e => {
+            console.log(`[${this.name}] load settings [${STORAGE_NAME}] fail: `, e);
+        });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
 
         console.log(
@@ -391,13 +399,35 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.byePlugin);
+        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
+        this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
     }
 
-    uninstall() {
+    async uninstall() {
         console.log("uninstall");
+        // 卸载插件时删除插件数据
+        // Delete plugin data when uninstalling the plugin
+        await this.removeData(STORAGE_NAME).catch(e => {
+            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
+        });
     }
+
+    // 使用 saveData() 存储的数据发生变更 (如多端数据同步) 时触发，注释掉则自动禁用插件再重新启用
+    // Triggered when data stored using saveData() changes (for example, multi-device data synchronization). If commented out, the plugin will be automatically disabled and then re-enabled.
+    // onDataChanged() {
+    //     console.log("onDataChanged");
+    // }
+
+    private readonly onKernelPluginNotify = async (message: string) => {
+        console.log("kernel plugin notify", message);
+        showMessage(`[kernel] ${message}`);
+    };
+
+    private readonly onKernelPluginStateChange = ({ detail }: CustomEvent<IKernelPluginState>) => {
+        console.log("kernel-plugin-state-change", detail);
+    };
 
     async updateCards(options: ICardData) {
         options.cards.sort((a: ICard, b: ICard) => {
@@ -499,6 +529,53 @@ export default class PluginSample extends Plugin {
             label: "Open Plugin Setting",
             click: () => {
                 this.openSetting();
+            }
+        });
+        menu.addSeparator();
+        menu.addItem({
+            icon: "iconInfo",
+            label: "Call Kernel Plugin",
+            click: async () => {
+                try {
+                    const result = await this.kernel.rpc.call.echo("Hello from frontend", new Date().toISOString());
+                    console.log("kernel echo result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel echo failed", error);
+                    showMessage("Kernel plugin call failed");
+                }
+            }
+        });
+        menu.addItem({
+            icon: "iconFile",
+            label: "Read Kernel Storage",
+            click: async () => {
+                try {
+                    const result = await this.kernel.rpc.call.readSampleStorage();
+                    console.log("kernel storage result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel storage read failed", error);
+                    showMessage("Kernel storage read failed");
+                }
+            }
+        });
+        menu.addItem({
+            icon: "iconLink",
+            label: "Call Kernel HTTP Handler",
+            click: async () => {
+                try {
+                    const response = await fetch(`/plugin/private/${this.name}/status`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    const result = await response.json();
+                    console.log("kernel HTTP result", result);
+                    showMessage(`[kernel] ${JSON.stringify(result)}`);
+                } catch (error) {
+                    console.error("kernel HTTP call failed", error);
+                    showMessage("Kernel HTTP call failed");
+                }
             }
         });
         menu.addSeparator();
