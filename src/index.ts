@@ -66,7 +66,7 @@ export default class PluginSample extends Plugin {
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
-        console.log("loading plugin-sample", this.i18n);
+        console.log("Loading plugin-sample-vite-svelte");
 
         this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
         this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);

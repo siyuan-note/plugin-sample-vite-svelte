@@ -17,9 +17,17 @@
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 5. 包含一个最小 SiYuan 3.7.0 kernel plugin 示例
 
+## Svelte 版本
+
+当前版本的模板使用 **Svelte 5**，是新插件的推荐选择，使用 `$props`、`$state` 和 snippets 等新版 runes API。
+
+之前的 Svelte 4 实现已通过 **`legacy-svelte4`** tag 保留（[在 GitHub 上查看](https://github.com/siyuan-note/plugin-sample-vite-svelte/tree/legacy-svelte4)）。如果你的插件依赖 Svelte 4 API 或旧版兼容行为，可以在基于模板创建插件前先切换到该 tag。
+
+`legacy-svelte4` tag 是稳定的 Svelte 4 参考版本，用于兼容现有用户和旧版依赖。新开发将使用 Svelte 5。
+
 ## 开始
 
-1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致，默认分支必须为 `main`
+1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致。生成的项目使用 Svelte 5；如需 Svelte 4 兼容性，请改用稳定的 `legacy-svelte4` tag。
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
 3. 安装 Node.js 24 或更高版本以及 pnpm 11.4，然后在开发文件夹下执行 `pnpm i` 安装依赖

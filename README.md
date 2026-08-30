@@ -19,9 +19,18 @@
 5. Includes a minimal SiYuan 3.7.0 kernel plugin demo
 
 
+## Svelte version
+
+The current version of this template uses **Svelte 5**. It is the recommended choice for new plugins and uses the runes-based API such as `$props`, `$state`, and snippets.
+
+The previous Svelte 4 implementation is preserved as the **`legacy-svelte4`** tag ([view it on GitHub](https://github.com/siyuan-note/plugin-sample-vite-svelte/tree/legacy-svelte4)). If your plugin depends on Svelte 4 APIs or compatibility behavior, switch to this tag before creating your plugin from the template.
+
+The `legacy-svelte4` tag is retained as a stable reference for existing users and compatibility needs. New development uses Svelte 5.
+
+
 ## Get started
 
-1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. Note that the repository name should match the plugin name, and the default branch must be `main`.
+1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. The repository name should match the plugin name. The generated project uses Svelte 5. If you need Svelte 4 compatibility, start from the stable `legacy-svelte4` tag instead.
 2. Clone your repository to the local development folder.
     * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
 3. Install Node.js 24 or later and pnpm 11.4, then run `pnpm i` in the development folder to install the required dependencies.
