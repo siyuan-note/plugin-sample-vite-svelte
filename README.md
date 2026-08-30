@@ -19,19 +19,35 @@
 5. Includes a minimal SiYuan 3.7.0 kernel plugin demo
 
 
-> [!NOTE]
-> The current template case is based on `svelte4` version, we maintain an experimental template in the `svelte5` branch, which upgrades Svelte to 5.x version.
->
-> In the future, we will switch the default main branch to svelte5.
+## Svelte version
+
+The current version of this template uses **Svelte 5**. It is the recommended choice for new plugins and uses the runes-based API such as `$props`, `$state`, and snippets.
+
+The previous Svelte 4 implementation is preserved as the **`legacy-svelte4`** tag ([view it on GitHub](https://github.com/siyuan-note/plugin-sample-vite-svelte/tree/legacy-svelte4)). If your plugin depends on Svelte 4 APIs or compatibility behavior, switch to this tag before creating your plugin from the template.
+
+The `legacy-svelte4` tag is retained as a stable reference for existing users and compatibility needs. New development uses Svelte 5.
+
 
 ## Get started
 
-1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. Note that the repository name should match the plugin name, and the default branch must be `main`.
+1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. The repository name should match the plugin name. The generated project uses Svelte 5. If you need Svelte 4 compatibility, start from the stable `legacy-svelte4` tag instead.
 2. Clone your repository to the local development folder.
     * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
-3. Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the development folder to install the required dependencies.
+3. Install Node.js 24 or later and pnpm 11.4, then run `pnpm i` in the development folder to install the required dependencies.
 4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
-5. Execute `pnpm run dev` for real-time compilation.
+5. Execute `pnpm run dev` for real-time compilation. In development mode, the generated app bundle connects to the local LiveReload server and asks the current SiYuan window to reload this plugin only.
+
+   The default LiveReload debounce is 300 ms and the default delay between disabling and re-enabling the plugin is 500 ms. You can customize them before starting development:
+
+   ```powershell
+   $env:SIYUAN_LIVERELOAD_PORT = "35740"
+   $env:SIYUAN_LIVERELOAD_DEBOUNCE_MS = "300"
+   $env:SIYUAN_PLUGIN_RELOAD_GAP_MS = "500"
+   $env:SIYUAN_LIVERELOAD_MESSAGE = "Current check item already exists"
+   pnpm run dev
+   ```
+
+   Use `SIYUAN_PLUGIN_DIR` to bind `dev` to a specific workspace instead of selecting a workspace by index.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.
 
 > [!TIP]
@@ -247,25 +263,32 @@ and you can check the deployment status at https://github.com/siyuan-note/bazaar
 
 ## Use Github Action
 
-The github action is included in this sample, you can use it to publish your new realse to marketplace automatically:
+The github action is included in this sample and can build and publish a GitHub release automatically.
 
-1. In your repo setting page `https://github.com/OWNER/REPO/settings/actions`, down to **Workflow Permissions** and open the configuration like this:
+1. In your repository, open `Settings` > `Actions` > `General`. Under **Workflow permissions**, select **Read and write permissions** and save the setting. This repository setting allows the workflow's `GITHUB_TOKEN` to create or update releases. The workflow also declares the required `contents: write` permission in `.github/workflows/release.yml`.
 
     ![](asset/action.png)
 
-2. Push a tag in the format `v*` and github will automatically create a new release with new bulit package.zip
+2. Update the `version` fields in `package.json` and `plugin.json`, then push a tag in the format `v*` with the same version, for example:
 
-3. By default, it will only publish a pre-release, if you don't think this is necessary, change the settings in release.yml
+    ```bash
+    git tag v0.4.1
+    git push origin v0.4.1
+    ```
+
+    The workflow removes the `v` prefix and verifies that the tag version matches both JSON files before checking, building, or publishing.
+
+3. The current workflow creates a regular release (`prerelease: false`). Pre-release publishing remains supported: set `prerelease: true` in `.github/workflows/release.yml` when a tag should create a pre-release.
 
     ```yaml
     - name: Release
-        uses: ncipollo/release-action@v1
-        with.
-            allowUpdates: true
-            artifactErrorsFailBuild: true
-            artifacts: 'package.zip'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            prerelease: true # change this to false
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        artifacts: 'package.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: false # set to true for a pre-release
     ```
 
 

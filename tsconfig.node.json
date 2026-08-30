@@ -3,10 +3,15 @@
         "composite": true,
         "skipLibCheck": true,
         "module": "ESNext",
-        "moduleResolution": "Node",
-        "allowSyntheticDefaultImports": true
+        "moduleResolution": "Bundler",
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "checkJs": true
     },
     "include": [
-        "vite.config.ts"
+        "vite.config.ts",
+        "yaml-plugin.js",
+        "scripts/siyuan_live_reload.js",
+        "types/livereload.d.ts"
     ]
 }

@@ -7,19 +7,29 @@
  Description  : The setting item container
 -->
 <script lang="ts">
-    export let title: string; // Displayint Setting Title
-    export let description: string; // Displaying Setting Text
-    export let direction: 'row' | 'column' = 'column';
+    interface Props {
+        title: string;
+        description: string;
+        direction?: 'row' | 'column';
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        title,
+        description,
+        direction = 'column',
+        children
+    }: Props = $props();
 </script>
 
 {#if direction === "row"}
-    <div class="item-wrap b3-label" data-key="CustomCSS">
+    <div class="item-wrap b3-label">
         <div class="fn__block">
             <span class="title">{title}</span>
             <div class="b3-label__text">{@html description}</div>
             <div class="fn__hr"></div>
-            <div style="display: flex; flex-direction: column; gap: 5px; position: relative;">
-                <slot />
+            <div class="item-wrap__content">
+                {@render children?.()}
             </div>
         </div>
     </div>
@@ -31,8 +41,8 @@
                 {@html description}
             </div>
         </div>
-        <span class="fn__space" />
-        <slot />
+        <span class="fn__space"></span>
+        {@render children?.()}
     </div>
 {/if}
 
@@ -50,4 +60,12 @@
     .item-wrap.b3-label:not(:last-child) {
         border-bottom: 1px solid var(--b3-border-color);
     }
+
+    .item-wrap__content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        position: relative;
+    }
+
 </style>
