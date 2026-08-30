@@ -17,17 +17,12 @@
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 5. 包含一个最小 SiYuan 3.7.0 kernel plugin 示例
 
-> [!NOTE]
-> 当前模板案例基于 `svelte4` 版本，我们在 `svelte5` 分支中维护了一个实验性模板，将 Svelte 升级至 5.x 版本。
->
-> 未来我们会将主分支默认版本切换至 svelte5。
-
 ## 开始
 
 1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致，默认分支必须为 `main`
 2. 将你的库克隆到本地开发文件夹中
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
-3. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i` 安装所需要的依赖
+3. 安装 Node.js 24 或更高版本以及 pnpm 11.4，然后在开发文件夹下执行 `pnpm i` 安装依赖
 4. 运行 `pnpm run make-link` 命令创建符号链接 (Windows 下的开发者请参阅下方「Windows 下的 make-link」小节)
 5. 执行 `pnpm run dev` 进行实时编译
 6.  在思源中打开集市并在下载选项卡中启用插件

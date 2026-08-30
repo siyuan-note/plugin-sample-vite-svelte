@@ -1,12 +1,12 @@
 import { resolve } from "path";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import livereload from "rollup-plugin-livereload";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import zipPack from "vite-plugin-zip-pack";
 import fg from "fast-glob";
 
-import vitePluginYamlI18n from "./yaml-plugin";
+import vitePluginYamlI18n from "./yaml-plugin.js";
 
 const env = process.env;
 const isSrcmap = env.VITE_SOURCEMAP === "inline";
@@ -28,7 +28,7 @@ export default defineConfig(buildTarget === "kernel" ? {
         sourcemap: isSrcmap ? "inline" : false,
 
         lib: {
-            entry: resolve(__dirname, "src/kernel.ts"),
+            entry: resolve(import.meta.dirname, "src/kernel.ts"),
             name: "KernelPluginSample",
             fileName: () => "kernel.js",
             formats: ["iife"],
@@ -58,7 +58,7 @@ export default defineConfig(buildTarget === "kernel" ? {
 } : {
     resolve: {
         alias: {
-            "@": resolve(__dirname, "src"),
+            "@": resolve(import.meta.dirname, "src"),
         }
     },
 
@@ -73,7 +73,7 @@ export default defineConfig(buildTarget === "kernel" ? {
         viteStaticCopy({
             targets: [
                 { src: "./README*.md", dest: "./" },
-                { src: "./docs/*.md", dest: "./docs" },
+                { src: "./docs/*.md", dest: "./docs", rename: { stripBase: true } },
                 { src: "./plugin.json", dest: "./" },
                 { src: "./preview.png", dest: "./" },
                 { src: "./icon.png", dest: "./" }
@@ -93,8 +93,9 @@ export default defineConfig(buildTarget === "kernel" ? {
         sourcemap: isSrcmap ? "inline" : false,
 
         lib: {
-            entry: resolve(__dirname, "src/index.ts"),
+            entry: resolve(import.meta.dirname, "src/index.ts"),
             fileName: () => "index.js",
+            cssFileName: "index",
             formats: ["cjs"],
         },
         rollupOptions: {
@@ -112,18 +113,13 @@ export default defineConfig(buildTarget === "kernel" ? {
 
             output: {
                 entryFileNames: "[name].js",
-                assetFileNames: (assetInfo) => {
-                    if (assetInfo.name === "style.css") {
-                        return "index.css";
-                    }
-                    return assetInfo.name;
-                },
+                assetFileNames: (assetInfo) => assetInfo.name ?? "asset",
             },
         },
     }
 });
 
-function watchExternalFiles(patterns: string[]) {
+function watchExternalFiles(patterns: string[]): Plugin {
     return {
         name: "watch-external",
         async buildStart() {
@@ -141,7 +137,7 @@ function watchExternalFiles(patterns: string[]) {
  * @param options:
  * @returns
  */
-function cleanupDistFiles(options: { patterns: string[], distDir: string }) {
+function cleanupDistFiles(options: { patterns: string[], distDir: string }): Plugin {
     const {
         patterns,
         distDir

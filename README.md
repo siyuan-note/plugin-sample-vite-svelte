@@ -19,17 +19,12 @@
 5. Includes a minimal SiYuan 3.7.0 kernel plugin demo
 
 
-> [!NOTE]
-> The current template case is based on `svelte4` version, we maintain an experimental template in the `svelte5` branch, which upgrades Svelte to 5.x version.
->
-> In the future, we will switch the default main branch to svelte5.
-
 ## Get started
 
 1. Use the <kbd>Use this template</kbd> button to make a copy of this repo as a template. Note that the repository name should match the plugin name, and the default branch must be `main`.
 2. Clone your repository to the local development folder.
     * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
-3. Install [NodeJS](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation), then run `pnpm i` in the development folder to install the required dependencies.
+3. Install Node.js 24 or later and pnpm 11.4, then run `pnpm i` in the development folder to install the required dependencies.
 4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
 5. Execute `pnpm run dev` for real-time compilation.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.

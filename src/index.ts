@@ -17,7 +17,6 @@ import {
     lockScreen,
     ICard,
     ICardData,
-    Custom,
     exitSiYuan,
     getModelByDockType,
     getAllEditor,
@@ -26,10 +25,10 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IKernelPluginState
+    IKernelPluginState,
+    IMenuItem
 } from "siyuan";
 import "./index.scss";
-import { IMenuItem } from "siyuan/types";
 
 import HelloExample from "@/hello.svelte";
 import SettingExample from "@/setting-example.svelte";
@@ -44,7 +43,6 @@ const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private custom: () => Custom;
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
@@ -85,7 +83,7 @@ export default class PluginSample extends Plugin {
 
         let tabDiv = document.createElement("div");
         let app = null;
-        this.custom = this.addTab({
+        this.addTab({
             type: TAB_TYPE,
             init() {
                 app = mount(HelloExample, {
@@ -124,6 +122,7 @@ export default class PluginSample extends Plugin {
             },
         });
 
+        const isMobile = this.isMobile;
         this.addDock({
             config: {
                 position: "LeftBottom",
@@ -142,18 +141,18 @@ export default class PluginSample extends Plugin {
             update() {
                 console.log(DOCK_TYPE + " update");
             },
-            init: (dock) => {
-                if (this.isMobile) {
-                    dock.element.innerHTML = `<div class="toolbar toolbar--border toolbar--dark">
+            init() {
+                if (isMobile) {
+                    this.element.innerHTML = `<div class="toolbar toolbar--border toolbar--dark">
                     <svg class="toolbar__icon"><use xlink:href="#iconEmoji"></use></svg>
                         <div class="toolbar__text">Custom Dock</div>
                     </div>
                     <div class="fn__flex-1 plugin-sample__custom-dock">
-                        ${dock.data.text}
+                        ${this.data.text}
                     </div>
                     </div>`;
                 } else {
-                    dock.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
+                    this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
                     <div class="block__icons">
                         <div class="block__logo">
                             <svg class="block__logoicon"><use xlink:href="#iconEmoji"></use></svg>
@@ -163,7 +162,7 @@ export default class PluginSample extends Plugin {
                         <span data-type="min" class="block__icon ariaLabel" data-position="north" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
                     </div>
                     <div class="fn__flex-1 plugin-sample__custom-dock">
-                        ${dock.data.text}
+                        ${this.data.text}
                     </div>
                     </div>`;
                 }

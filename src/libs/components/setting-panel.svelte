@@ -20,15 +20,12 @@
 
     let {
         group,
-        settingItems: _settingItems,
+        settingItems,
         display = true,
         children,
         onclick,
         onchanged
     }: Props = $props();
-
-    // 使用 $state 让 settingItems 变成响应式
-    let settingItems = $state(_settingItems);
 
     function handleClick(detail: {key: string}) {
         onclick?.(detail);

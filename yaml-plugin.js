@@ -8,9 +8,13 @@
  */
 // plugins/vite-plugin-parse-yaml.js
 import fs from 'fs';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { resolve } from 'path';
 
+/**
+ * @param {{ inDir?: string, outDir?: string }} [options]
+ * @returns {import('vite').Plugin}
+ */
 export default function vitePluginYamlI18n(options = {}) {
     // Default options with a fallback
     const DefaultOptions = {
@@ -51,7 +55,8 @@ export default function vitePluginYamlI18n(options = {}) {
                         console.log(`---- Writing to ${outputFilePath}`);
                         fs.writeFileSync(outputFilePath, jsonContent);
                     } catch (error) {
-                        this.error(`---- Error parsing YAML file ${file}: ${error.message}`);
+                        const message = error instanceof Error ? error.message : String(error);
+                        this.error(`---- Error parsing YAML file ${file}: ${message}`);
                     }
                 }
             }
