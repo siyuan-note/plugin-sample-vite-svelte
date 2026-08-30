@@ -130,7 +130,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "minAppVersion": "3.7.0",
   "kernels": [
     "windows",
@@ -271,8 +271,8 @@ PR 社区集市仓库。
 2. 更新 `package.json` 和 `plugin.json` 中的 `version` 字段，然后推送格式为 `v*` 且版本号一致的 tag，例如：
 
     ```bash
-    git tag v0.4.1
-    git push origin v0.4.1
+    git tag v0.5.0
+    git push origin v0.5.0
     ```
 
     workflow 会移除 tag 的 `v` 前缀，并在检查、构建和发布之前验证 tag 版本是否同时匹配这两个 JSON 文件。

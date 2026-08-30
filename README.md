@@ -132,7 +132,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "minAppVersion": "3.7.0",
   "kernels": [
     "windows",
@@ -278,8 +278,8 @@ The github action is included in this sample and can build and publish a GitHub 
 2. Update the `version` fields in `package.json` and `plugin.json`, then push a tag in the format `v*` with the same version, for example:
 
     ```bash
-    git tag v0.4.1
-    git push origin v0.4.1
+    git tag v0.5.0
+    git push origin v0.5.0
     ```
 
     The workflow removes the `v` prefix and verifies that the tag version matches both JSON files before checking, building, or publishing.
