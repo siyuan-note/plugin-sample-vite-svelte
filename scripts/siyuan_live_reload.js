@@ -42,9 +42,6 @@ export function createSiYuanLiveReloadScript({ port, pluginName, frontend, messa
         }
     };
 
-    const socket = new WebSocket("ws://127.0.0.1:" + options.port + "/livereload");
-    globalThis[socketKey] = socket;
-
     let reloadTimer;
     let reloadInFlight = false;
     let reloadPending = false;
