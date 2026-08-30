@@ -7,6 +7,7 @@ import zipPack from "vite-plugin-zip-pack";
 import fg from "fast-glob";
 
 import vitePluginYamlI18n from "./yaml-plugin.js";
+import { createSiYuanLiveReloadScript, readPluginManifest } from "./scripts/siyuan_live_reload.js";
 
 const env = process.env;
 const isSrcmap = env.VITE_SOURCEMAP === "inline";
@@ -14,6 +15,12 @@ const isDev = env.NODE_ENV === "development";
 const buildTarget = env.VITE_BUILD_TARGET === "kernel" ? "kernel" : "app";
 
 const outputDir = isDev ? "dev" : "dist";
+const pluginManifest = readPluginManifest();
+const liveReloadPort = Number.parseInt(env.SIYUAN_LIVERELOAD_PORT || "35740", 10);
+const liveReloadFrontend = env.SIYUAN_LIVERELOAD_FRONTEND || "desktop";
+const liveReloadMessage = env.SIYUAN_LIVERELOAD_MESSAGE || `Live reload: ${pluginManifest.name}`;
+const liveReloadDebounceMs = Number.parseInt(env.SIYUAN_LIVERELOAD_DEBOUNCE_MS || "300", 10);
+const pluginReloadGapMs = Number.parseInt(env.SIYUAN_PLUGIN_RELOAD_GAP_MS || "500", 10);
 
 console.log("isDev=>", isDev);
 console.log("isSrcmap=>", isSrcmap);
@@ -100,7 +107,13 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
         rollupOptions: {
             plugins: isDev ? [
-                livereload(outputDir),
+                livereload({
+                    watch: outputDir,
+                    inject: false,
+                    port: liveReloadPort,
+                    delay: liveReloadDebounceMs
+                }),
+                siYuanPluginReload(),
                 watchExternalFiles([
                     "public/i18n/**",
                     "./README*.md",
@@ -118,6 +131,20 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
     }
 });
+
+function siYuanPluginReload(): Plugin {
+    return {
+        name: "siyuan-plugin-reload",
+        banner: () => createSiYuanLiveReloadScript({
+            port: liveReloadPort,
+            pluginName: pluginManifest.name,
+            frontend: liveReloadFrontend,
+            message: liveReloadMessage,
+            debounceMs: liveReloadDebounceMs,
+            reloadGapMs: pluginReloadGapMs
+        })
+    };
+}
 
 function watchExternalFiles(patterns: string[]): Plugin {
     return {

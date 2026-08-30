@@ -10,6 +10,7 @@
     },
     "include": [
         "vite.config.ts",
-        "yaml-plugin.js"
+        "yaml-plugin.js",
+        "scripts/siyuan_live_reload.js"
     ]
 }

@@ -26,7 +26,19 @@
     * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
 3. Install Node.js 24 or later and pnpm 11.4, then run `pnpm i` in the development folder to install the required dependencies.
 4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
-5. Execute `pnpm run dev` for real-time compilation.
+5. Execute `pnpm run dev` for real-time compilation. In development mode, the generated app bundle connects to the local LiveReload server and asks the current SiYuan window to reload this plugin only.
+
+   The default LiveReload debounce is 300 ms and the default delay between disabling and re-enabling the plugin is 500 ms. You can customize them before starting development:
+
+   ```powershell
+   $env:SIYUAN_LIVERELOAD_PORT = "35740"
+   $env:SIYUAN_LIVERELOAD_DEBOUNCE_MS = "300"
+   $env:SIYUAN_PLUGIN_RELOAD_GAP_MS = "500"
+   $env:SIYUAN_LIVERELOAD_MESSAGE = "Current check item already exists"
+   pnpm run dev
+   ```
+
+   Use `SIYUAN_PLUGIN_DIR` to bind `dev` to a specific workspace instead of selecting a workspace by index.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.
 
 > [!TIP]

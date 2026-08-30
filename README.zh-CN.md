@@ -24,7 +24,19 @@
     * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
 3. 安装 Node.js 24 或更高版本以及 pnpm 11.4，然后在开发文件夹下执行 `pnpm i` 安装依赖
 4. 运行 `pnpm run make-link` 命令创建符号链接 (Windows 下的开发者请参阅下方「Windows 下的 make-link」小节)
-5. 执行 `pnpm run dev` 进行实时编译
+5. 执行 `pnpm run dev` 进行实时编译。开发模式下，生成的 app bundle 会连接本地 LiveReload 服务，并请求当前 SiYuan 窗口只重载本插件。
+
+   默认 debounce 为 300 毫秒，关闭插件到重新启用之间默认等待 500 毫秒。可以在启动开发服务前调整：
+
+   ```powershell
+   $env:SIYUAN_LIVERELOAD_PORT = "35740"
+   $env:SIYUAN_LIVERELOAD_DEBOUNCE_MS = "300"
+   $env:SIYUAN_PLUGIN_RELOAD_GAP_MS = "500"
+   $env:SIYUAN_LIVERELOAD_MESSAGE = "当前检查项目已经存在"
+   pnpm run dev
+   ```
+
+   可以通过 `SIYUAN_PLUGIN_DIR` 指定插件链接目录，避免按序号选择错误工作空间。
 6.  在思源中打开集市并在下载选项卡中启用插件
 
 > [!TIP]
