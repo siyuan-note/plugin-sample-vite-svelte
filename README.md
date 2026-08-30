@@ -3,7 +3,7 @@
 
 [中文版](./README.zh-CN.md)
 
-> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1), with selected updates from newer releases.
+> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0), with selected updates from newer releases.
 
 
 
@@ -14,6 +14,8 @@
      > **If don't want svelte, turn to this template**: [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
      >
      > **We also provide with a vite+solidjs template**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
+     >
+     > ⚠️ These alternative templates are provided for reference and may not receive updates as promptly as this template.
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
 5. Includes a visual External Capture Service demo for SiYuan Kernel Plugins
@@ -49,13 +51,6 @@ The `legacy-svelte4` tag is retained as a stable reference for existing users an
 
    Use `SIYUAN_PLUGIN_DIR` to bind `dev` to a specific workspace instead of selecting a workspace by index.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.
-
-> [!TIP]
-> You can also use our maintained [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) command-line tool to directly build plugins in your local terminal.
->
-> Additionally, for the `make-link` related commands mentioned in this plugin, all future updates will be made in [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli).
->
-> The built-in `make-link` scripts may also be removed in a future version, in favor of using the `siyuan-plugin-cli` tool, aiming to simplify the workload of maintaining multiple plugin templates.
 
 ### Setting the Target Directory for the make-link Command
 

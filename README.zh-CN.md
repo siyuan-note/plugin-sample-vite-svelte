@@ -4,15 +4,17 @@
 [English](./README.md)
 
 
-> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)，并同步了后续版本中的部分更新。
- 
+> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)，并同步了后续版本中的部分更新。
+
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
 3. 内置对 svelte 框架的支持
-  
+
    > **如果不想要 svelte，请移步这个模板:** [frostime/plugin-sample-vite](https://github.com/frostime/plugin-sample-vite)
    >
    > **这里还提供了一个 vite+solidjs 的模板**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
+   >
+   > ⚠️ 这些模板仅供参考，更新可能不如本模板及时。
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
 5. 包含一个直观的 SiYuan Kernel Plugin 外部摘录服务示例
@@ -47,12 +49,6 @@
    可以通过 `SIYUAN_PLUGIN_DIR` 指定插件链接目录，避免按序号选择错误工作空间。
 6.  在思源中打开集市并在下载选项卡中启用插件
 
-> [!TIP]
-> 你也可以使用我们维护的 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 命令行工具，在本地终端中直接构建插件。
-> 
-> 此外，对于本插件以下提及到的 `make-link` 相关的命令，后续所有更新将在 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 中进行。
-> 
-> 模板内置的 `make-link` 脚本也可能会在未来某个版本中移除，转而使用 `siyuan-plugin-cli` 工具，意在简化同时维护多个插件模板的工作量。
 
 ### 设置 make-link 命令的目标目录
 
