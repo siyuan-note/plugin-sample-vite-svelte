@@ -30,7 +30,8 @@
     function handleClick(detail: {key: string}) {
         onclick?.(detail);
     }
-    function handleChanged(detail: {key: string, value: any}) {
+    function handleChanged(item: ISettingItem, detail: {key: string, value: any}) {
+        item.value = detail.value;
         onchanged?.({group: group, key: detail.key, value: detail.value});
     }
 
@@ -49,7 +50,7 @@
             <Form.Input
                 type={item.type}
                 key={item.key}
-                bind:value={item.value}
+                value={item.value}
                 placeholder={item?.placeholder}
                 options={item?.options}
                 slider={item?.slider}
@@ -61,7 +62,7 @@
                 getEleVal={item?.getEleVal}
                 setEleVal={item?.setEleVal}
                 onclick={handleClick}
-                onchanged={handleChanged}
+                onchanged={(detail) => handleChanged(item, detail)}
             />
         </Form.Wrap>
     {/each}
