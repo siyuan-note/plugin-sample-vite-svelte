@@ -1,10 +1,13 @@
 import type * as kernel from "siyuan/kernel";
+import { CaptureService } from "./kernel-capture/kernel-service";
 
 const STORAGE_FILE = "kernel-sample.json";
 const api: kernel.ISiyuan = siyuan;
+const captureService = new CaptureService(api);
 
 api.plugin.lifecycle.onload = async () => {
     await api.logger.info(`[${api.plugin.name}] kernel plugin loading`);
+    await captureService.start();
 
     await api.storage.put(STORAGE_FILE, JSON.stringify({
         message: "Hello from the kernel plugin",
@@ -24,34 +27,6 @@ api.plugin.lifecycle.onload = async () => {
         const data = await api.storage.get(STORAGE_FILE);
         return JSON.parse(await data.text());
     }, "Read the sample file stored by the kernel plugin.");
-
-    api.server.private.http.handler = async (request) => {
-        if (request.request.method !== "GET" || request.context.path !== "/status") {
-            return {
-                statusCode: 404,
-                body: {
-                    data: {
-                        type: "JSON",
-                        data: { error: "Not found" },
-                    },
-                },
-            };
-        }
-
-        return {
-            statusCode: 200,
-            body: {
-                data: {
-                    type: "JSON",
-                    data: {
-                        name: api.plugin.name,
-                        platform: api.plugin.platform,
-                        status: "running",
-                    },
-                },
-            },
-        };
-    };
 };
 
 api.plugin.lifecycle.onrunning = async () => {
@@ -61,6 +36,7 @@ api.plugin.lifecycle.onrunning = async () => {
 
 api.plugin.lifecycle.onunload = async () => {
     await api.logger.info(`[${api.plugin.name}] kernel plugin unloading`);
+    await captureService.stop();
     await api.rpc.unbind("echo");
     await api.rpc.unbind("readSampleStorage");
 };

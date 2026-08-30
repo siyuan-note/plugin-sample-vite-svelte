@@ -32,6 +32,8 @@ import "./index.scss";
 
 import HelloExample from "@/hello.svelte";
 import SettingExample from "@/setting-example.svelte";
+import CaptureConsole from "@/kernel-capture/capture-console.svelte";
+import type { CaptureBroadcast, CaptureResult } from "@/kernel-capture/contracts";
 
 import { SettingUtils } from "./libs/setting-utils";
 import { svelteDialog } from "./libs/dialog";
@@ -41,11 +43,16 @@ const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
+interface CaptureConsoleHandle {
+    showCapture?: (result: CaptureResult) => void;
+}
+
 export default class PluginSample extends Plugin {
 
     private isMobile: boolean;
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
+    private captureDialog?: ReturnType<typeof svelteDialog>;
 
 
     updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
@@ -69,6 +76,7 @@ export default class PluginSample extends Plugin {
         console.log("Loading plugin-sample-vite-svelte");
 
         this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
+        this.kernel.rpc.bind("capture-received", this.onCaptureReceived);
         this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         const frontEnd = getFrontend();
@@ -399,7 +407,10 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.byePlugin);
+        this.captureDialog?.close();
+        this.captureDialog = undefined;
         this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
+        this.kernel.rpc.unbind("capture-received", this.onCaptureReceived);
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
@@ -427,6 +438,17 @@ export default class PluginSample extends Plugin {
 
     private readonly onKernelPluginStateChange = ({ detail }: CustomEvent<IKernelPluginState>) => {
         console.log("kernel-plugin-state-change", detail);
+    };
+
+    private readonly onCaptureReceived = (event: CaptureBroadcast) => {
+        if (this.captureDialog) {
+            (this.captureDialog.component as CaptureConsoleHandle).showCapture?.(event.result);
+            return;
+        }
+
+        if (event.openUi && document.visibilityState === "visible") {
+            this.openCaptureConsole(event.result);
+        }
     };
 
     async updateCards(options: ICardData) {
@@ -518,7 +540,32 @@ export default class PluginSample extends Plugin {
         });
     }
 
+    private openCaptureConsole(initialResult?: CaptureResult) {
+        const labels = this.i18n.kernelCapture as unknown as Record<string, string>;
+        if (this.captureDialog) {
+            if (initialResult) {
+                (this.captureDialog.component as CaptureConsoleHandle).showCapture?.(initialResult);
+            }
+            return;
+        }
+
+        this.captureDialog = svelteDialog({
+            title: labels.title,
+            width: this.isMobile ? "96vw" : "860px",
+            component: CaptureConsole,
+            props: {
+                pluginName: this.name,
+                labels,
+                initialResult,
+            },
+            callback: () => {
+                this.captureDialog = undefined;
+            },
+        });
+    }
+
     private addMenu(rect?: DOMRect) {
+        const captureLabels = this.i18n.kernelCapture as unknown as Record<string, string>;
         const menu = new Menu("topBarSample", () => {
             console.log(this.i18n.byeMenu);
         });
@@ -538,50 +585,9 @@ export default class PluginSample extends Plugin {
         });
         menu.addSeparator();
         menu.addItem({
-            icon: "iconInfo",
-            label: "Call Kernel Plugin",
-            click: async () => {
-                try {
-                    const result = await this.kernel.rpc.call.echo("Hello from frontend", new Date().toISOString());
-                    console.log("kernel echo result", result);
-                    showMessage(`[kernel] ${JSON.stringify(result)}`);
-                } catch (error) {
-                    console.error("kernel echo failed", error);
-                    showMessage("Kernel plugin call failed");
-                }
-            }
-        });
-        menu.addItem({
-            icon: "iconFile",
-            label: "Read Kernel Storage",
-            click: async () => {
-                try {
-                    const result = await this.kernel.rpc.call.readSampleStorage();
-                    console.log("kernel storage result", result);
-                    showMessage(`[kernel] ${JSON.stringify(result)}`);
-                } catch (error) {
-                    console.error("kernel storage read failed", error);
-                    showMessage("Kernel storage read failed");
-                }
-            }
-        });
-        menu.addItem({
-            icon: "iconLink",
-            label: "Call Kernel HTTP Handler",
-            click: async () => {
-                try {
-                    const response = await fetch(`/plugin/private/${this.name}/status`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                    const result = await response.json();
-                    console.log("kernel HTTP result", result);
-                    showMessage(`[kernel] ${JSON.stringify(result)}`);
-                } catch (error) {
-                    console.error("kernel HTTP call failed", error);
-                    showMessage("Kernel HTTP call failed");
-                }
-            }
+            icon: "iconInbox",
+            label: captureLabels.menu,
+            click: () => this.openCaptureConsole(),
         });
         menu.addSeparator();
         menu.addItem({
