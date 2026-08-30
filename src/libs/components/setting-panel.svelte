@@ -53,7 +53,13 @@
                 placeholder={item?.placeholder}
                 options={item?.options}
                 slider={item?.slider}
+                number={item?.number}
                 button={item?.button}
+                password={item?.password}
+                spellcheck={item?.spellcheck}
+                createElement={item?.createElement}
+                getEleVal={item?.getEleVal}
+                setEleVal={item?.setEleVal}
                 onclick={handleClick}
                 onchanged={handleChanged}
             />

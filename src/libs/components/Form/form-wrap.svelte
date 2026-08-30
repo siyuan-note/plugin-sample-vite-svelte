@@ -23,12 +23,12 @@
 </script>
 
 {#if direction === "row"}
-    <div class="item-wrap b3-label" data-key="CustomCSS">
+    <div class="item-wrap b3-label">
         <div class="fn__block">
             <span class="title">{title}</span>
             <div class="b3-label__text">{@html description}</div>
             <div class="fn__hr"></div>
-            <div style="display: flex; flex-direction: column; gap: 5px; position: relative;">
+            <div class="item-wrap__content">
                 {@render children?.()}
             </div>
         </div>
@@ -60,4 +60,12 @@
     .item-wrap.b3-label:not(:last-child) {
         border-bottom: 1px solid var(--b3-border-color);
     }
+
+    .item-wrap__content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        position: relative;
+    }
+
 </style>

@@ -4,8 +4,8 @@
     import SidebarTabsLayout, { type SidebarTab } from "./libs/components/sidebar-tabs-layout.svelte";
 
     const tabs: SidebarTab[] = [
-        { key: "group-1", title: "🌈 Group 1" },
-        { key: "group-2", title: "✨ Group 2" }
+        { key: "group-1", title: "🌈 Group-A" },
+        { key: "group-2", title: "✨ Group-B" }
     ];
 
     const group1Items: ISettingItem[] = [
