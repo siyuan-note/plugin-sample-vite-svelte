@@ -1,9 +1,12 @@
 <script lang="ts">
     import { showMessage } from "siyuan";
     import SettingPanel from "./libs/components/setting-panel.svelte";
+    import SidebarTabsLayout, { type SidebarTab } from "./libs/components/sidebar-tabs-layout.svelte";
 
-    let groups: string[] = ["🌈 Group 1", "✨ Group 2"];
-    let focusGroup = $state(groups[0]);
+    const tabs: SidebarTab[] = [
+        { key: "group-1", title: "🌈 Group 1" },
+        { key: "group-2", title: "✨ Group 2" }
+    ];
 
     const group1Items: ISettingItem[] = [
         {
@@ -80,7 +83,7 @@
     }
 
     const onChanged = (detail: ChangeEvent) => {
-        if (detail.group === groups[0]) {
+        if (detail.group === tabs[0].key) {
             // setting.set(detail.key, detail.value);
             //Please add your code here
             //Udpate the plugins setting data, don't forget to call plugin.save() for data persistence
@@ -88,52 +91,30 @@
     };
 </script>
 
-<div class="fn__flex-1 fn__flex config__panel">
-    <ul class="b3-tab-bar b3-list b3-list--background">
-        {#each groups as group}
-            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <li
-                data-name="editor"
-                class:b3-list-item--focus={group === focusGroup}
-                class="b3-list-item"
-                onclick={() => {
-                    focusGroup = group;
-                }}
-                onkeydown={() => {}}
+<SidebarTabsLayout
+    tabs={tabs}
+    onactivechange={(detail) => { console.debug("Active tab:", detail.key); }}
+>
+    {#snippet content(tab)}
+        {#if tab.key === tabs[0].key}
+            <SettingPanel
+                group={tab.key}
+                settingItems={group1Items}
+                onchanged={onChanged}
+                onclick={(detail) => { console.debug("Click:", detail.key); }}
             >
-                <span class="b3-list-item__text">{group}</span>
-            </li>
-        {/each}
-    </ul>
-    <div class="config__tab-wrap">
-        <SettingPanel
-            group={groups[0]}
-            settingItems={group1Items}
-            display={focusGroup === groups[0]}
-            onchanged={onChanged}
-            onclick={(detail) => { console.debug("Click:", detail.key); }}
-        >
-            <div class="fn__flex b3-label">
-                💡 This is our default settings.
-            </div>
-        </SettingPanel>
-        <SettingPanel
-            group={groups[1]}
-            settingItems={group2Items}
-            display={focusGroup === groups[1]}
-            onchanged={onChanged}
-            onclick={(detail) => { console.debug("Click:", detail.key); }}
-        >
-        </SettingPanel>
-    </div>
-</div>
-
-<style lang="scss">
-    .config__panel {
-        height: 100%;
-    }
-    .config__panel > ul > li {
-        padding-left: 1rem;
-    }
-</style>
+                <div class="fn__flex b3-label">
+                    💡 This is our default settings.
+                </div>
+            </SettingPanel>
+        {:else if tab.key === tabs[1].key}
+            <SettingPanel
+                group={tab.key}
+                settingItems={group2Items}
+                onchanged={onChanged}
+                onclick={(detail) => { console.debug("Click:", detail.key); }}
+            />
+        {/if}
+    {/snippet}
+</SidebarTabsLayout>
 
