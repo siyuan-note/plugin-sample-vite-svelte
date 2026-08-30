@@ -256,25 +256,32 @@ PR 社区集市仓库。
 
 ## 使用 Github action 自动发布
 
-样例中自带了 github action，可以自动打包发布，请遵循以下操作：
+样例中自带了 github action，可以自动检查、打包并发布 GitHub Release。
 
-1. 设置项目 `https://github.com/OWNER/REPO/settings/actions` 页面向下划到 **Workflow Permissions**，打开配置
+1. 在仓库中打开 `Settings` > `Actions` > `General`。在 **Workflow permissions** 下选择 **Read and write permissions** 并保存。这个仓库设置允许工作流使用 `GITHUB_TOKEN` 创建或更新 Release。`.github/workflows/release.yml` 中也声明了所需的 `contents: write` 权限。
 
     ![](asset/action.png)
 
-2. 需要发布版本的时候，push 一个格式为 `v*` 的 tag，github 就会自动打包发布 release（包括 package.zip）
+2. 更新 `package.json` 和 `plugin.json` 中的 `version` 字段，然后推送格式为 `v*` 且版本号一致的 tag，例如：
 
-3. 默认使用保守策略进行 pre-release 发布，如果觉得没有必要，可以更改 release.yml 中的设置：
+    ```bash
+    git tag v0.4.1
+    git push origin v0.4.1
+    ```
+
+    workflow 会移除 tag 的 `v` 前缀，并在检查、构建和发布之前验证 tag 版本是否同时匹配这两个 JSON 文件。
+
+3. 当前 workflow 默认创建正式 Release（`prerelease: false`）。此前支持的 pre-release 发布仍然保留；如果某个 tag 需要发布为预发布版本，将 `.github/workflows/release.yml` 中的 `prerelease` 改为 `true` 即可。
 
     ```yaml
     - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-            allowUpdates: true
-            artifactErrorsFailBuild: true
-            artifacts: 'package.zip'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            prerelease: true # 把这个改为 false
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        artifacts: 'package.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: false # 需要预发布时改为 true
     ```
 
 ## 如何去掉 svelte 依赖

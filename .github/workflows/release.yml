@@ -5,6 +5,9 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,11 +31,38 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Validate release version
+        shell: bash
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./package.json').version")"
+          plugin_version="$(node -p "require('./plugin.json').version")"
+
+          if [[ "$GITHUB_REF_NAME" != v* || -z "$tag_version" ]]; then
+            echo "Invalid release tag: $GITHUB_REF_NAME (expected v<version>)"
+            exit 1
+          fi
+
+          if [[ "$tag_version" != "$package_version" ]]; then
+            echo "Tag version ($tag_version) does not match package.json ($package_version)"
+            exit 1
+          fi
+
+          if [[ "$tag_version" != "$plugin_version" ]]; then
+            echo "Tag version ($tag_version) does not match plugin.json ($plugin_version)"
+            exit 1
+          fi
+
+          echo "Release version validated: $tag_version"
+
       - name: Check source
         run: pnpm check
 
       - name: Build production package
-        run: pnpm build
+        run: |
+          pnpm build
+          cd dist
+          zip -r ../package.zip ./*
 
       - name: Release
         uses: ncipollo/release-action@v1

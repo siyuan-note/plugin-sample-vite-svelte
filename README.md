@@ -263,25 +263,32 @@ and you can check the deployment status at https://github.com/siyuan-note/bazaar
 
 ## Use Github Action
 
-The github action is included in this sample, you can use it to publish your new realse to marketplace automatically:
+The github action is included in this sample and can build and publish a GitHub release automatically.
 
-1. In your repo setting page `https://github.com/OWNER/REPO/settings/actions`, down to **Workflow Permissions** and open the configuration like this:
+1. In your repository, open `Settings` > `Actions` > `General`. Under **Workflow permissions**, select **Read and write permissions** and save the setting. This repository setting allows the workflow's `GITHUB_TOKEN` to create or update releases. The workflow also declares the required `contents: write` permission in `.github/workflows/release.yml`.
 
     ![](asset/action.png)
 
-2. Push a tag in the format `v*` and github will automatically create a new release with new bulit package.zip
+2. Update the `version` fields in `package.json` and `plugin.json`, then push a tag in the format `v*` with the same version, for example:
 
-3. By default, it will only publish a pre-release, if you don't think this is necessary, change the settings in release.yml
+    ```bash
+    git tag v0.4.1
+    git push origin v0.4.1
+    ```
+
+    The workflow removes the `v` prefix and verifies that the tag version matches both JSON files before checking, building, or publishing.
+
+3. The current workflow creates a regular release (`prerelease: false`). Pre-release publishing remains supported: set `prerelease: true` in `.github/workflows/release.yml` when a tag should create a pre-release.
 
     ```yaml
     - name: Release
-        uses: ncipollo/release-action@v1
-        with.
-            allowUpdates: true
-            artifactErrorsFailBuild: true
-            artifacts: 'package.zip'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            prerelease: true # change this to false
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        artifacts: 'package.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: false # set to true for a pre-release
     ```
 
 
