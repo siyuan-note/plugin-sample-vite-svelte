@@ -32,15 +32,15 @@ importers:
       js-yaml:
         specifier: ^5.4.1
         version: 5.4.1
+      livereload:
+        specifier: ^0.9.3
+        version: 0.9.3
       minimist:
         specifier: ^1.2.8
         version: 1.2.8
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
-      rollup-plugin-livereload:
-        specifier: ^2.0.5
-        version: 2.0.5
       sass:
         specifier: ^1.103.1
         version: 1.103.1
@@ -1091,10 +1091,6 @@ packages:
     resolution: {integrity: sha512-vMM4q3aixf46GiF1Kok8jDPFsEpXgFWGjUHXNkNHNm+Y2adXAG2dbX91jkti3i0ZRsOlcmbuzAz1poObSHCmUA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
-
-  rollup-plugin-livereload@2.0.5:
-    resolution: {integrity: sha512-vqQZ/UQowTW7VoiKEM5ouNW90wE5/GZLfdWuR0ELxyKOJUIaj+uismPZZaICU4DnWPVjnpCDDxEqwU7pcKY/PA==}
-    engines: {node: '>=8.3'}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -2426,13 +2422,6 @@ snapshots:
       '@rolldown/binding-openharmony-arm64': 1.2.6
       '@rolldown/binding-win32-arm64-msvc': 1.2.6
       '@rolldown/binding-win32-x64-msvc': 1.2.6
-
-  rollup-plugin-livereload@2.0.5:
-    dependencies:
-      livereload: 0.9.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   run-parallel@1.2.0:
     dependencies:

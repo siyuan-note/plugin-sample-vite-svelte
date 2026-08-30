@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import livereload from "rollup-plugin-livereload";
+import { createServer as createLiveReloadServer } from "livereload";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import zipPack from "vite-plugin-zip-pack";
 import fg from "fast-glob";
@@ -107,12 +107,7 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
         rollupOptions: {
             plugins: isDev ? [
-                livereload({
-                    watch: outputDir,
-                    inject: false,
-                    port: liveReloadPort,
-                    delay: liveReloadDebounceMs
-                }),
+                liveReloadServer(),
                 siYuanPluginReload(),
                 watchExternalFiles([
                     "public/i18n/**",
@@ -131,6 +126,33 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
     }
 });
+
+function liveReloadServer(): Plugin {
+    let server: ReturnType<typeof createLiveReloadServer> | undefined;
+
+    return {
+        name: "siyuan-live-reload-server",
+        buildStart() {
+            if (server) {
+                return;
+            }
+
+            server = createLiveReloadServer({
+                port: liveReloadPort,
+                delay: liveReloadDebounceMs
+            });
+            server.on("error", (error) => {
+                console.error(`[live-reload] unable to listen on port ${liveReloadPort}:`, error);
+                throw error;
+            });
+            server.watch(resolve(import.meta.dirname, outputDir));
+        },
+        closeWatcher() {
+            server?.close();
+            server = undefined;
+        }
+    };
+}
 
 function siYuanPluginReload(): Plugin {
     return {
