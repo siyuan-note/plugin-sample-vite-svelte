@@ -16,7 +16,7 @@
      > **We also provide with a vite+solidjs template**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. Provides a github action template to automatically generate package.zip and upload to new release
-5. Includes a minimal SiYuan 3.7.0 kernel plugin demo
+5. Includes a visual External Capture Service demo for SiYuan Kernel Plugins
 
 
 ## Svelte version
@@ -115,9 +115,15 @@ conveniently. Unsupported languages do not need to be declared in the `displayNa
 
 ## Kernel Plugin
 
-SiYuan 3.7.0 introduced kernel plugins. This template includes a minimal kernel plugin in `src/kernel.ts` and builds it to `kernel.js` together with the frontend plugin.
+A Kernel Plugin is the service part of a plugin that runs with the SiYuan kernel instead of belonging to one dialog, dock, or editor instance. Use it when service state and lifecycle should remain owned by the running kernel, when several trusted clients need one service, or when a plugin needs to expose an authenticated RPC/HTTP interface or Agent capability.
 
-The sample covers lifecycle hooks, kernel logs, scoped storage, frontend-to-kernel RPC calls, and kernel-to-frontend notifications. Read [docs/kernel-plugin.md](./docs/kernel-plugin.md) for the development guide. For full API coverage, see [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample).
+This template demonstrates that boundary with an **External Capture Service**. A local CLI, reader integration, browser extension, or the Svelte GUI can send captured text to one domain endpoint. The Kernel Plugin owns the target-notebook configuration, previews or writes the content to today's Daily Note, records committed captures, and notifies an open frontend. Open **Kernel Plugin Example: External Capture Service** from the plugin's top-bar menu to try the complete flow and copy a terminal command for your operating system.
+
+The endpoint requires SiYuan administrator authentication. The workspace API token is not a capture-only credential. Do not expose it to untrusted software or directly to the Internet.
+
+- Follow [Run the capture service without its UI](./docs/kernel-capture-demo.md) to see the Kernel service continue after its panel closes.
+- Read [Why a Kernel Plugin is a service](./docs/kernel-plugin.md) for the runtime and ownership model.
+- Use [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
 
 ## plugin.json
 

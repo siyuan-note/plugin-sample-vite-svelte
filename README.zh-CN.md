@@ -15,7 +15,7 @@
    > **这里还提供了一个 vite+solidjs 的模板**: [frostime/plugin-sample-vite-solidjs](https://github.com/frostime/plugin-sample-vite-solidjs)
 
 4. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
-5. 包含一个最小 SiYuan 3.7.0 kernel plugin 示例
+5. 包含一个直观的 SiYuan Kernel Plugin 外部摘录服务示例
 
 ## Svelte 版本
 
@@ -113,9 +113,15 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
 
 ## Kernel Plugin
 
-SiYuan 3.7.0 引入了 kernel plugin。本模板在 `src/kernel.ts` 中提供最小 kernel plugin 示例，并在构建时与 frontend plugin 一起输出为 `kernel.js`。
+Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某一个对话框、Dock 或编辑器实例。当服务状态和生命周期应由正在运行的 Kernel 持有、多个可信客户端需要使用同一服务，或者插件需要提供认证 RPC/HTTP 接口或 Agent capability 时，才适合使用 Kernel Plugin。
 
-该示例覆盖 lifecycle hooks、kernel logs、scoped storage、frontend-to-kernel RPC calls 和 kernel-to-frontend notifications。开发指南见 [docs/kernel-plugin.zh-CN.md](./docs/kernel-plugin.zh-CN.md)。完整 API 覆盖请查看 [siyuan-note/plugin-sample](https://github.com/siyuan-note/plugin-sample)。
+本模板通过一个 **外部摘录服务** 直观展示这条边界。本机 CLI、阅读工具、浏览器扩展或 Svelte GUI 都可以向同一个领域端点发送摘录；Kernel Plugin 统一管理目标笔记本配置，预览或写入今天的日记，记录真实写入历史，并通知已打开的前端。在插件顶栏菜单中打开 **Kernel Plugin 示例：外部摘录服务**，即可测试完整链路并复制适用于当前操作系统的终端命令。
+
+该端点需要思源管理员认证。Workspace API token 并不是只能摘录的低权限凭据。不要把它交给不可信软件或直接暴露到互联网。
+
+- 按照[在没有 UI 时运行摘录服务](./docs/kernel-capture-demo.zh-CN.md)操作，观察面板关闭后 Kernel 服务继续运行。
+- 阅读[为什么 Kernel Plugin 是一项服务](./docs/kernel-plugin.zh-CN.md)，理解 runtime 和状态归属。
+- Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)。
 
 ## plugin.json
 
