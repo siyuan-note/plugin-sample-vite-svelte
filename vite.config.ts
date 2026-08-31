@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { resolve } from "path";
 import { defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
@@ -16,6 +17,13 @@ const buildTarget = env.VITE_BUILD_TARGET === "kernel" ? "kernel" : "app";
 
 const outputDir = isDev ? "dev" : "dist";
 const pluginManifest = readPluginManifest();
+const packageImageTargets = [
+    ["icon", "icon.png"],
+    ["preview", "preview.png"],
+].flatMap(([field, legacyName]) => {
+    const fileName = pluginManifest[field] || (existsSync(legacyName) ? legacyName : "");
+    return fileName ? [{ src: `./${fileName}`, dest: "./" }] : [];
+});
 const liveReloadPort = Number.parseInt(env.SIYUAN_LIVERELOAD_PORT || "35740", 10);
 const liveReloadFrontend = env.SIYUAN_LIVERELOAD_FRONTEND || "desktop";
 const liveReloadMessage = env.SIYUAN_LIVERELOAD_MESSAGE || `Live reload: ${pluginManifest.name}`;
@@ -79,11 +87,11 @@ export default defineConfig(buildTarget === "kernel" ? {
 
         viteStaticCopy({
             targets: [
+                ...packageImageTargets,
                 { src: "./README*.md", dest: "./" },
                 { src: "./docs/*.md", dest: "./docs", rename: { stripBase: true } },
+                { src: "./asset/*", dest: "./asset", rename: { stripBase: true } },
                 { src: "./plugin.json", dest: "./" },
-                { src: "./preview.png", dest: "./" },
-                { src: "./icon.png", dest: "./" }
             ],
         }),
     ],

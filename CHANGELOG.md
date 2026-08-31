@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.1 2026-09-01
+
+* [Document optional marketplace images and package README assets for offline use](https://github.com/siyuan-note/siyuan/issues/19056)
+
 ## v0.3.5 2024-04-30
 
 * [Add `direction` to plugin method `Setting.addItem`](https://github.com/siyuan-note/siyuan/issues/11183)

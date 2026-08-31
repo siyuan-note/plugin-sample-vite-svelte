@@ -127,7 +127,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   "name": "plugin-sample-vite-svelte",
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "minAppVersion": "3.7.0",
   "kernels": [
     "windows",
@@ -168,6 +168,8 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
     "default": "README.md",
     "zh-CN": "README.zh-CN.md"
   },
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "openCollective": "",
     "patreon": "",
@@ -214,11 +216,16 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 * `readme`: readme file name, mainly used to display in the marketplace details page, supports multiple languages
     * `default`: Default language, must exist
     * `zh-CN`, `en` and other languages: optional, must be BCP 47 tags
+    * Relative images are loaded from `package.zip` when present; otherwise the online marketplace falls back to the matching GitHub Release. Include them in `package.zip` for offline use
+* `icon`: Optional marketplace icon filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 64 KiB; the recommended size is 160*160
+* `preview`: Optional marketplace preview filename at the package root. Supports PNG, JPEG, WebP, and AVIF up to 512 KiB; the recommended size is 1024*768
+    * SVG is unsupported. To omit an image, remove its field and the legacy `icon.png` or `preview.png`; an empty field value is invalid
 * `funding`: Plugin sponsorship information
     * `openCollective`: Open Collective name
     * `patreon`: Patreon name
     * `github`: GitHub login name
     * `custom`: Custom sponsorship link list
+    * `links`: Labeled custom sponsorship links, for example `{"label": "Sponsor", "url": "https://example.com"}`
 * `keywords`: Search keyword list, used for marketplace search function
 
 ## Package
@@ -227,13 +234,13 @@ No matter which method is used to compile and package, we finally need to genera
 least the following files:
 
 * i18n/*
-* icon.png (160*160)
+* Image files declared by `icon` and `preview` (optional)
 * index.css
 * index.js
 * kernel.js
 * plugin.json
-* preview.png (1024*768)
 * README*.md
+* asset/* (README images required offline)
 
 ## List on the marketplace
 
@@ -273,8 +280,8 @@ The github action is included in this sample and can build and publish a GitHub 
 2. Update the `version` fields in `package.json` and `plugin.json`, then push a tag in the format `v*` with the same version, for example:
 
     ```bash
-    git tag v0.5.0
-    git push origin v0.5.0
+    git tag v0.5.1
+    git push origin v0.5.1
     ```
 
     The workflow removes the `v` prefix and verifies that the tag version matches both JSON files before checking, building, or publishing.
