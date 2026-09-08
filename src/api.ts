@@ -15,6 +15,8 @@ export interface ApiResponse<T = any> {
     data: T | null;
 }
 
+export const currentAppId = (): string | undefined => window.siyuan?.ws?.app?.appId;
+
 /**
  * Execute a SiYuan kernel API request while retaining its status and raw response.
  */
@@ -454,14 +456,26 @@ export async function putFile(path: string, isDir: boolean, file: File | Blob) {
         form.append('file', new Blob());
     }
 
+    const appId = currentAppId();
+    // siyuan v3.8.3 requires appId to be set
+    if (appId) {
+        form.append('app', appId);
+    }
+
     let url = '/api/file/putFile';
     return request(url, form);
 }
 
 export async function removeFile(path: string) {
-    let data = {
+    let data: { path: string; app?: string } = {
         path: path
     }
+
+    const appId = currentAppId();
+    if (appId) {
+        data.app = appId;
+    }
+
     let url = '/api/file/removeFile';
     return request(url, data);
 }
