@@ -67,7 +67,7 @@ export async function getSiYuanDir() {
         error("\tPlease make sure SiYuan is running!!!");
         return null;
     }
-    return conf?.data; // 保持原始返回值
+    return conf?.data; // Preserve the API's original return value.
 }
 
 /**

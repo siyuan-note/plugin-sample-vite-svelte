@@ -37,17 +37,21 @@ The `legacy-svelte4` tag is retained as a stable reference for existing users an
     * Note: Unlike `plugin-sample`, this example does not recommend directly downloading the code to `{workspace}/data/plugins/`.
 3. Install Node.js 24 or later and pnpm 11.4, then run `pnpm i` in the development folder to install the required dependencies.
 4. Run the `pnpm run make-link` command to create a symbolic link (Windows developers, please refer to the "make-link on Windows" section below).
-5. Execute `pnpm run dev` for real-time compilation. In development mode, the generated app bundle connects to the local LiveReload server and asks the current SiYuan window to reload this plugin only.
+5. Execute `pnpm run dev` for real-time compilation. In development mode, LiveReload opens a local WebSocket port, and the client embedded in the plugin bundle connects to it from inside SiYuan. Keep this port stable and associated with the current plugin, especially when developing multiple plugins at the same time.
 
-   The default LiveReload debounce is 300 ms and the default delay between disabling and re-enabling the plugin is 500 ms. You can customize them before starting development:
+   If `port` is omitted, LiveReload derives a stable default port from the plugin name. If that port is already in use or conflicts with another plugin, set a dedicated development port manually and keep using the same value in subsequent development sessions. The default debounce is 5 seconds, and the default delay between disabling and re-enabling the plugin is 500 ms. To override these settings, pass options to `useLiveReload` in `vite.config.ts`:
 
-   ```powershell
-   $env:SIYUAN_LIVERELOAD_PORT = "35740"
-   $env:SIYUAN_LIVERELOAD_DEBOUNCE_MS = "300"
-   $env:SIYUAN_PLUGIN_RELOAD_GAP_MS = "500"
-   $env:SIYUAN_LIVERELOAD_MESSAGE = "Current check item already exists"
-   pnpm run dev
+   ```ts
+   useLiveReload({
+       outputDir,
+       port: 31416,
+       debounceMs: 300,
+       reloadGapMs: 500,
+       message: "Reloading my plugin"
+   })
    ```
+
+   LiveReload also verifies the plugin identity before reloading to prevent one plugin from responding to another plugin's server.
 
    Use `SIYUAN_PLUGIN_DIR` to bind `dev` to a specific workspace instead of selecting a workspace by index.
 6. Open the marketplace in SiYuan and enable the plugin in the download tab.

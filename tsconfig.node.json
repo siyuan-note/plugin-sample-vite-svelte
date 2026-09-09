@@ -11,7 +11,6 @@
     "include": [
         "vite.config.ts",
         "yaml-plugin.js",
-        "scripts/siyuan_live_reload.js",
-        "types/livereload.d.ts"
+        "scripts/siyuan_live_reload.ts"
     ]
 }

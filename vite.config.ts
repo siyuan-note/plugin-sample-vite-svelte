@@ -1,14 +1,13 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "path";
 import { defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import { createServer as createLiveReloadServer } from "livereload";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import zipPack from "vite-plugin-zip-pack";
 import fg from "fast-glob";
 
 import vitePluginYamlI18n from "./yaml-plugin.js";
-import { createSiYuanLiveReloadScript, readPluginManifest } from "./scripts/siyuan_live_reload.js";
+import { useLiveReload } from "./scripts/siyuan_live_reload.js";
 
 const env = process.env;
 const isSrcmap = env.VITE_SOURCEMAP === "inline";
@@ -16,7 +15,7 @@ const isDev = env.NODE_ENV === "development";
 const buildTarget = env.VITE_BUILD_TARGET === "kernel" ? "kernel" : "app";
 
 const outputDir = isDev ? "dev" : "dist";
-const pluginManifest = readPluginManifest();
+const pluginManifest = JSON.parse(readFileSync(resolve(import.meta.dirname, "plugin.json"), "utf8"));
 const packageImageTargets = [
     ["icon", "icon.png"],
     ["preview", "preview.png"],
@@ -24,12 +23,6 @@ const packageImageTargets = [
     const fileName = pluginManifest[field] || (existsSync(legacyName) ? legacyName : "");
     return fileName ? [{ src: `./${fileName}`, dest: "./" }] : [];
 });
-const liveReloadPort = Number.parseInt(env.SIYUAN_LIVERELOAD_PORT || "35740", 10);
-const liveReloadFrontend = env.SIYUAN_LIVERELOAD_FRONTEND || "desktop";
-const liveReloadMessage = env.SIYUAN_LIVERELOAD_MESSAGE || `Live reload: ${pluginManifest.name}`;
-const liveReloadDebounceMs = Number.parseInt(env.SIYUAN_LIVERELOAD_DEBOUNCE_MS || "300", 10);
-const pluginReloadGapMs = Number.parseInt(env.SIYUAN_PLUGIN_RELOAD_GAP_MS || "500", 10);
-
 console.log("isDev=>", isDev);
 console.log("isSrcmap=>", isSrcmap);
 console.log("outputDir=>", outputDir);
@@ -115,8 +108,7 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
         rollupOptions: {
             plugins: isDev ? [
-                liveReloadServer(),
-                siYuanPluginReload(),
+                useLiveReload({ outputDir }),
                 watchExternalFiles([
                     "public/i18n/**",
                     "./README*.md",
@@ -134,47 +126,6 @@ export default defineConfig(buildTarget === "kernel" ? {
         },
     }
 });
-
-function liveReloadServer(): Plugin {
-    let server: ReturnType<typeof createLiveReloadServer> | undefined;
-
-    return {
-        name: "siyuan-live-reload-server",
-        buildStart() {
-            if (server) {
-                return;
-            }
-
-            server = createLiveReloadServer({
-                port: liveReloadPort,
-                delay: liveReloadDebounceMs
-            });
-            server.on("error", (error) => {
-                console.error(`[live-reload] unable to listen on port ${liveReloadPort}:`, error);
-                throw error;
-            });
-            server.watch(resolve(import.meta.dirname, outputDir));
-        },
-        closeWatcher() {
-            server?.close();
-            server = undefined;
-        }
-    };
-}
-
-function siYuanPluginReload(): Plugin {
-    return {
-        name: "siyuan-plugin-reload",
-        banner: () => createSiYuanLiveReloadScript({
-            port: liveReloadPort,
-            pluginName: pluginManifest.name,
-            frontend: liveReloadFrontend,
-            message: liveReloadMessage,
-            debounceMs: liveReloadDebounceMs,
-            reloadGapMs: pluginReloadGapMs
-        })
-    };
-}
 
 function watchExternalFiles(patterns: string[]): Plugin {
     return {
@@ -211,7 +162,7 @@ function cleanupDistFiles(options: { patterns: string[], distDir: string }): Plu
                 const fs = await import("fs");
                 // const path = await import('path');
 
-                // 使用 glob 语法，确保能匹配到文件
+                // Use glob syntax so nested translation files are included.
                 const distPatterns = patterns.map(pat => `${distDir}/${pat}`);
                 console.debug("Cleanup searching patterns:", distPatterns);
 
