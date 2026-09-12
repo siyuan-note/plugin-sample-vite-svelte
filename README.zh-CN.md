@@ -104,7 +104,7 @@ make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插
   * plugin.json 中的 `displayName`、`description` 和 `readme` 字段，以及对应的 README*.md 文件
 * 插件中使用的文本，比如按钮文字和提示信息
   * public/i18n/*.json 语言配置文件
-  * 代码中使用 `this.i18.key` 获取文本
+  * 代码中使用 `this.i18n.key` 获取文本
 * yaml 支持
   * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh-CN.yaml`
   * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
@@ -131,7 +131,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.7.0",
+  "minAppVersion": "3.8.0",
   "kernels": [
     "windows",
     "linux",
@@ -194,13 +194,14 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
 * `minAppVersion`：插件支持的最低思源笔记版本号
 * `kernels`：kernel plugin 需要的 kernel 环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
-* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端
   * `linux`：Linux 桌面端
   * `darwin`：macOS 桌面端
   * `docker`：Docker 端
   * `android`：Android 端
   * `ios`：iOS 端
+  * `harmony`：鸿蒙端
   * `all`：所有环境
 * `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
   * `desktop`：桌面端
@@ -251,27 +252,15 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 * 上传 package.zip 作为二进制附件
 * 提交发布
 
-如果是第一次发布版本，还需要创建一个 PR 到 [Community Bazaar](https://github.com/siyuan-note/bazaar) 社区集市仓库，修改该库的
-plugins.json。该文件是所有社区插件库的索引，格式为：
+首次发布时，请 Fork [社区集市仓库](https://github.com/siyuan-note/bazaar)，在根目录的 `plugins.txt` 中新增一行 `owner/repo`，然后向 `main` 分支提交 PR。每行一个仓库，不添加逗号或空行；每个新增包 PR 只添加一个包。完整流程和审核规则请参阅[提交集市包](https://github.com/siyuan-note/bazaar/blob/main/README.zh-CN.md#提交集市包)。
 
-```json
-{
-  "repos": [
-    "username/reponame"
-  ]
-}
-```
-
-PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。后续发布新版本插件时只需要按照上述步骤创建新的发布即可，不需要再
-PR 社区集市仓库。
-
-正常情况下，社区集市仓库每隔 1 小时会自动更新索引并部署，可在 https://github.com/siyuan-note/bazaar/actions 查看部署状态。
+PR 合并后，集市会自动更新索引。后续更新只需提升清单中的 `version` 并发布包含 `package.zip` 的正式 GitHub Release，无需再次提交上架 PR。更新时效和排错方法请参阅[更新集市包](https://github.com/siyuan-note/bazaar/blob/main/README.zh-CN.md#更新集市包)，部署状态可在 [Stage 工作流](https://github.com/siyuan-note/bazaar/actions/workflows/stage.yml) 查看。
 
 ## 使用 Github action 自动发布
 
 样例中自带了 github action，可以自动检查、打包并发布 GitHub Release。
 
-1. 在仓库中打开 `Settings` > `Actions` > `General`。在 **Workflow permissions** 下选择 **Read and write permissions** 并保存。这个仓库设置允许工作流使用 `GITHUB_TOKEN` 创建或更新 Release。`.github/workflows/release.yml` 中也声明了所需的 `contents: write` 权限。
+1. 在仓库中打开 `Settings` - `Actions` - `General`。在 **Workflow permissions** 下选择 **Read and write permissions** 并保存。这个仓库设置允许工作流使用 `GITHUB_TOKEN` 创建或更新 Release。`.github/workflows/release.yml` 中也声明了所需的 `contents: write` 权限。
 
     ![](asset/action.png)
 
@@ -297,31 +286,29 @@ PR 社区集市仓库。
         prerelease: false # 需要预发布时改为 true
     ```
 
-## 如何去掉 svelte 依赖
+## 如何去掉 Svelte 依赖
 
-> 无 Svelte 依赖版: https://github.com/frostime/plugin-sample-vite
+当前模板的示例界面使用 Svelte 5。编写不使用 Svelte 的界面时，可以保留这些依赖；如果要彻底移除依赖，还需要删除或改写示例组件及其调用代码。
 
-本插件使用 vite 打包，并提供了 svelte 框架依赖。不过实际情况下可能有些开发者并不想要 svelte，只希望使用 vite 打包。
+如需一个不依赖 Svelte 的最小前端，请在自己的副本中按以下步骤修改。这会替换示例界面，包括设置界面和内核捕获对话框；需要保留的功能应先迁移再删除其实现。
 
-实际上你可以完全不做任何修改，就可以在不使用 svelte 的前提下使用这个模板。与 svelte 编译的编译相关的部分是以插件的形式载入到 vite 的工作流中，所以即使你的项目里面没有 svelte，也不会有太大的影响。
+1. 将 `src/index.ts` 替换为下面的最小入口，或使用自己的界面实现改写其中所有 Svelte 组件导入、`mount` / `unmount` 调用及 `svelteDialog` 用法
 
-如果你执意希望删除掉所有 svelte 依赖以免它们污染你的工作空间，可以执行一下步骤:
+    ```ts
+    import { Plugin } from "siyuan";
+    import "./index.scss";
 
-1. 删掉 package.json 中的
-    ```json
-    {
-      "@sveltejs/vite-plugin-svelte": "^2.0.3",
-      "@tsconfig/svelte": "^4.0.1",
-      "svelte": "^3.57.0"
-    }
+    export default class PluginSample extends Plugin {}
     ```
-2. 删掉 `svelte.config.js` 文件
-3. 删掉 `vite.config.js` 文件中的
-    - 第六行: `import { svelte } from "@sveltejs/vite-plugin-svelte"`
-    - 第二十行: `svelte(),`
-4. 删掉 `tsconfig.json` 中 37 行 `"svelte"`
-5. 重新执行 `pnpm i`
 
+2. 迁移需要保留的代码后，删除 `src/` 下所有 `.svelte` 文件，以及 `src/libs/dialog.ts` 和 `src/libs/components/Form/index.ts`，并清理对这些文件的剩余导入
+3. 删除 `vite.config.ts` 中从 `@sveltejs/vite-plugin-svelte` 导入的语句和前端 `plugins` 数组中的 `svelte()` 项，删除 `svelte.config.js`
+4. 删除 `tsconfig.json` 的 `compilerOptions.types` 中的 `"svelte"` 和 `include` 中的 `"src/**/*.svelte"`，保留 `node` 和 `vite/client` 类型
+5. 删除 `package.json` 中的 `check:svelte` 脚本，将 `check` 改为 `"pnpm run check:types"`
+6. 执行 `pnpm remove -D @sveltejs/vite-plugin-svelte @tsconfig/svelte svelte svelte-check`，更新依赖及锁文件，无需写死依赖版本号
+7. 执行 `pnpm run check`，检查剩余 TypeScript 源码及 Vite 配置，再按上文的打包步骤生成安装包并在思源中验证
+
+内核入口及其构建配置不依赖 Svelte，可以保留。移除依赖前，还应检查自行添加的源码是否存在其他 Svelte 导入。
 
 ## 开发者须知
 

@@ -104,7 +104,7 @@ complete the following tasks:
     * `displayName`, `description` and `readme` fields in plugin.json, and the corresponding README*.md file
 * Text used in the plugin, such as button text and tooltips
     * public/i18n/*.json language configuration files
-    * Use `this.i18.key` to get the text in the code
+    * Use `this.i18n.key` to get the text in the code
 * YAML Support
   * This template specifically supports I18n based on YAML syntax, see `public/i18n/zh-CN.yaml`
   * During compilation, the defined YAML files will be automatically translated into JSON files and placed in the dist or dev directory.
@@ -132,7 +132,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.7.0",
+  "minAppVersion": "3.8.0",
   "kernels": [
     "windows",
     "linux",
@@ -196,13 +196,14 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
 * `minAppVersion`: Minimum version number of SiYuan required to use this plugin
 * `kernels`: Kernel environments required by the kernel plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
-* `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
+* `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
   * `linux`: Linux desktop
   * `darwin`: macOS desktop
   * `docker`: Docker
   * `android`: Android APP
   * `ios`: iOS APP
+  * `harmony`: HarmonyOS APP
   * `all`: All environments
 * `frontends`: Frontend environment required by the plugin, optional values are `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
   * `desktop`: Desktop
@@ -254,30 +255,15 @@ least the following files:
 * Upload the file package.zip as binary attachments
 * Publish the release
 
-If it is the first release, please create a pull request to
-the [Community Bazaar](https://github.com/siyuan-note/bazaar) repository and modify the plugins.json file in it. This
-file is the index of all community plugin repositories, the format is:
+For the first release, fork the [community bazaar repository](https://github.com/siyuan-note/bazaar), add one `owner/repo` line to `plugins.txt` in its root, and open a PR against `main`. Use one repository per line without commas or empty lines, and add only one new package per PR. See [Submitting a bazaar package](https://github.com/siyuan-note/bazaar#submitting-a-bazaar-package) for the full process and review rules.
 
-```json
-{
-  "repos": [
-    "username/reponame"
-  ]
-}
-```
-
-After the PR is merged, the bazaar will automatically update the index and deploy through GitHub Actions. When releasing
-a new version of the plugin in the future, you only need to follow the above steps to create a new release, and you
-don't need to PR the community bazaar repo.
-
-Under normal circumstances, the community bazaar repo will automatically update the index and deploy every hour,
-and you can check the deployment status at https://github.com/siyuan-note/bazaar/actions.
+After the PR is merged, the bazaar updates its index automatically. For subsequent updates, increase `version` in the package manifest and publish a regular GitHub Release containing `package.zip`; no additional listing PR is needed. See [Updating a bazaar package](https://github.com/siyuan-note/bazaar#updating-a-bazaar-package) for update timing and troubleshooting, and check deployment status in the [Stage workflow](https://github.com/siyuan-note/bazaar/actions/workflows/stage.yml).
 
 ## Use Github Action
 
 The github action is included in this sample and can build and publish a GitHub release automatically.
 
-1. In your repository, open `Settings` > `Actions` > `General`. Under **Workflow permissions**, select **Read and write permissions** and save the setting. This repository setting allows the workflow's `GITHUB_TOKEN` to create or update releases. The workflow also declares the required `contents: write` permission in `.github/workflows/release.yml`.
+1. In your repository, open `Settings` - `Actions` - `General`. Under **Workflow permissions**, select **Read and write permissions** and save the setting. This repository setting allows the workflow's `GITHUB_TOKEN` to create or update releases. The workflow also declares the required `contents: write` permission in `.github/workflows/release.yml`.
 
     ![](asset/action.png)
 
@@ -304,30 +290,29 @@ The github action is included in this sample and can build and publish a GitHub 
     ```
 
 
-## How to remove svelte dependencies
+## How to remove Svelte dependencies
 
-> Pure vite without svelte: https://github.com/frostime/plugin-sample-vite
+The current template uses Svelte 5 in its example UI. You can keep these dependencies while writing your own UI without Svelte. Removing the dependencies requires removing or rewriting the example components and their callers as well.
 
-This plugin is packaged in vite and provides a dependency on the svelte framework. However, in practice some developers may not want to use svelte and only want to use the vite package.
+For a minimal frontend without Svelte, make the following changes in your own copy. This replaces the example UI, including its settings and kernel capture dialog; port any features you want to keep before removing their implementation.
 
-In fact you can use this template without using svelte without any modifications at all. The compilation-related parts of the svelte compilation are loaded into the vite workflow as plugins, so even if you don't have svelte in your project, it won't matter much.
+1. Replace `src/index.ts` with the minimal entry below, or rewrite all its Svelte component imports, `mount` / `unmount` calls and `svelteDialog` usage using your own UI
 
-If you insist on removing all svelte dependencies so that they do not pollute your workspace, you can perform the following steps. 1.
+    ```ts
+    import { Plugin } from "siyuan";
+    import "./index.scss";
 
-1. delete the
-    ```json
-    {
-      "@sveltejs/vite-plugin-svelte": "^2.0.3",
-      "@tsconfig/svelte": "^4.0.1",
-      "svelte": "^3.57.0"
-    }
+    export default class PluginSample extends Plugin {}
     ```
-2. delete the `svelte.config.js` file
-3. delete the following line from the `vite.config.js` file
-    - Line 6: `import { svelte } from "@sveltejs/vite-plugin-svelte"`
-    - Line 20: `svelte(),`
-4. delete line 37 of `tsconfig.json` from `"svelte"` 5.
-5. re-run `pnpm i`
+
+2. Remove all `.svelte` files under `src/`, plus `src/libs/dialog.ts` and `src/libs/components/Form/index.ts`, after migrating any code you need; remove any remaining imports of these files
+3. In `vite.config.ts`, remove the import from `@sveltejs/vite-plugin-svelte` and the `svelte()` entry in the frontend `plugins` array; remove `svelte.config.js`
+4. In `tsconfig.json`, remove `"svelte"` from `compilerOptions.types` and `"src/**/*.svelte"` from `include`; keep the `node` and `vite/client` types
+5. In `package.json`, remove the `check:svelte` script and change `check` to `"pnpm run check:types"`
+6. Run `pnpm remove -D @sveltejs/vite-plugin-svelte @tsconfig/svelte svelte svelte-check` to update the dependencies and lockfile without hard-coding dependency versions
+7. Run `pnpm run check` to verify the remaining TypeScript source and Vite configuration, then use the packaging steps above and verify the resulting plugin in SiYuan
+
+The kernel entry and its build configuration do not depend on Svelte and can remain. Check your own source for any additional Svelte imports before removing the dependencies.
 
 ## Developer's Guide
 
@@ -349,4 +334,3 @@ Developers should pay attention to the following when developing the functionali
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
 * If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
-
