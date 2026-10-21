@@ -46,7 +46,7 @@
     "svelte-check": "^4.7.6",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
-    "vite": "^8.2.2",
+    "vite": "^8.2.4",
     "vite-plugin-static-copy": "^4.1.1",
     "vite-plugin-zip-pack": "^1.2.4"
   }
