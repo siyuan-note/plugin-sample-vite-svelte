@@ -123,6 +123,11 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 - 阅读[为什么 Kernel Plugin 是一项服务](./docs/kernel-plugin.zh-CN.md)，理解 runtime 和状态归属。
 - Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)。
 
+## 插件生命周期与发布服务
+
+- 阅读[前端插件生命周期](./docs/plugin-lifecycle.zh-CN.md)，了解钩子顺序、关停流程中的五秒限时，以及何时实现 `onDataChanged`。
+- 阅读[在发布页面运行插件](./docs/publish.zh-CN.md)，了解访问者浏览器能做什么、两条数据通道，以及如何接入发布服务。
+
 ## plugin.json
 
 ```json
@@ -210,8 +215,8 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
-* `disabledInPublish`：插件不应在发布服务提供的页面上加载时设为 `true`；详见[发布服务](#4-发布服务)
-* `publish`：发布服务的声明；详见[发布服务](#4-发布服务)
+* `disabledInPublish`：插件不应在发布服务提供的页面上加载时设为 `true`；详见[在发布页面运行插件](./docs/publish.zh-CN.md)
+* `publish`：发布服务的声明；详见[在发布页面运行插件](./docs/publish.zh-CN.md)
   * `resources`：发布页面可用的额外前端文件，写精确相对路径或以 `/` 结尾的目录
   * `data`：允许作为公开快照的字段名；值只能是字符串、数字、布尔值或 `null`，访问还需管理员单独授权
 * `displayName`：插件名称（纯文本），在插件集市列表中显示，支持多语言
@@ -334,25 +339,3 @@ PR 合并后，集市会自动更新索引。后续更新只需提升清单中�
 
 * 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理
 * 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性
-
-### 3. 前端插件生命周期
-
-每个前端进程拥有自己的插件实例。对同一个实例，思源按顺序执行 `onload`、`onLayoutReady`、`onDataChanged`、`onunload` 和 `uninstall`，并等待钩子返回的 Promise 后才进入下一阶段。`onLayoutReady` 在 `onload` 和内核初始化完成后最多运行一次；`uninstall` 仅在插件从工作空间移除时运行。本样例在这些钩子里等待了自己发起的异步操作。
-
-`onDataChanged` 仅在实例就绪后运行，挂起的通知会合并。它通知的是插件通过 `saveData` 存储的数据发生了变更，包括其他前端的写入和同步。如果插件没有覆盖基类实现，思源会改为重载整个插件，而不是调用这个空钩子。
-
-禁用、重载或卸载插件时会建立一份共享的 5 秒拆除预算。等待未完成的 `onload`、内核初始化、`onLayoutReady` 或正在运行的 `onDataChanged` 都消耗同一份预算，剩余时间由 `onunload` 和（仅在真正卸载时）`uninstall` 共用。截止时间之前各阶段保持串行；超时后思源不再等待，会尽力对每个剩余拆除钩子调用一次，然后拆除内核连接。Promise 无法取消，超时的钩子可能在拆除后继续运行。
-
-钩子应当保持短小，拆除逻辑要可重复调用，用插件自己的 `AbortController` 取消未完成的工作，重要数据在操作发生时立即保存，而不要依赖拆除钩子。关闭窗口或退出思源不会触发前端钩子。同样的契约也写在 [SDK 声明](https://github.com/siyuan-note/petal) 的 `Plugin` 类上。
-
-### 4. 发布服务
-
-发布服务把工作空间的只读副本提供给访问者，因此插件的前端代码也会在访问者的浏览器中运行。该环境没有内核插件，也无法访问插件的私有存储。
-
-两类数据必须分开。私有配置通过 `loadData` / `saveData` 读写，只保存在管理员自己的设备上；公开快照通过 `loadPublishData` / `savePublishData` 读写，访问者以及发布页面上的其他代码都能读取，因此不要公开令牌、密码或私有笔记本内容。
-
-公开数据分为三个独立步骤：管理员开启发布服务、授权 `publish.data` 中声明的字段（授权会清空上一份快照）、插件生成快照。保存私有设置不会更新快照；读取失败时必须显示安全默认内容，不能回退到私有存储。
-
-`savePublishData` 会整份替换快照，省略的字段会被移除，每个值只能是字符串、数字、布尔值或 `null`。额外的图片、字体或脚本用 `publish.resources` 声明；`plugin.json` 和 `kernel.js` 不可公开，以 `/` 结尾的目录声明需要思源 3.8.6 及以上版本。
-
-本模板保持 `disabledInPublish: true`，因此不会在发布页面加载。完整示例见 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) 中的 `loadPublishData`、`savePublishData` 和 `onDataChanged`，权限模型见[插件发布](https://github.com/siyuan-note/siyuan/blob/master/docs/PLUGIN-PUBLISH.zh-CN.md)。

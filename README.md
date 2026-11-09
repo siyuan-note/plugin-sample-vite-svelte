@@ -124,6 +124,11 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 - Read [Why a Kernel Plugin is a service](./docs/kernel-plugin.md) for the runtime and ownership model.
 - Use [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
 
+## Plugin Lifecycle and Publishing
+
+- Read [Frontend Plugin Lifecycle](./docs/plugin-lifecycle.md) for the hook order, the five-second cap on shutdown, and when to implement `onDataChanged`.
+- Read [Running a Plugin on Published Pages](./docs/publish.md) for what a visitor's browser can reach, the two data channels, and how to opt in.
+
 ## plugin.json
 
 ```json
@@ -212,8 +217,8 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
-* `disabledInPublish`: Set to `true` when the plugin must not load on pages served by the publishing service; see [Publishing Service](#4-publishing-service)
-* `publish`: Declarations for the publishing service; see [Publishing Service](#4-publishing-service)
+* `disabledInPublish`: Set to `true` when the plugin must not load on pages served by the publishing service; see [Running a Plugin on Published Pages](./docs/publish.md)
+* `publish`: Declarations for the publishing service; see [Running a Plugin on Published Pages](./docs/publish.md)
     * `resources`: Extra frontend files served to published pages, written as exact relative paths or directories ending in `/`
     * `data`: Field names the plugin may expose as a public snapshot; each value must be a string, number, boolean or `null`, and access needs a separate administrator grant
 * `displayName`: Plugin name (plain text), displayed in the marketplace list, supports multiple languages
@@ -338,25 +343,3 @@ Developers should pay attention to the following when developing the functionali
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
 * If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
-
-### 3. Frontend Plugin Lifecycle
-
-Each frontend process owns its own plugin instance. SiYuan runs `onload`, `onLayoutReady`, `onDataChanged`, `onunload`, and `uninstall` for the same instance in sequence, and waits for the Promise a hook returns before starting the next phase. `onLayoutReady` runs at most once, after `onload` and kernel initialization. `uninstall` runs only when the plugin is removed from the workspace. This sample awaits its own asynchronous work in these hooks.
-
-`onDataChanged` runs only after the instance is ready, and pending notifications are coalesced. It reports changes to the data the plugin stored with `saveData`, including writes from other frontends and sync. If you leave the base implementation unchanged, SiYuan reloads the whole plugin instead of calling the empty hook.
-
-Disabling, reloading, or uninstalling the plugin starts one shared five-second removal budget. Waiting for a pending `onload`, kernel initialization, `onLayoutReady`, or a running `onDataChanged` consumes the same budget, and the remaining time is shared by `onunload` and, for an actual uninstall, `uninstall`. Hooks stay serial until the deadline. After it expires, SiYuan stops waiting, calls each remaining teardown hook once on a best-effort basis, and destroys the kernel connection. Promises cannot be cancelled, so a timed-out hook may keep running after teardown.
-
-Keep the hooks short, make teardown idempotent, cancel pending work with a plugin-owned `AbortController`, and persist important data when the operation happens rather than in a teardown hook. Closing a window or exiting SiYuan does not run frontend hooks. See [the SDK declaration](https://github.com/siyuan-note/petal) for the same contract next to the `Plugin` class.
-
-### 4. Publishing Service
-
-The publishing service serves a read-only copy of the workspace to visitors, so a plugin's frontend code also runs in a visitor's browser. That environment has no kernel plugin and no access to the plugin's private storage.
-
-Keep the two data channels apart. Private configuration uses `loadData` / `saveData` and stays on the administrator's device. Public snapshots use `loadPublishData` / `savePublishData`, and visitors as well as any other code on the published page can read them, so never publish tokens, passwords, or private notebook content.
-
-Publishing takes three independent steps: the administrator enables the publishing service, grants the fields declared in `publish.data` (a grant clears the previous snapshot), and the plugin generates the snapshot. Saving private settings does not update the snapshot, and a failed read must show a safe default instead of falling back to private storage.
-
-`savePublishData` replaces the whole snapshot, so omitted fields are removed, and each value is limited to a string, number, boolean, or `null`. Declare extra images, fonts, or scripts with `publish.resources`; `plugin.json` and `kernel.js` cannot be published, and directory entries (a path ending in `/`) require SiYuan 3.8.6 or later.
-
-This template keeps `disabledInPublish: true`, so it does not load on published pages. See `loadPublishData`, `savePublishData`, and `onDataChanged` in [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) for a complete example, and [Plugin publishing](https://github.com/siyuan-note/siyuan/blob/master/docs/PLUGIN-PUBLISH.md) for the permission model.
