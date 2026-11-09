@@ -334,3 +334,13 @@ Developers should pay attention to the following when developing the functionali
 
 * If `/api/filetree/createDailyNote` is called to create a daily note, the attribute will be automatically added to the document, and developers do not need to handle it separately
 * If a document is created manually by developer's code (e.g., using the `createDocWithMd` API to create a daily note), please manually add this attribute to the document
+
+### 3. Frontend Plugin Lifecycle
+
+Each frontend process owns its own plugin instance. SiYuan runs `onload`, `onLayoutReady`, `onDataChanged`, `onunload`, and `uninstall` for the same instance in sequence, and waits for the Promise a hook returns before starting the next phase. `onLayoutReady` runs at most once, after `onload` and kernel initialization. `uninstall` runs only when the plugin is removed from the workspace. This sample awaits its own asynchronous work in these hooks.
+
+`onDataChanged` runs only after the instance is ready, and pending notifications are coalesced. It reports changes to the data the plugin stored with `saveData`, including writes from other frontends and sync. If you leave the base implementation unchanged, SiYuan reloads the whole plugin instead of calling the empty hook.
+
+Disabling, reloading, or uninstalling the plugin starts one shared five-second removal budget. Waiting for a pending `onload`, kernel initialization, `onLayoutReady`, or a running `onDataChanged` consumes the same budget, and the remaining time is shared by `onunload` and, for an actual uninstall, `uninstall`. Hooks stay serial until the deadline. After it expires, SiYuan stops waiting, calls each remaining teardown hook once on a best-effort basis, and destroys the kernel connection. Promises cannot be cancelled, so a timed-out hook may keep running after teardown.
+
+Keep the hooks short, make teardown idempotent, cancel pending work with a plugin-owned `AbortController`, and persist important data when the operation happens rather than in a teardown hook. Closing a window or exiting SiYuan does not run frontend hooks. See [the SDK declaration](https://github.com/siyuan-note/petal) for the same contract next to the `Plugin` class.
