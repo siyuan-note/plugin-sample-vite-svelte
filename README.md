@@ -132,7 +132,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.8.0",
+  "minAppVersion": "3.8.5",
   "kernels": [
     "windows",
     "linux",
@@ -194,7 +194,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 * `author`: Plugin author name
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
-* `minAppVersion`: Minimum version number of SiYuan required to use this plugin
+* `minAppVersion`: Minimum version number of SiYuan required to use this plugin. The sample requires 3.8.5 because its examples use plugin APIs added in recent releases
 * `kernels`: Kernel environments required by the kernel plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop

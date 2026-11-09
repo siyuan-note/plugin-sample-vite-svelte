@@ -131,7 +131,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.8.0",
+  "minAppVersion": "3.8.5",
   "kernels": [
     "windows",
     "linux",
@@ -192,7 +192,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 * `author`：插件作者名
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
-* `minAppVersion`：插件支持的最低思源笔记版本号
+* `minAppVersion`：插件支持的最低思源笔记版本号。本样例要求 3.8.5，因为示例使用了较新版本引入的插件 API
 * `kernels`：kernel plugin 需要的 kernel 环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端

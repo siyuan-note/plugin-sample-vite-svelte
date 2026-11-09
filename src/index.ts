@@ -25,8 +25,7 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IKernelPluginState,
-    IMenuItem
+    IKernelPluginState
 } from "siyuan";
 import "./index.scss";
 
@@ -54,22 +53,6 @@ export default class PluginSample extends Plugin {
     private settingUtils: SettingUtils;
     private captureDialog?: ReturnType<typeof svelteDialog>;
 
-
-    updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
-        toolbar.push("|");
-        toolbar.push({
-            name: "insert-smail-emoji",
-            icon: "iconEmoji",
-            hotkey: "⇧⌘I",
-            tipPosition: "n",
-            tip: String(this.i18n.insertEmoji),
-            click(protyle: Protyle) {
-                protyle.insert("😊");
-            }
-        });
-        return toolbar;
-    }
-
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
@@ -81,6 +64,20 @@ export default class PluginSample extends Plugin {
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
+
+        // Register an editor toolbar button dynamically. Call `removeToolbarItem(name)`
+        // to remove it again; the older `updateProtyleToolbar` hook is still supported.
+        this.addToolbarItem({
+            name: "insert-smiley-emoji",
+            icon: "iconEmoji",
+            hotkey: "⇧⌘I",
+            tipPosition: "n",
+            tip: String(this.i18n.insertEmoji),
+            click(protyle: Protyle) {
+                protyle.insert("😊");
+            }
+        });
+
         // 图标的制作参见帮助文档
         this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">
 <path d="M13.667 17.333c0 0.92-0.747 1.667-1.667 1.667s-1.667-0.747-1.667-1.667 0.747-1.667 1.667-1.667 1.667 0.747 1.667 1.667zM20 15.667c-0.92 0-1.667 0.747-1.667 1.667s0.747 1.667 1.667 1.667 1.667-0.747 1.667-1.667-0.747-1.667-1.667-1.667zM29.333 16c0 7.36-5.973 13.333-13.333 13.333s-13.333-5.973-13.333-13.333 5.973-13.333 13.333-13.333 13.333 5.973 13.333 13.333zM14.213 5.493c1.867 3.093 5.253 5.173 9.12 5.173 0.613 0 1.213-0.067 1.787-0.16-1.867-3.093-5.253-5.173-9.12-5.173-0.613 0-1.213 0.067-1.787 0.16zM5.893 12.627c2.28-1.293 4.040-3.4 4.88-5.92-2.28 1.293-4.040 3.4-4.88 5.92zM26.667 16c0-1.040-0.16-2.040-0.44-2.987-0.933 0.2-1.893 0.32-2.893 0.32-4.173 0-7.893-1.92-10.347-4.92-1.4 3.413-4.187 6.093-7.653 7.4 0.013 0.053 0 0.12 0 0.187 0 5.88 4.787 10.667 10.667 10.667s10.667-4.787 10.667-10.667z"></path>
