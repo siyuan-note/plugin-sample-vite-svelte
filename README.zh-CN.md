@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)，并同步了后续版本中的部分更新。
+> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)，并同步了后续版本中的部分更新。
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -121,7 +121,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 
 - 按照[在没有 UI 时运行摘录服务](./docs/kernel-capture-demo.zh-CN.md)操作，观察面板关闭后 Kernel 服务继续运行。
 - 阅读[为什么 Kernel Plugin 是一项服务](./docs/kernel-plugin.zh-CN.md)，理解 runtime 和状态归属。
-- Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)。
+- Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)。
 
 ## plugin.json
 

@@ -3,7 +3,7 @@
 
 [中文版](./README.zh-CN.md)
 
-> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0), with selected updates from newer releases.
+> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2), with selected updates from newer releases.
 
 
 
@@ -122,7 +122,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 
 - Follow [Run the capture service without its UI](./docs/kernel-capture-demo.md) to see the Kernel service continue after its panel closes.
 - Read [Why a Kernel Plugin is a service](./docs/kernel-plugin.md) for the runtime and ownership model.
-- Use [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
+- Use [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
 
 ## plugin.json
 
