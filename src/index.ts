@@ -41,6 +41,7 @@ import { mount, unmount } from "svelte";
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
+const COUNTER_BLOCK_TYPE = "counter";
 
 interface CaptureConsoleHandle {
     showCapture?: (result: CaptureResult) => void;
@@ -52,6 +53,43 @@ export default class PluginSample extends Plugin {
     private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
     private captureDialog?: ReturnType<typeof svelteDialog>;
+
+    /**
+     * A custom block stores a raw text payload in the document and renders it with a
+     * plugin-owned function. `content` is that payload as stored; `setContent` replaces
+     * the whole payload, and the block is then disposed and rendered again with the new
+     * `content`. Any state that must survive that rebuild has to live in `content`.
+     */
+    private readonly renderCounterBlock = ({
+        element,
+        content,
+        setContent,
+    }: {
+        element: HTMLElement,
+        content: string,
+        setContent: (content: string) => boolean,
+    }) => {
+        const parsed = Number.parseInt(content, 10);
+        const count = Number.isSafeInteger(parsed) ? parsed : 0;
+
+        const button = document.createElement("button");
+        button.className = "b3-button b3-button--outline";
+        button.textContent = String(count);
+        button.title = String(this.i18n.counterHint);
+        button.addEventListener("click", () => {
+            setContent(String(count + 1));
+        });
+        // The listener lives inside `element`, so it disappears with the rendered DOM.
+        // Timers and listeners outside `element` belong in the cleanup function that
+        // this render function can return.
+        element.append(button);
+    };
+
+    customBlockRenders = {
+        [COUNTER_BLOCK_TYPE]: {
+            render: this.renderCounterBlock,
+        },
+    };
 
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
@@ -321,6 +359,16 @@ export default class PluginSample extends Plugin {
             id: "insertEmoji",
             callback(protyle: Protyle) {
                 protyle.insert("😊");
+            }
+        }, {
+            // The fence info of a custom block is the encoded plugin name and block type.
+            filter: ["insert counter block", "插入计数器块", "jsq"],
+            html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertCounterBlock}</span><span class="b3-list-item__meta">🔢</span></div>`,
+            id: "insertCounterBlock",
+            callback: (protyle: Protyle) => {
+                const info = `${encodeURIComponent(this.name)}/${encodeURIComponent(COUNTER_BLOCK_TYPE)}`;
+                const markdown = `;;;${info}\n0\n;;;`;
+                protyle.insert(protyle.protyle.lute.Md2BlockDOM(markdown), true);
             }
         }];
 

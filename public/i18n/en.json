@@ -9,6 +9,8 @@
     "removedData": "Data deleted",
     "confirmRemove": "Confirm to delete the data in ${name}?",
     "insertEmoji": "Insert Emoji",
+    "counterHint": "Click to add one",
+    "insertCounterBlock": "Counter block",
     "removeSpace": "Remove Space",
     "getTab": "Print out all opened custom tabs in the debugger",
     "name": "SiYuan",
