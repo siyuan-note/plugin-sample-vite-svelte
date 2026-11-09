@@ -41,7 +41,7 @@
     "minimist": "^1.2.8",
     "npm-run-all": "^4.1.5",
     "sass": "^1.103.1",
-    "siyuan": "1.2.5",
+    "siyuan": "1.2.9",
     "svelte": "^5.57.0",
     "svelte-check": "^4.7.6",
     "ts-node": "^10.9.2",

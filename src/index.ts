@@ -62,7 +62,7 @@ export default class PluginSample extends Plugin {
             icon: "iconEmoji",
             hotkey: "⇧⌘I",
             tipPosition: "n",
-            tip: this.i18n.insertEmoji,
+            tip: String(this.i18n.insertEmoji),
             click(protyle: Protyle) {
                 protyle.insert("😊");
             }
@@ -305,8 +305,8 @@ export default class PluginSample extends Plugin {
             key: "Hint",
             value: "",
             type: "hint",
-            title: this.i18n.hintTitle,
-            description: this.i18n.hintDesc,
+            title: String(this.i18n.hintTitle),
+            description: String(this.i18n.hintDesc),
         });
 
         try {
@@ -353,7 +353,7 @@ export default class PluginSample extends Plugin {
     onLayoutReady() {
         const topBarElement = this.addTopBar({
             icon: "iconFace",
-            title: this.i18n.addTopBarIcon,
+            title: String(this.i18n.addTopBarIcon),
             position: "right",
             callback: () => {
                 if (this.isMobile) {
@@ -379,7 +379,7 @@ export default class PluginSample extends Plugin {
     </svg>
 </div>`;
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
-            confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
+            confirm("⚠️", String(this.i18n.confirmRemove).replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
