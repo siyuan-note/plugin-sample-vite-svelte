@@ -58,8 +58,10 @@ export default class PluginSample extends Plugin {
 
         console.log("Loading plugin-sample-vite-svelte");
 
-        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
-        this.kernel.rpc.bind("capture-received", this.onCaptureReceived);
+        await Promise.all([
+            this.kernel.rpc.bind("notify", this.onKernelPluginNotify),
+            this.kernel.rpc.bind("capture-received", this.onCaptureReceived),
+        ]);
         this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         const frontEnd = getFrontend();
@@ -347,7 +349,9 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.helloPlugin);
     }
 
-    onLayoutReady() {
+    // Lifecycle hooks may be async. SiYuan waits for the returned Promise before
+    // starting the next phase and shares one five-second removal budget.
+    async onLayoutReady() {
         const topBarElement = this.addTopBar({
             icon: "iconFace",
             title: String(this.i18n.addTopBarIcon),
@@ -389,7 +393,7 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
         // this.loadData(STORAGE_NAME);
-        this.settingUtils.load().catch(e => {
+        await this.settingUtils.load().catch(e => {
             console.log(`[${this.name}] load settings [${STORAGE_NAME}] fail: `, e);
         });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
@@ -406,8 +410,10 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
         this.captureDialog?.close();
         this.captureDialog = undefined;
-        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
-        this.kernel.rpc.unbind("capture-received", this.onCaptureReceived);
+        await Promise.all([
+            this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
+            this.kernel.rpc.unbind("capture-received", this.onCaptureReceived),
+        ]);
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");
