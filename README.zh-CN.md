@@ -4,7 +4,7 @@
 [English](./README.md)
 
 
-> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)，并同步了后续版本中的部分更新。
+> 本例基于 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)，并同步了后续版本中的部分更新。
 
 1. 使用 vite 打包
 2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
@@ -121,7 +121,12 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 
 - 按照[在没有 UI 时运行摘录服务](./docs/kernel-capture-demo.zh-CN.md)操作，观察面板关闭后 Kernel 服务继续运行。
 - 阅读[为什么 Kernel Plugin 是一项服务](./docs/kernel-plugin.zh-CN.md)，理解 runtime 和状态归属。
-- Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)。
+- Agent capability、RPC batch、WebSocket、SSE 和 storage watcher 的完整案例请查看 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)。
+
+## 插件生命周期与发布服务
+
+- 阅读[前端插件生命周期](./docs/plugin-lifecycle.zh-CN.md)，了解钩子顺序、关停流程中的五秒限时，以及何时实现 `onDataChanged`。
+- 阅读[在发布页面运行插件](./docs/publish.zh-CN.md)，了解访问者浏览器能做什么、两条数据通道，以及如何接入发布服务。
 
 ## plugin.json
 
@@ -131,7 +136,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.8.0",
+  "minAppVersion": "3.8.5",
   "kernels": [
     "windows",
     "linux",
@@ -192,7 +197,7 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
 * `author`：插件作者名
 * `url`：插件仓库地址
 * `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
-* `minAppVersion`：插件支持的最低思源笔记版本号
+* `minAppVersion`：插件支持的最低思源笔记版本号。本样例要求 3.8.5，因为示例使用了较新版本引入的插件 API
 * `kernels`：kernel plugin 需要的 kernel 环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
 * `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` 和 `all`
   * `windows`：Windows 桌面端
@@ -210,6 +215,10 @@ Kernel Plugin 是插件中随思源 Kernel 运行的服务部分，不属于某�
   * `browser-desktop`：桌面端浏览器
   * `browser-mobile`：移动端浏览器
   * `all`：所有环境
+* `disabledInPublish`：插件不应在发布服务提供的页面上加载时设为 `true`；详见[在发布页面运行插件](./docs/publish.zh-CN.md)
+* `publish`：发布服务的声明；详见[在发布页面运行插件](./docs/publish.zh-CN.md)
+  * `resources`：发布页面可用的额外前端文件，写精确相对路径或以 `/` 结尾的目录
+  * `data`：允许作为公开快照的字段名；值只能是字符串、数字、布尔值或 `null`，访问还需管理员单独授权
 * `displayName`：插件名称（纯文本），在插件集市列表中显示，支持多语言
   * `default`：默认语言，必须存在
   * `zh-CN`、`en` 等其他语言：可选，须为 [BCP 47](https://tools.ietf.org/html/bcp47) 标签（如 `zh-CN`、`zh-TW`、`en`、`ja`、`pt-BR`）

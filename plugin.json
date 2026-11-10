@@ -3,7 +3,7 @@
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.8.0",
+  "minAppVersion": "3.8.5",
   "kernels": [
     "windows",
     "linux",

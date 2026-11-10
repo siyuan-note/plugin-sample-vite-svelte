@@ -4,7 +4,7 @@ A frontend plugin belongs to the SiYuan user interface. A Kernel Plugin belongs 
 
 This difference matters when a feature must keep one state and one lifecycle without depending on a dialog, dock, editor, or browser tab. The Kernel Plugin owns that feature as a service. Frontends and trusted external programs become clients of the service.
 
-To run the template's concrete example, follow [Run the capture service without its UI](./kernel-capture-demo.md). For complete API coverage, use the official [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0).
+To run the template's concrete example, follow [Run the capture service without its UI](./kernel-capture-demo.md). For complete API coverage, use the official [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2).
 
 ## The service owns work that does not belong to a UI
 
@@ -136,7 +136,7 @@ This split lets a reader follow one product flow:
 request → Kernel-owned service → persistent result → frontend notification
 ```
 
-The official [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0) covers RPC batch, raw WebSocket and SSE handlers, storage watchers, Agent capabilities, and the rest of the Kernel API surface.
+The official [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) covers RPC batch, raw WebSocket and SSE handlers, storage watchers, Agent capabilities, and the rest of the Kernel API surface.
 
 ## Decide which runtime owns a feature
 
@@ -151,5 +151,5 @@ Use these questions in order:
 
 - [SiYuan Kernel Plugin implementation](https://github.com/siyuan-note/siyuan/tree/master/kernel/plugin)
 - [Kernel Plugin TypeScript declarations](https://github.com/siyuan-note/petal/blob/main/kernel.d.ts)
-- [Official plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)
+- [Official plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)
 - [Agent capability access-control scenario](https://github.com/siyuan-note/siyuan/issues/18638)

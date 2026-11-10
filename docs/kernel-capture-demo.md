@@ -104,4 +104,4 @@ The private endpoint accepts authenticated administrator requests. It does not i
 
 Use the runnable command only on a trusted machine. Store long-lived tokens in the operating system's credential store or another protected local secret store. Do not expose the endpoint directly to the Internet.
 
-For the architecture behind this tutorial, read [Why a Kernel Plugin is a service](./kernel-plugin.md). For other Kernel APIs, use the official [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0).
+For the architecture behind this tutorial, read [Why a Kernel Plugin is a service](./kernel-plugin.md). For other Kernel APIs, use the official [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2).
