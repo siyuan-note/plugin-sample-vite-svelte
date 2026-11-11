@@ -11,6 +11,8 @@ updates:
     versioning-strategy: "lockfile-only"
     commit-message:
       prefix: "📦 chore(deps)"
+    assignees:
+      - "frostime"
     groups:
       npm:
         applies-to: "version-updates"
@@ -29,6 +31,8 @@ updates:
     open-pull-requests-limit: 1
     commit-message:
       prefix: "👷 ci(deps)"
+    assignees:
+      - "frostime"
     # Explicit version bounds also constrain security PRs; update-types does not.
     # Review these bounds when adding an action or upgrading its major version.
     ignore:
