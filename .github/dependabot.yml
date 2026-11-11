@@ -12,6 +12,13 @@ updates:
       prefix: "📦 chore(deps)"
     assignees:
       - "frostime"
+    ignore:
+      # `svelte-check` 4.x refuses to run on TypeScript 7 alone: it needs a
+      # second TypeScript 6 install plus the `--tsgo` flag. Drop this rule
+      # when `svelte-check` supports TypeScript 7 directly.
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
     groups:
       npm:
         patterns:
