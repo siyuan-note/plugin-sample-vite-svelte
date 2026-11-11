@@ -104,4 +104,4 @@ Private endpoint 接收经过认证的管理员请求。它不会签发一个权
 
 只在可信设备上使用可运行命令。把长期使用的 token 保存在操作系统 credential store 或其他受保护的本机 secret store 中。不要把该端点直接暴露到互联网。
 
-架构说明请阅读[为什么 Kernel Plugin 是一项服务](./kernel-plugin.zh-CN.md)。其他 Kernel API 请查看官方 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)。
+架构说明请阅读[为什么 Kernel Plugin 是一项服务](./kernel-plugin.zh-CN.md)。其他 Kernel API 请查看官方 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)。

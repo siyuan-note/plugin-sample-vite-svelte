@@ -4,7 +4,7 @@ Frontend plugin 属于思源用户界面。Kernel Plugin 属于正在运行的�
 
 当一项功能需要独立于 Dialog、Dock、编辑器或浏览器 tab 持有状态和生命周期时，这个区别很重要。Kernel Plugin 以服务的形式持有该功能。Frontend 和可信外部程序是这项服务的 client。
 
-要运行本模板的具体案例，请阅读[在没有 UI 时运行摘录服务](./kernel-capture-demo.zh-CN.md)。完整 API 请查看官方 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)。
+要运行本模板的具体案例，请阅读[在没有 UI 时运行摘录服务](./kernel-capture-demo.zh-CN.md)。完整 API 请查看官方 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)。
 
 ## 服务持有不属于 UI 的工作
 
@@ -136,7 +136,7 @@ Svelte 面板从 `window.siyuan.config` 读取当前 server address、操作系�
 请求 → Kernel 持有的服务 → 持久化结果 → frontend notification
 ```
 
-官方 [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0) 继续覆盖 RPC batch、原始 WebSocket 和 SSE handler、storage watcher、Agent capability 及其余 Kernel API。
+官方 [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) 继续覆盖 RPC batch、原始 WebSocket 和 SSE handler、storage watcher、Agent capability 及其余 Kernel API。
 
 ## 判断一项功能属于哪个 runtime
 
@@ -151,5 +151,5 @@ Svelte 面板从 `window.siyuan.config` 读取当前 server address、操作系�
 
 - [思源 Kernel Plugin 实现](https://github.com/siyuan-note/siyuan/tree/master/kernel/plugin)
 - [Kernel Plugin TypeScript 类型声明](https://github.com/siyuan-note/petal/blob/main/kernel.d.ts)
-- [官方 plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0)
+- [官方 plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2)
 - [Agent capability 访问控制场景](https://github.com/siyuan-note/siyuan/issues/18638)

@@ -25,8 +25,7 @@ import {
     openSetting,
     openAttributePanel,
     saveLayout,
-    IKernelPluginState,
-    IMenuItem
+    IKernelPluginState
 } from "siyuan";
 import "./index.scss";
 
@@ -42,6 +41,7 @@ import { mount, unmount } from "svelte";
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
+const COUNTER_BLOCK_TYPE = "counter";
 
 interface CaptureConsoleHandle {
     showCapture?: (result: CaptureResult) => void;
@@ -54,33 +54,70 @@ export default class PluginSample extends Plugin {
     private settingUtils: SettingUtils;
     private captureDialog?: ReturnType<typeof svelteDialog>;
 
+    /**
+     * A custom block stores a raw text payload in the document and renders it with a
+     * plugin-owned function. `content` is that payload as stored; `setContent` replaces
+     * the whole payload, and the block is then disposed and rendered again with the new
+     * `content`. Any state that must survive that rebuild has to live in `content`.
+     */
+    private readonly renderCounterBlock = ({
+        element,
+        content,
+        setContent,
+    }: {
+        element: HTMLElement,
+        content: string,
+        setContent: (content: string) => boolean,
+    }) => {
+        const parsed = Number.parseInt(content, 10);
+        const count = Number.isSafeInteger(parsed) ? parsed : 0;
 
-    updateProtyleToolbar(toolbar: Array<string | IMenuItem>) {
-        toolbar.push("|");
-        toolbar.push({
-            name: "insert-smail-emoji",
-            icon: "iconEmoji",
-            hotkey: "⇧⌘I",
-            tipPosition: "n",
-            tip: this.i18n.insertEmoji,
-            click(protyle: Protyle) {
-                protyle.insert("😊");
-            }
+        const button = document.createElement("button");
+        button.className = "b3-button b3-button--outline";
+        button.textContent = String(count);
+        button.title = String(this.i18n.counterHint);
+        button.addEventListener("click", () => {
+            setContent(String(count + 1));
         });
-        return toolbar;
-    }
+        // The listener lives inside `element`, so it disappears with the rendered DOM.
+        // Timers and listeners outside `element` belong in the cleanup function that
+        // this render function can return.
+        element.append(button);
+    };
+
+    customBlockRenders = {
+        [COUNTER_BLOCK_TYPE]: {
+            render: this.renderCounterBlock,
+        },
+    };
 
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
 
         console.log("Loading plugin-sample-vite-svelte");
 
-        this.kernel.rpc.bind("notify", this.onKernelPluginNotify);
-        this.kernel.rpc.bind("capture-received", this.onCaptureReceived);
+        await Promise.all([
+            this.kernel.rpc.bind("notify", this.onKernelPluginNotify),
+            this.kernel.rpc.bind("capture-received", this.onCaptureReceived),
+        ]);
         this.eventBus.on("kernel-plugin-state-change", this.onKernelPluginStateChange);
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
+
+        // Register an editor toolbar button dynamically. Call `removeToolbarItem(name)`
+        // to remove it again; the older `updateProtyleToolbar` hook is still supported.
+        this.addToolbarItem({
+            name: "insert-smiley-emoji",
+            icon: "iconEmoji",
+            hotkey: "⇧⌘I",
+            tipPosition: "n",
+            tip: String(this.i18n.insertEmoji),
+            click(protyle: Protyle) {
+                protyle.insert("😊");
+            }
+        });
+
         // 图标的制作参见帮助文档
         this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">
 <path d="M13.667 17.333c0 0.92-0.747 1.667-1.667 1.667s-1.667-0.747-1.667-1.667 0.747-1.667 1.667-1.667 1.667 0.747 1.667 1.667zM20 15.667c-0.92 0-1.667 0.747-1.667 1.667s0.747 1.667 1.667 1.667 1.667-0.747 1.667-1.667-0.747-1.667-1.667-1.667zM29.333 16c0 7.36-5.973 13.333-13.333 13.333s-13.333-5.973-13.333-13.333 5.973-13.333 13.333-13.333 13.333 5.973 13.333 13.333zM14.213 5.493c1.867 3.093 5.253 5.173 9.12 5.173 0.613 0 1.213-0.067 1.787-0.16-1.867-3.093-5.253-5.173-9.12-5.173-0.613 0-1.213 0.067-1.787 0.16zM5.893 12.627c2.28-1.293 4.040-3.4 4.88-5.92-2.28 1.293-4.040 3.4-4.88 5.92zM26.667 16c0-1.040-0.16-2.040-0.44-2.987-0.933 0.2-1.893 0.32-2.893 0.32-4.173 0-7.893-1.92-10.347-4.92-1.4 3.413-4.187 6.093-7.653 7.4 0.013 0.053 0 0.12 0 0.187 0 5.88 4.787 10.667 10.667 10.667s10.667-4.787 10.667-10.667z"></path>
@@ -305,8 +342,8 @@ export default class PluginSample extends Plugin {
             key: "Hint",
             value: "",
             type: "hint",
-            title: this.i18n.hintTitle,
-            description: this.i18n.hintDesc,
+            title: String(this.i18n.hintTitle),
+            description: String(this.i18n.hintDesc),
         });
 
         try {
@@ -322,6 +359,16 @@ export default class PluginSample extends Plugin {
             id: "insertEmoji",
             callback(protyle: Protyle) {
                 protyle.insert("😊");
+            }
+        }, {
+            // The fence info of a custom block is the encoded plugin name and block type.
+            filter: ["insert counter block", "插入计数器块", "jsq"],
+            html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertCounterBlock}</span><span class="b3-list-item__meta">🔢</span></div>`,
+            id: "insertCounterBlock",
+            callback: (protyle: Protyle) => {
+                const info = `${encodeURIComponent(this.name)}/${encodeURIComponent(COUNTER_BLOCK_TYPE)}`;
+                const markdown = `;;;${info}\n0\n;;;`;
+                protyle.insert(protyle.protyle.lute.Md2BlockDOM(markdown), true);
             }
         }];
 
@@ -350,10 +397,12 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.helloPlugin);
     }
 
-    onLayoutReady() {
+    // Lifecycle hooks may be async. SiYuan waits for the returned Promise before
+    // starting the next phase and shares one five-second removal budget.
+    async onLayoutReady() {
         const topBarElement = this.addTopBar({
             icon: "iconFace",
-            title: this.i18n.addTopBarIcon,
+            title: String(this.i18n.addTopBarIcon),
             position: "right",
             callback: () => {
                 if (this.isMobile) {
@@ -379,7 +428,7 @@ export default class PluginSample extends Plugin {
     </svg>
 </div>`;
         statusIconTemp.content.firstElementChild.addEventListener("click", () => {
-            confirm("⚠️", this.i18n.confirmRemove.replace("${name}", this.name), () => {
+            confirm("⚠️", String(this.i18n.confirmRemove).replace("${name}", this.name), () => {
                 this.removeData(STORAGE_NAME).then(() => {
                     this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
                     showMessage(`[${this.name}]: ${this.i18n.removedData}`);
@@ -392,7 +441,7 @@ export default class PluginSample extends Plugin {
             element: statusIconTemp.content.firstElementChild as HTMLElement,
         });
         // this.loadData(STORAGE_NAME);
-        this.settingUtils.load().catch(e => {
+        await this.settingUtils.load().catch(e => {
             console.log(`[${this.name}] load settings [${STORAGE_NAME}] fail: `, e);
         });
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
@@ -409,8 +458,10 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.byePlugin);
         this.captureDialog?.close();
         this.captureDialog = undefined;
-        this.kernel.rpc.unbind("notify", this.onKernelPluginNotify);
-        this.kernel.rpc.unbind("capture-received", this.onCaptureReceived);
+        await Promise.all([
+            this.kernel.rpc.unbind("notify", this.onKernelPluginNotify),
+            this.kernel.rpc.unbind("capture-received", this.onCaptureReceived),
+        ]);
         this.eventBus.off("kernel-plugin-state-change", this.onKernelPluginStateChange);
         showMessage("Goodbye SiYuan Plugin");
         console.log("onunload");

@@ -3,7 +3,7 @@
 
 [中文版](./README.zh-CN.md)
 
-> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0), with selected updates from newer releases.
+> Based on [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2), with selected updates from newer releases.
 
 
 
@@ -122,7 +122,12 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 
 - Follow [Run the capture service without its UI](./docs/kernel-capture-demo.md) to see the Kernel service continue after its panel closes.
 - Read [Why a Kernel Plugin is a service](./docs/kernel-plugin.md) for the runtime and ownership model.
-- Use [plugin-sample v0.5.0](https://github.com/siyuan-note/plugin-sample/tree/v0.5.0) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
+- Use [plugin-sample v0.5.2](https://github.com/siyuan-note/plugin-sample/tree/v0.5.2) for complete Agent capability, RPC batch, WebSocket, SSE, and storage watcher examples.
+
+## Plugin Lifecycle and Publishing
+
+- Read [Frontend Plugin Lifecycle](./docs/plugin-lifecycle.md) for the hook order, the five-second cap on shutdown, and when to implement `onDataChanged`.
+- Read [Running a Plugin on Published Pages](./docs/publish.md) for what a visitor's browser can reach, the two data channels, and how to opt in.
 
 ## plugin.json
 
@@ -132,7 +137,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   "author": "frostime",
   "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
   "version": "0.5.1",
-  "minAppVersion": "3.8.0",
+  "minAppVersion": "3.8.5",
   "kernels": [
     "windows",
     "linux",
@@ -194,7 +199,7 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
 * `author`: Plugin author name
 * `url`: Plugin repo URL
 * `version`: Plugin version number, it is recommended to follow the [semver](https://semver.org/) specification
-* `minAppVersion`: Minimum version number of SiYuan required to use this plugin
+* `minAppVersion`: Minimum version number of SiYuan required to use this plugin. The sample requires 3.8.5 because its examples use plugin APIs added in recent releases
 * `kernels`: Kernel environments required by the kernel plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
 * `backends`: Backend environment required by the plugin, optional values are `windows`, `linux`, `darwin`, `docker`, `android`, `ios`, `harmony` and `all`
   * `windows`: Windows desktop
@@ -212,6 +217,10 @@ The endpoint requires SiYuan administrator authentication. The workspace API tok
   * `browser-desktop`: Desktop browser
   * `browser-mobile`: Mobile browser
   * `all`: All environments
+* `disabledInPublish`: Set to `true` when the plugin must not load on pages served by the publishing service; see [Running a Plugin on Published Pages](./docs/publish.md)
+* `publish`: Declarations for the publishing service; see [Running a Plugin on Published Pages](./docs/publish.md)
+    * `resources`: Extra frontend files served to published pages, written as exact relative paths or directories ending in `/`
+    * `data`: Field names the plugin may expose as a public snapshot; each value must be a string, number, boolean or `null`, and access needs a separate administrator grant
 * `displayName`: Plugin name (plain text), displayed in the marketplace list, supports multiple languages
     * `default`: Default language, must exist
     * `zh-CN`, `en` and other languages: optional, must be [BCP 47](https://tools.ietf.org/html/bcp47) tags (e.g. `zh-CN`, `zh-TW`, `en`, `ja`, `pt-BR`)
