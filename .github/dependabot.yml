@@ -1,30 +1,29 @@
 version: 2
 
 updates:
-  # npm dependencies, grouped into one pull request per month.
+  # Version updates run monthly; security updates are triggered by alerts.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 1
-    versioning-strategy: "increase-if-necessary"
+    # Both update types must preserve the ranges declared in package.json.
+    versioning-strategy: "lockfile-only"
     commit-message:
       prefix: "📦 chore(deps)"
     assignees:
       - "frostime"
-    ignore:
-      # `svelte-check` 4.x refuses to run on TypeScript 7 alone: it needs a
-      # second TypeScript 6 install plus the `--tsgo` flag. Drop this rule
-      # when `svelte-check` supports TypeScript 7 directly.
-      - dependency-name: "typescript"
-        update-types:
-          - "version-update:semver-major"
     groups:
       npm:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+      npm-security:
+        applies-to: "security-updates"
         patterns:
           - "*"
 
-  # Keep the workflow actions current; deprecated Node runtimes eventually break.
+  # Update actions within their reviewed major versions.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -34,7 +33,23 @@ updates:
       prefix: "👷 ci(deps)"
     assignees:
       - "frostime"
+    # Explicit version bounds also constrain security PRs; update-types does not.
+    # Review these bounds when adding an action or upgrading its major version.
+    ignore:
+      - dependency-name: "actions/checkout"
+        versions: [">=8"]
+      - dependency-name: "actions/setup-node"
+        versions: [">=8"]
+      - dependency-name: "pnpm/action-setup"
+        versions: [">=7"]
+      - dependency-name: "ncipollo/release-action"
+        versions: [">=2"]
     groups:
       actions:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+      actions-security:
+        applies-to: "security-updates"
         patterns:
           - "*"
