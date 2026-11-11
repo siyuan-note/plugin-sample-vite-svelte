@@ -36,7 +36,7 @@
     "cross-env": "^10.1.0",
     "fast-glob": "^3.3.3",
     "js-yaml": "^5.4.1",
-    "livereload": "^0.9.3",
+    "livereload": "^0.10.3",
     "minimist": "^1.2.8",
     "npm-run-all": "^4.1.5",
     "sass": "^1.103.1",
@@ -44,7 +44,7 @@
     "svelte": "^5.57.0",
     "svelte-check": "^4.7.6",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.2.4",
     "vite-plugin-static-copy": "^4.1.1",
     "vite-plugin-zip-pack": "^1.2.4"
